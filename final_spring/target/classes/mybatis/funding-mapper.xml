@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="funding">
-	
-	<insert id="insert" parameterType="fundingDto">
-		INSERT INTO FUNDING
-		VALUES(FUNDINGSEQ.NEXTVAL, #{funding_no}, #{funding_pic}, #{funding_title}, #{funding_content}, #{funding_filter}, #{funding_start}, #{funding_end}, #{funding_ta}, 0, #{funding_pay}, '진행중', #{member_no})
-	</insert>
-</mapper>
