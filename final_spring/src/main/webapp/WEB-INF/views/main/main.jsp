@@ -15,21 +15,16 @@
 <body>
  <jsp:include page="header.jsp"></jsp:include>
 
-	<div><a href="group_list.do">글작성</a></div>
-	<a href="funding_list.do" id="test">펀딩 list</a>
-	<a href="funding_insertform.do">펀딩 insert</a>
-	<a href="funding_test.do">펀딩 test</a>
-	<a href="message.do">쪽지</a>
-	<a href="event_list.do">이벤트</a>
+<a href="admin_list.do">관리자 - 회원 조회</a><br/><br/>
+
+	--상단 메뉴 구성--<br/>
+	정보안내 - 인겸님 게시판들 (티쳐블 등), 친환경식당(지도) <br/>
+	공지 및 이벤트 - 공지,이벤트, QNA <br/><br/>
+	-- 네비게이션바 -- <br/>
+	챗봇
+
  <jsp:include page="footer.jsp"></jsp:include>
-	정보안내 - 인겸님 게시판들 (티쳐블 등), 친환경식당(지도)
-	회원거래
-	펀딩
-	소모임
-	공지 - 공지,이벤트, QNA
+
 	
-	로그인, 회원가입 / 로그아웃
-	쪽지
-	마이페이지
 </body>
 </html>
