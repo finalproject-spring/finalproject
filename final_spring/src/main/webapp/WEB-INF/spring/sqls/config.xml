@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd" >
+<configuration>
+	<typeAliases>
+		<typeAlias type="com.spring.recycle.model.dto.FundingDto" alias="fundingDto"/>
+		<typeAlias type="com.spring.recycle.model.dto.MessageDto" alias="MessageDto"/>
+		<typeAlias type="com.spring.recycle.model.dto.MemberDto" alias="memberDto"/>
+		<typeAlias type="com.spring.recycle.model.dto.GroupDto" alias="GroupDto"/>
+		<typeAlias type="com.spring.recycle.model.dto.GroupReplyDto" alias="GroupReplyDto"/>
+		<typeAlias type="com.spring.recycle.model.dto.EventDto" alias="EventDto"/>
+	</typeAliases>
+	
+	<mappers>
+		<mapper resource="/mybatis/funding-mapper.xml"/>
+		<mapper resource="/mybatis/message-mapper.xml"/>
+		<mapper resource="/mybatis/member-mapper.xml"/>
+		<mapper resource="/mybatis/group-mapper.xml"/>
+		<mapper resource="/mybatis/group_reply-mapper.xml"/>
+		<mapper resource="/mybatis/event-mapper.xml"/>
+	</mappers>
+
+</configuration>

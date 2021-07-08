@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="member">
+  
+ <!-- 로그인 -->
+  <select id="login" parameterType="memberDto" resultType="memberDto">
+   SELECT * FROM MEMBER
+   WHERE MEMBER_ID = #{member_id} 
+  </select>
+  
+  <!-- 회원가입 -->
+  <insert id="join" parameterType="memberDto">
+     INSERT INTO MEMBER 
+     VALUES(MEMBERSEQ.NEXTVAL ,#{member_name} ,#{member_id},#{member_pw},#{member_email},#{member_phone},#{member_addr},null,1,0 )
+  </insert>
+  
+  <!-- id중복체크 -->
+  <select id="idCheck" resultType="int" parameterType="String">
+     SELECT COUNT(*) FROM MEMBER
+     WHERE MEMBER_ID = #{member_id}
+  </select>
+</mapper>
