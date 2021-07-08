@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="message">
+
+<!-- 메세지 작성 -->
+<insert id="insertSendMessage" parameterType="MessageDto">
+	INSERT INTO MESSAGE VALUES(MESSAGESEQ.NEXTVAL, #{message_sendid}, #{message_recvid}, #{message_content}, SYSDATE, SYSDATE, '발신')
+</insert>
+
+<insert id="insertRecvMessage" parameterType="MessageDto">
+	INSERT INTO MESSAGE(MESSAGE_NO, MESSAGE_SENDID, MESSAGE_RECVID, MESSAGE_CONTENT, MESSAGE_SENDDATE, MESSAGE_READDATE, MESSAGE_TYPE)
+	VALUES(MESSAGESEQ.NEXTVAL, #{message_sendid}, #{message_recvid}, #{message_content}, SYSDATE, '9999-12-31', '수신')
+</insert>
+
+<!-- 메세지 읽음 처리 -->
+<update id="updateMessage" parameterType="int">
+	UPDATE MESSAGE SET MESSAGE_READDATE = SYSDATE WHERE MESSAGE_NO = #{message_no}
+</update>
+
+<!-- 읽지 않은 메세지 개수 -->
+<select id="unreadMsgCount" resultType="int">
+	SELECT COUNT(*) FROM MESSAGE
+	WHERE READDATE = '9999-12-31' AND MESSAGE_RECVID = #{message_recvid}
+</select>
+
+<!-- 받은 메세지 개수 -->
+<select id="getRecvMessageCount" resultType="int">
+	SELECT COUNT(MESSAGE_NO) FROM MESSAGE WHERE MESSAGE_RECVID = #{message_recvid} AND MESSAGE_TYPE = '수신'
+</select>
+
+<!-- 보낸 메세지 개수 -->
+<select id="getSendMessageCount" resultType="int">
+	SELECT COUNT(MESSAGE_NO) FROM MESSAGE WHERE MESSAGE_TYPE = '발신' AND MESSAGE_SENDID = #{message_sendid}
+</select>
+
+<!-- 받은 메세지 -->
+<!-- <select id="getRecvMessage" resultType="MessageDto" parameterType="String">
+	SELECT * FROM MESSAGE WHERE MESSAGE_RECVID = #{message_recvid} AND MESSAGE_TYPE = '수신'
+	ORDER BY MESSAGE_READDATE DESC, MESSAGE_NO DESC
+</select> -->
+
+<select id="getRecvMessage" resultType="MessageDto" parameterType="hashmap">
+	SELECT MESSAGE_NO, MESSAGE_SENDID, MESSAGE_RECVID, MESSAGE_CONTENT, MESSAGE_SENDDATE, MESSAGE_READDATE, MESSAGE_TYPE FROM 
+	(SELECT MESSAGE_NO, MESSAGE_SENDID, MESSAGE_RECVID, MESSAGE_CONTENT, MESSAGE_SENDDATE, MESSAGE_READDATE, MESSAGE_TYPE, ROW_NUMBER() OVER(ORDER BY MESSAGE_READDATE DESC, MESSAGE_NO DESC) AS rn FROM MESSAGE WHERE MESSAGE_TYPE='수신' AND MESSAGE_RECVID = #{message_recvid}) msg 
+	WHERE rn BETWEEN #{rowstart} AND #{rowend}
+	ORDER BY MESSAGE_READDATE DESC, MESSAGE_NO DESC
+</select>
+
+<!-- 보낸 메세지 -->
+<!-- <select id="getSendMessage" resultType="MessageDto" parameterType="String">
+		SELECT * FROM MESSAGE WHERE MESSAGE_SENDID = #{message_sendid} AND MESSAGE_TYPE = '발신'
+	ORDER BY MESSAGE_NO DESC
+</select> -->
+
+<select id="getSendMessage" resultType="MessageDto" parameterType="hashmap">
+	SELECT MESSAGE_NO, MESSAGE_SENDID, MESSAGE_RECVID, MESSAGE_CONTENT, MESSAGE_SENDDATE, MESSAGE_READDATE, MESSAGE_TYPE FROM 
+	(SELECT MESSAGE_NO, MESSAGE_SENDID, MESSAGE_RECVID, MESSAGE_CONTENT, MESSAGE_SENDDATE, MESSAGE_READDATE, MESSAGE_TYPE, ROW_NUMBER() OVER(ORDER BY MESSAGE_READDATE DESC, MESSAGE_NO DESC) AS rn FROM MESSAGE WHERE MESSAGE_SENDID = #{message_sendid} AND MESSAGE_TYPE = '발신') msg 
+	WHERE rn BETWEEN #{rowstart} AND #{rowend}
+	ORDER BY MESSAGE_READDATE DESC, MESSAGE_NO DESC
+</select>
+
+<!-- 받은 메세지 상세 -->
+<select id="recvDetail" parameterType="int" resultType="MessageDto">
+	SELECT * FROM MESSAGE LEFT OUTER JOIN MEMBER ON MESSAGE.MESSAGE_RECVID = MEMBER.MEMBER_ID WHERE MESSAGE_NO = #{message_no}
+</select>
+<!-- 보낸 메세지 상세 -->
+<select id="sendDetail" parameterType="int" resultType="MessageDto">
+	SELECT * FROM MESSAGE LEFT OUTER JOIN MEMBER ON MESSAGE.MESSAGE_SENDID = MEMBER.MEMBER_ID WHERE MESSAGE_NO = #{message_no}
+</select>
+
+<!-- 받은 메세지 삭제 -->
+<delete id="deleteRecvMessage" parameterType="java.util.ArrayList">
+	DELETE FROM MESSAGE WHERE MESSAGE_NO IN
+	<foreach collection="array" item="item" open="(" close=")" separator=",">
+		#{item }
+	</foreach>
+</delete>
+
+<!-- 보낸 메세지 삭제 -->
+<delete id="deleteSendMessage" parameterType="java.util.ArrayList">
+		DELETE FROM MESSAGE WHERE MESSAGE_NO IN
+	<foreach collection="array" item="item" open="(" close=")" separator=",">
+		#{item }
+	</foreach>
+</delete>
+
+<!-- 받은 메세지 총 개수 -->
+<select id="recvListCount" resultType="int" parameterType="String">
+	SELECT COUNT(*) FROM MESSAGE WHERE MESSAGE_RECVID = #{message_recvid} AND MESSAGE_TYPE = '수신'
+</select>
+
+<!-- 보낸 메세지 총 개수 -->
+<select  id="sendListCount" resultType="int" parameterType="String">
+
+</select>
+
+<!-- 회원 아이디 존재유무 체크 -->
+<select id="idCheck" resultType="int" parameterType="String">
+	SELECT COUNT(MEMBER_ID) FROM MEMBER WHERE MEMBER_ID = #{member_id}
+</select>
+
+</mapper>
