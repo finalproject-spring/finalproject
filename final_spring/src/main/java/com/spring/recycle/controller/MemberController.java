@@ -193,6 +193,15 @@ public class MemberController {
 	      
 	   }
 	   
+		@RequestMapping(value = "/member_logout.do" , method = RequestMethod.GET)
+		public String logout(HttpServletRequest request) {
+			logger.info("Logout");
+		        
+			HttpSession session = request.getSession();
+			session.invalidate();
+			return "main/main";
+		}
+	   
 
 
 }

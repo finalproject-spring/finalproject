@@ -45,17 +45,18 @@
 <style type="text/css">
 	body { margin: 0; padding: 0; }
 	.lists {}
-	.list { display: inline-block; width: 340px; margin: 20px; }
-	.Elist { display: inline-block; width: 340px; margin: 20px; }
-	.container { background:rgb(255, 254, 254); padding:0; margin:0; }
-	.prog { width: 340px; background:rgb(189, 177, 177); }
+	.list { display: inline-block; width: 327px; margin: 20px; }
+	.Elist { display: inline-block; width: 327px; margin: 20px; }
+	.wrap { background:rgb(255, 254, 254); padding:0; margin:0; }
+	.prog { width: 327px; background:rgb(189, 177, 177); }
 	.progs { height: 6px; background: rgb(225, 149, 240); color:#fff; line-height: 50px; }
 	
 	li {list-style: none; float: left; padding: 6px;}		
 </style>
 </head>
 <body>
-
+ <jsp:include page="../main/header.jsp"></jsp:include>
+ <div class="container">
 	<div>
 		펀딩 카테고리
 		<div class="multi_select_box">
@@ -88,58 +89,55 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.bundle.js" integrity="sha512-iqhWkvLOXVDz+Lr//ZryEKNvZ5pmgdKEe58Wh/VwfTGwTku0MKbuLhjJ1zUAJu8iSbOqfLcXrrxJ61+27THi2Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.18/js/bootstrap-select.min.js" integrity="sha512-yDlE7vpGDP7o2eftkCiPZ+yuUyEcaBwoJoIhdXv71KZWugFqEphIS3PU60lEkFaz8RxaVsMpSvQxMBaKVwA5xg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 	</div>
-	
-	<div class="lists">
-		<div>펀딩</div>
-		 <c:choose>
-				<c:when test="${empty list }">
-				해당 카테고리의 펀딩이 존재하지 않습니다.
-				</c:when>
-				<c:otherwise>					
-					<c:forEach items="${list }" var="dto">
-					<div class="list">
-						<div><a href="funding_detail.do?funding_no=${dto.funding_no }"><img src="${dto.funding_pic}" style="width:340px; height: 240px;"></a></div>
-						<div><a href="funding_detail.do?funding_no=${dto.funding_no }">${dto.funding_title }</a></div>
-						<div>${dto.funding_filter }</div>
-						<jsp:useBean id="today" class="java.util.Date" />
-						<fmt:parseNumber value="${today.time / (1000*60*60*24)}" integerOnly="true" var="nowDate" scope="request" />
-						<fmt:parseDate var="dateString" value="${dto.funding_end}" pattern="yyyy-MM-dd" />
-						<fmt:parseNumber value="${dateString.time / (1000*60*60*24)}" integerOnly="true" var="endDate" scope="request" />
-						<fmt:parseNumber var="persent" integerOnly="true" value="${dto.funding_ca/dto.funding_ta*100 }"/>
-						<fmt:formatNumber var="ca" value="${dto.funding_ca}" pattern="#,###,###,###"/>
-						<div>${persent }% ${ca } 원</div>
-						<div class="container">
-							<div class="prog">
-								<div class="progs" style="width: ${persent }%; max-width:300px"></div>
-							</div>
+	 <c:choose>
+		<c:when test="${empty list }">
+		해당 카테고리의 펀딩이 존재하지 않습니다.
+		</c:when>
+		<c:otherwise>					
+			<c:forEach items="${list }" var="dto">
+				<div class="list">
+					<div><a href="funding_detail.do?funding_no=${dto.funding_no}&page=${scri.page}&perPageNum=${scri.perPageNum}&funding_filter=${scri.funding_filter}"><img src="${dto.funding_pic}" style="width:327px; height: 235px;"></a></div>
+					<div><a href="funding_detail.do?funding_no=${dto.funding_no}&page=${scri.page}&perPageNum=${scri.perPageNum}&funding_filter=${scri.funding_filter}">${dto.funding_title }</a></div>
+					<div>${dto.funding_filter }</div>
+					<jsp:useBean id="today" class="java.util.Date" />
+					<fmt:parseNumber value="${today.time / (1000*60*60*24)}" integerOnly="true" var="nowDate" scope="request" />
+					<fmt:parseDate var="dateString" value="${dto.funding_end}" pattern="yyyy-MM-dd" />
+					<fmt:parseNumber value="${dateString.time / (1000*60*60*24)}" integerOnly="true" var="endDate" scope="request" />
+					<fmt:parseNumber var="persent" integerOnly="true" value="${dto.funding_ca/dto.funding_ta*100 }"/>
+					<fmt:formatNumber var="ca" value="${dto.funding_ca}" pattern="#,###,###,###"/>
+					<div>${persent }% ${ca } 원</div>
+					<div class="wrap">
+						<div class="prog">
+							<div class="progs" style="width: ${persent }%; max-width:300px"></div>
 						</div>
-						<c:choose>
-							<c:when test="${endDate-nowDate >= 0}">
-								<div>${endDate-nowDate } 일 남음</div></c:when>
-							<c:otherwise>
-								<div>종료됨</div>
-							</c:otherwise>
-					</c:choose>
 					</div>
-					</c:forEach>
-				</c:otherwise>
-			</c:choose> 
-			<div>
-			  <ul>
-			    <c:if test="${pageMaker.prev}">
-			    	<li><a href="funding_list.do${pageMaker.makeQuery(pageMaker.startPage - 1)}&funding_filter=${scri.funding_filter}">이전</a></li>
-			    </c:if> 
-			
-			    <c:forEach begin="${pageMaker.startPage}" end="${pageMaker.endPage}" var="idx">
-			    	<li><a href="funding_list.do${pageMaker.makeQuery(idx)}&funding_filter=${scri.funding_filter}">${idx}</a></li>
-			    </c:forEach>
-			
-			    <c:if test="${pageMaker.next && pageMaker.endPage > 0}">
-			    	<li><a href="funding_list.do${pageMaker.makeQuery(pageMaker.endPage + 1)}&funding_filter=${scri.funding_filter}">다음</a></li>
-			    </c:if> 
-			  </ul>
-			</div>
-
+					<c:choose>
+						<c:when test="${endDate-nowDate >= 0}">
+							<div>${endDate-nowDate } 일 남음</div></c:when>
+						<c:otherwise>
+							<div>종료됨</div>
+						</c:otherwise>
+				</c:choose>
+				</div>
+				</c:forEach>
+			</c:otherwise>
+		</c:choose> 
+		<div>
+			<ul>
+		    <c:if test="${pageMaker.prev}">
+			   	<li><a href="funding_list.do${pageMaker.makeQuery(pageMaker.startPage - 1)}&funding_filter=${scri.funding_filter}">이전</a></li>
+		    </c:if> 		
+		    <c:forEach begin="${pageMaker.startPage}" end="${pageMaker.endPage}" var="idx">
+		    	<li><a href="funding_list.do${pageMaker.makeQuery(idx)}&funding_filter=${scri.funding_filter}">${idx}</a></li>
+		    </c:forEach>
+		    <c:if test="${pageMaker.next && pageMaker.endPage > 0}">
+		    	<li><a href="funding_list.do${pageMaker.makeQuery(pageMaker.endPage + 1)}&funding_filter=${scri.funding_filter}">다음</a></li>
+		    </c:if> 
+		  </ul>
+		</div>
+		<c:if test="${memberdto.member_role eq 0 }">
+			<div><input type="button" value="글 작성" onclick="location.href='funding_insertform.do'"/></div>
+		</c:if>
 	</div>
 
 </body>

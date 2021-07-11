@@ -15,7 +15,7 @@
 <body>
  <jsp:include page="header.jsp"></jsp:include>
 
-<a href="admin_list.do">관리자 - 회원 조회</a><br/><br/>
+<a href="admin_memberList.do">관리자 - 회원 조회</a><br/><br/>
 
 	--상단 메뉴 구성--<br/>
 	정보안내 - 인겸님 게시판들 (티쳐블 등), 친환경식당(지도) <br/>

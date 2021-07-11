@@ -47,13 +47,13 @@ public class MessageBizImpl implements MessageBiz {
 	}
 
 	@Override
-	public int deleteRecvMessage(int[] message_noList) {
-		return dao.deleteRecvMessage(message_noList);
+	public int deleteRecvMessage(int message_no) {
+		return dao.deleteRecvMessage(message_no);
 	}
 
 	@Override
-	public int deleteSendMessage(int[] message_noList) {
-		return dao.deleteSendMessage(message_noList);
+	public int deleteSendMessage(int message_no) {
+		return dao.deleteSendMessage(message_no);
 	}
 
 	@Override
@@ -80,7 +80,16 @@ public class MessageBizImpl implements MessageBiz {
 	public int idCheck(String member_id) {
 		return dao.idCheck(member_id);
 	}
-	
+
+	@Override
+	public int MultiDeleteRecvMessage(int[] message_noList) {
+		return dao.MultiDeleteRecvMessage(message_noList);
+	}
+
+	@Override
+	public int MultiDeleteSendMessage(int[] message_noList) {
+		return dao.MultiDeleteSendMessage(message_noList);
+	}
 
 
 }

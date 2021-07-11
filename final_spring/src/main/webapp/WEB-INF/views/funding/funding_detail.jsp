@@ -95,7 +95,14 @@
 </style>
 </head>
 <body>
+ <jsp:include page="../main/header.jsp"></jsp:include>
 	<div>
+	<form name="readForm" role="form" method="post">
+	  <input type="hidden" id="funding_no" name="funding_no" value="${dto.funding_no}" />
+	  <input type="hidden" id="page" name="page" value="${scri.page}"> 
+	  <input type="hidden" id="perPageNum" name="perPageNum" value="${scri.perPageNum}"> 
+	  <input type="hidden" id="funding_filter" name="funding_filter" value="${scri.funding_filter}"> 
+	</form>
 	<div class="title">${dto.funding_title }</div>
 		<div>
 		<img alt="펀딩 썸네일 사진" src="${dto.funding_pic}" style="width:600px; height: 400px;"></div>
@@ -121,6 +128,11 @@
 			  <option>3</option>
 			  <option>4</option>
 			  <option>5</option>
+			  <option>6</option>
+			  <option>7</option>
+			  <option>8</option>
+			  <option>9</option>
+			  <option>10</option>
 			</select>
 		</div>
 		<div><input type="button" id="addPayBtn" value="선택" onclick="addPayment();"></div>
@@ -132,10 +144,11 @@
 		</div>
 		
 		<div>${dto.funding_content }</div>
+		<div><input type="button" value="목록" onclick="location.href='funding_list.do?page=${scri.page}&perPageNum=${scri.perPageNum}&funding_filter=${scri.funding_filter}'"/></div>
+	<c:if test="${memberdto.member_role eq 0}">
 		<div><input type="button" value="수정" onclick="location.href='funding_updateform.do?funding_no=${dto.funding_no}'"/></div>
 		<div><input type="button" value="글 삭제" onclick="fundingDelete();"/></div>
-		
-		<div></div>
+	</c:if>
 	</div>
 </body>
 </html>

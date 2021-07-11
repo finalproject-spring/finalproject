@@ -19,4 +19,44 @@
      SELECT COUNT(*) FROM MEMBER
      WHERE MEMBER_ID = #{member_id}
   </select>
+  
+	<!-- 지현 추가 -->
+	<!-- 회원 전체 조회 -->
+	<select id="memberList" resultType="memberDto">
+		SELECT * FROM MEMBER ORDER BY MEMBER_DELETE, MEMBER_NO
+	</select>
+	
+	<!-- 회원 정보 디테일 -->
+	<select id="memberDetail" resultType="memberDto">
+		SELECT * FROM MEMBER WHERE MEMBER_NO=#{member_no}
+	</select>
+	
+	<!-- 전체 회원수 -->
+	<select id="memberCount" resultType="int">
+		SELECT COUNT(MEMBER_NO) FROM MEMBER
+	</select>
+	
+	<!-- board 게시판 회원 작성 게시글 소모임/문의 -->
+	<select id="memberWriteList" resultType="BoardDto">
+		SELECT * FROM BOARD WHERE MEMBER_NO=#{member_no} ORDER BY BOARD_NO DESC
+	</select>
+	
+	<select id="memberWriteDetail" resultType="BoardDto">
+		SELECT * FROM BOARD WHERE BOARD_NO=#{board_no}
+	</select>
+	
+	<delete id="memberWriteDelete">
+		DELETE FROM BOARD WHERE BOARD_NO=#{board_no}
+	</delete>
+	
+	<!-- 회원 정보 update -->
+	<update id="memberUpdate">
+		UPDATE MEMBER SET MEMBER_NAME=#{member_name}, MEMBER_EMAIL=#{member_email}, MEMBER_ADDR=#{member_addr}, MEMBER_PHONE=#{member_phone}
+		WHERE MEMBER_NO=#{member_no}
+	</update>
+	
+	<!-- 회원 탈퇴 (member_delete 변경) -->
+	<update id="memberDelete">
+		UPDATE MEMBER SET MEMBER_DELETE=1 WHERE MEMBER_NO=#{member_no}
+	</update>
 </mapper>

@@ -8,16 +8,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<!-- font Awesome -->
- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"/>
-
-<!-- jquery -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<!-- popper js -->
-<Script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js"></Script>
-<!-- Javascript -->
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 <script type="text/javascript">
 
 	$(document).ready(function(){
@@ -65,15 +56,36 @@
 });	
 	
 	$(function(){
-		$("#muldel").click(function(){
-				$("form").submit();
+		$("#delete").click(function(){
+				$("#deleteForm").submit();
 		});
 	});
 
 </script>
+<style type="text/css">
+	.modal {
+	        text-align: center;
+	}
+	 
+	@media screen and (min-width: 768px) { 
+	        .modal:before {
+	                display: inline-block;
+	                vertical-align: middle;
+	                content: " ";
+	                height: 100%;
+	        }
+	}
+	 
+	.modal-dialog {
+	        display: inline-block;
+	        text-align: left;
+	        vertical-align: middle; 
+	}
+</style>
 </head>
 <body>
-
+ <jsp:include page="../main/header.jsp"></jsp:include>
+ <div class="container">
 	<div>
 		<a href='message_recvList.do'>받은 쪽지함</a>
 		<a href='message_sendList.do'>보낸 쪽지함</a>
@@ -81,17 +93,17 @@
 	<div>받은 쪽지</div>
 
 	<div>
-		<form action="message_recvdel.do" method="get">
-			<input type="hidden" value="${dto.message_no }" name="message_noList"/>	
+		<form id="deleteForm" action="message_recvdel.do" method="get">
+			<input type="hidden" value="${dto.message_no }" name="message_no"/>	
 		</form>
 	</div>
 	 <button id="createBtn" class="btn btn-info btn-sm" data-target="#myModal" data-toggle="modal">답장하기</button>
-	 <input type="button" id="muldel" value="삭제"/>
+	 <input type="button" id="delete" value="삭제"/>
 	 <!-- Modal -->
 	<div class="modal fade" id="myModal" role="dialog">
 		<div class="modal-dialog">
 			<!-- Modal content-->
-			<div class="modal-content">
+			<div class="modal-content" style="width:500px;">
 				<div class="modal-header">
 					<h4 id="modal-title" class="modal-title">답장 보내기</h4>
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -104,8 +116,8 @@
 						</tr>
 						<tr>
 							<td>내용</td>
-							<td><textarea class="form-control" id="message_content" rows="10"></textarea></td>
-						</tr>					
+							<td><textarea class="form-control-lg" id="message_content" rows="30" style="resize: none; overflow: auto; height: 220px; width: 100%; border: 1px solid rgba(0, 0, 0, 0.1); font-size: 14px"></textarea></td>
+					</tr>					
 					</table>
 					<%
 					MemberDto dto = (MemberDto) request.getSession().getAttribute("dto");
@@ -120,14 +132,23 @@
 			</div>
 		</div>
 	</div>
-	
-	<div>보낸 사람 ${dto.message_sendid } </div>
-	<div>보낸 시간 			
-				<fmt:parseDate value="${dto.message_senddate }" pattern="yyyy/MM/dd" var="date"/>
-				<fmt:formatDate value="${date}" pattern="yyyy-MM-dd hh시 MM분" var="time"/>
-				${time }
+	</div>
+	<div class="container">
+		<fmt:formatDate value="${dto.message_senddate}" pattern="yyyy-MM-dd hh:mm" var="date"/>
+		<form>
+			<div class="form-group">
+				<label>보낸 사람</label>
+				<input type="text" value="${dto.message_sendid }" class="form-control" readonly="readonly">
 			</div>
-	<div>내용 ${dto.message_content }</div>
-	
+			<div class="form-group">
+				<label>보낸시간</label>
+				<input type="text" value="${date }" class="form-control" readonly="readonly">
+			</div>
+			<div class="form-group">
+				<label>내용</label>
+				<textarea rows="8" readonly="readonly" style="width: 100%; resize: none; border: 1px solid rgba(0, 0, 0, 0.1); font-size: 14px; border-radius: 0px; padding-left: 10px;">${dto.message_content }</textarea>
+			</div>
+		</form>
+	</div>
 </body>
 </html>

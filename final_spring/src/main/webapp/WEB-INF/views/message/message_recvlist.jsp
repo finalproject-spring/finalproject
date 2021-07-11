@@ -8,20 +8,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<!-- font Awesome -->
-
-<!-- jquery --><!-- 
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<!-- popper js -->
-<Script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js"></Script>
-<!-- Javascript -->
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"/>	
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
-	
-
 <script type="text/javascript">
 	$(document).ready(function(){
 		
@@ -45,6 +32,7 @@
 	 		} else if ($("#message_recvid").val() == "") {
 	 				$("#idchk1").css("display","none");
 	 				$("#idchk2").css("display","none");
+	 				$("#idchk3").css("display","none");
 	 			return false;
 	 		} else {
 	 			$.ajax({
@@ -54,8 +42,12 @@
 	 				success : function(res){
 	 					if (res == '0') {
 	 						$("#idchk1").css("display","block");
+	 		 				$("#idchk2").css("display","none");
+	 		 				$("#idchk3").css("display","none");
 	 					} else if(res == '1') {
 	 						$("#idchk3").css("display","block");
+	 		 				$("#idchk1").css("display","none");
+	 		 				$("#idchk2").css("display","none");
 	 					}
 	 				},
 	 				error : function(res){
@@ -141,14 +133,32 @@
 </script>
 <style type="text/css">
 
-	textarea { resize: none; }
-	
 	li { list-style: none; float: left; padding: 6px; }
 	
+	.modal {
+	        text-align: center;
+	}
+	 
+	@media screen and (min-width: 768px) { 
+	        .modal:before {
+	                display: inline-block;
+	                vertical-align: middle;
+	                content: " ";
+	                height: 100%;
+	        }
+	}
+	 
+	.modal-dialog {
+	        display: inline-block;
+	        text-align: left;
+	        vertical-align: middle; 
+	}
+		
 </style>
 </head>
 <body>
-
+ <jsp:include page="../main/header.jsp"></jsp:include>
+ <div class="container">
 	<div>
 		<div>받은 쪽지함</div>
 		<div><a href='message_sendList.do'>보낸 쪽지함</a></div>
@@ -160,7 +170,7 @@
 <div class="modal fade" id="myModal" role="dialog">
 	<div class="modal-dialog">
 		<!-- Modal content-->
-		<div class="modal-content">
+		<div class="modal-content" style="width:500px;">
 			<div class="modal-header">
 				<h4 id="modal-title" class="modal-title">쪽지 보내기</h4>
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -178,7 +188,7 @@
 					</tr>
 					<tr>
 						<td>내용</td>
-						<td><textarea class="form-control" id="message_content" rows="10"></textarea></td>
+						<td><textarea class="form-control-lg" id="message_content" style="resize: none; overflow: auto; height: 220px; width: 100%; border: 1px solid rgba(0, 0, 0, 0.1); font-size: 14px"></textarea></td>
 					</tr>					
 				</table>
 				<%
@@ -199,8 +209,8 @@
 
 	</div>
 	<input type="button" id="muldel" value="삭제"/>
-	<form action="message_recvdel.do" method="get" id="multiDelete">
-	<table style="table-layout:fixed" class="table table-hover">
+	<form action="message_multi_recvdel.do" method="get" id="multiDelete">
+	<table class="table table-hover" style="table-layout:fixed" >
 		<col width="50"/>
 		<col width="100"/>
 		<col width="450"/>
@@ -211,7 +221,7 @@
 			</td>
 			<td>보낸사람</td>
 			<td>내용</td>
-			<td>받은시간</td>
+			<td>보낸시간</td>
 		</tr>
 		<script type="text/javascript">
 	 	$("input:checkbox[id='allCheck']").click(function(){
@@ -237,10 +247,8 @@
 			<td>${dto.message_sendid }</td>
 			<td style="overflow:hidden;white-space:nowrap;text-overflow:ellipsis; max-width:450px;"><a href="message_recvDetail.do?message_no=${dto.message_no }">${dto.message_content }</a></td>
 			<td>
-				<fmt:parseDate value="${dto.message_senddate }" pattern="yyyy/MM/dd" var="date"/>
-				<fmt:formatDate value="${date}" pattern="yy-MM-dd hh:MM" var="time"/>
-				${time }
-			</td>
+				<fmt:formatDate value="${dto.message_senddate}" pattern="yy-MM-dd hh:mm" var="date"/>
+			${date }</td>
 		</tr>
 		</c:forEach>
 		</c:otherwise>
@@ -263,6 +271,6 @@
 		  </ul>
 		</div>
 	</div>
-
+</div>
 </body>
 </html>

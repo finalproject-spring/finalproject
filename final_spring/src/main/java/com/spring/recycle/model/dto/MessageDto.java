@@ -9,14 +9,14 @@ public class MessageDto {
 	private String message_sendid;
 	private String message_recvid;
 	private String message_content;
-	private String message_senddate;
-	private String message_readdate;
+	private Date message_senddate;
+	private Date message_readdate;
 	
 	public MessageDto() {
 	}
 
 	public MessageDto(int message_no, String message_sendid, String message_recvid, String message_content,
-			String message_senddate, String message_readdate) {
+			Date message_senddate, Date message_readdate) {
 		this.message_no = message_no;
 		this.message_sendid = message_sendid;
 		this.message_recvid = message_recvid;
@@ -57,39 +57,28 @@ public class MessageDto {
 		this.message_content = message_content;
 	}
 
-	public String getMessage_senddate() {
-		
-
+	public Date getMessage_senddate() {
 		return message_senddate;
 	}
 
-	public void setMessage_senddate(String message_senddate) {
-
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		String result = "";
-		
-		try {
-			Date date = format.parse(message_senddate);
-			SimpleDateFormat resultFormat = new SimpleDateFormat("yyyy/MM/dd");
-			result = resultFormat.format(date);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		this.message_senddate = result;
+	public void setMessage_senddate(Date message_senddate) {
+		this.message_senddate = message_senddate;
 	}
 
-	public String getMessage_readdate() {
+	public Date getMessage_readdate() {
 		return message_readdate;
 	}
 
-	public void setMessage_readdate(String message_readdate) {
+	public void setMessage_readdate(Date message_readdate) {
 		this.message_readdate = message_readdate;
 	}
-	
-	
-	
-	
-	
+
+	@Override
+	public String toString() {
+		return "MessageDto [message_no=" + message_no + ", message_sendid=" + message_sendid + ", message_recvid="
+				+ message_recvid + ", message_content=" + message_content + ", message_senddate=" + message_senddate
+				+ ", message_readdate=" + message_readdate + "]";
+	}
+
 	
 }

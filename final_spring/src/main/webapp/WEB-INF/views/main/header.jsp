@@ -58,7 +58,7 @@ li { list-style: none; float: left; padding: 6px; }
               <div class="dropdown-menu" aria-labelledby="dropdown04">
               	<a class="dropdown-item" href="#">공지</a>
                 <a class="dropdown-item" href="event_list.do">이벤트</a>
-                <a class="dropdown-item" href="#">QnA</a>
+                <a class="dropdown-item" href="qna_list.do">QnA</a>
               </div>
             </li> 
 	        </ul>
@@ -72,7 +72,7 @@ li { list-style: none; float: left; padding: 6px; }
 		        <% } else { %>
 		        <li class="nav-item"><a href="message_recvList.do" class="nav-link">쪽지로고</a></li>
 		        <li class="nav-item"><a href="#" class="nav-link">마이페이지 로고</a></li>
-	        	<li class="nav-item"><a href="login_memberjoin.do" class="nav-link">로그아웃</a></li>
+	        	<li class="nav-item"><a href="member_logout.do" class="nav-link">로그아웃</a></li>
 		        <% } %>
     		  </ul>
 	      </div>

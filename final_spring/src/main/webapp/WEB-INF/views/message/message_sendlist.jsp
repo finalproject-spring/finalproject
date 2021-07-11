@@ -8,13 +8,6 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<!-- popper js -->
-<Script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js"></Script>
-<!-- Javascript -->
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"/>	
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
 <script type="text/javascript">
 
 $(function(){
@@ -38,15 +31,16 @@ $(function(){
 </style>
 </head>
 <body>
-
+ <jsp:include page="../main/header.jsp"></jsp:include>
+ <div class="container">
 	<div>
 		<a href='message_recvList.do'>받은 쪽지함</a></div>
 		<div>보낸 쪽지함</div>
 	<div>
 
 	<div><input type="button" id="muldel" value="삭제"/></div>
-	<form action="message_senddel.do" method="get" id="multiDelete">
-	<table style="table-layout:fixed" class="table table-hover">
+	<form action="message_multi_senddel.do" method="get" id="multiDelete">
+	<table class="table table-hover" style="table-layout:fixed">
 		<col width="50"/>
 		<col width="100"/>
 		<col width="450"/>
@@ -83,9 +77,8 @@ $(function(){
 			<td>${dto.message_recvid }</td>
 			<td style="overflow:hidden;white-space:nowrap;text-overflow:ellipsis; max-width:450px;"><a href="message_sendDetail.do?message_no=${dto.message_no }">${dto.message_content }</a></td>
 			<td>
-				<fmt:parseDate value="${dto.message_senddate }" pattern="yyyy/MM/dd" var="date"/>
-				<fmt:formatDate value="${date}" pattern="yy-MM-dd hh:MM" var="time"/>
-				${time }
+				<fmt:formatDate value="${dto.message_senddate}" pattern="yy-MM-dd hh:mm" var="date"/>
+			${date }
 			</td>
 		</tr>
 		</c:forEach>
@@ -109,6 +102,6 @@ $(function(){
 		  </ul>
 		</div>
 	</div>
-	
+</div>	
 </body>
 </html>

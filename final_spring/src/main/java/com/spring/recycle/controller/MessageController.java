@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,26 +33,6 @@ public class MessageController {
 	@Autowired
 	private MessageBiz biz;
 	
-	@RequestMapping("/message.do")
-	public String message() {
-		return "message/message";
-	}
-	
-/*	@RequestMapping("/message_recvList.do")
-	public String recvList(Model model, HttpServletRequest request) {
-		MemberDto dto = (MemberDto) request.getSession().getAttribute("dto");
-			logger.info("============[MessageController] recvlist member_id : " + dto.getMember_id());
-		
-		if (dto != null) {
-			model.addAttribute("list", biz.getRecvMessage(dto.getMember_id()));
-			
-			return "message/message_recvlist";
-		} 
-			
-			return "main/main"; //나중에 수정
-		
-	}*/
-	
 	@RequestMapping("/message_recvList.do")
 	public String recvPageList(Model model, HttpServletRequest request, Criteria cri) {
 		MemberDto dto = (MemberDto) request.getSession().getAttribute("dto");
@@ -70,19 +51,10 @@ public class MessageController {
 
 		model.addAttribute("list", list);
 		model.addAttribute("pageMaker", pageMaker);
-		
-			
+	
 		return "message/message_recvlist"; 
 				
 	}
-	
-	/*@RequestMapping("/message_sendList.do")
-	public String sendList(Model model, HttpServletRequest request) {
-		MemberDto dto = (MemberDto) request.getSession().getAttribute("dto");
-		logger.info("============[MessageController] sendlist member_id : " + dto.getMember_id());
-		model.addAttribute("list", biz.getSendMessage(dto.getMember_id()));
-		return "message/message_sendlist";
-	}*/
 	
 	@RequestMapping("/message_sendList.do")
 	public String sendPageList(Model model, HttpServletRequest request, Criteria cri) {
@@ -103,7 +75,7 @@ public class MessageController {
 		
 		model.addAttribute("list", list);
 		model.addAttribute("pageMaker", pageMaker);
-		
+	
 		return "message/message_sendlist";
 	}
 	
@@ -125,7 +97,7 @@ public class MessageController {
 	@RequestMapping("/message_recvDetail.do")
 	public String recvDetail(Model model, int message_no) {
 		MessageDto mdto = biz.recvDetail(message_no);
-		if (mdto.getMessage_readdate().contains("9999")) {
+		if (mdto.getMessage_readdate().toString().contains("9999")) {
 			biz.updateMessage(message_no);
 		}
 		model.addAttribute("dto", biz.recvDetail(message_no));
@@ -140,21 +112,41 @@ public class MessageController {
 	}
 	
 	@RequestMapping("/message_recvdel.do")
-	public String recvDelete(MessageDelDto dto) {
+	public String recvDelete(int message_no) {
+		
+		if(biz.deleteRecvMessage(message_no) > 0) {
+			return "redirect:message_recvList.do";
+		}
+		
+		return "redirect:message_recvDetail.do?message_no="+message_no;
+	}
+	
+	@RequestMapping("/message_senddel.do")
+	public String sendDelete(int message_no) {
+		
+		if(biz.deleteSendMessage(message_no) > 0) {
+			return "redirect:message_sendList.do";
+		}
+		
+		return "redirect:message_sendDetail.do?message_no="+message_no;
+	}
+	
+	@RequestMapping("/message_multi_recvdel.do")
+	public String multiRecvDelete(MessageDelDto dto) {
 		for (int no:dto.getMessage_noList()) {
 			System.out.println("no= " + no);
 		}
-		int result = biz.deleteRecvMessage(dto.getMessage_noList());
+		int result = biz.MultiDeleteRecvMessage(dto.getMessage_noList());
 		System.out.println("삭제된 레코드 수 = " +result);
 		return "redirect:message_recvList.do";
 	}
 	
-	@RequestMapping("/message_senddel.do")
-	public String sendDelete(MessageDelDto dto) {
+	@RequestMapping("/message_multi_senddel.do")
+	public String multiSendDelete(MessageDelDto dto) {
 		for (int no:dto.getMessage_noList()) {
 			System.out.println("no= " + no);
 		}
-		int result = biz.deleteSendMessage(dto.getMessage_noList());
+		int result = biz.MultiDeleteSendMessage(dto.getMessage_noList());
 		System.out.println("삭제된 레코드 수 = " +result);
 		return "redirect:message_sendList.do";
 	}
@@ -163,8 +155,8 @@ public class MessageController {
 	@ResponseBody
 	public int message_idCheck(String member_id) {
 		logger.info(member_id);
-		int res = biz.idCheck(member_id);		
-		logger.info("================="+ member_id +"res =================" + res);
+		int res = biz.idCheck(member_id);
 		return res;
 	}
+
 }

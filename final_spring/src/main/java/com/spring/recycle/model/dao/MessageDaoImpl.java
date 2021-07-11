@@ -86,28 +86,6 @@ public class MessageDaoImpl implements MessageDao {
 	}
 
 	@Override
-	public int deleteRecvMessage(int[] message_noList) {
-		int res = 0;
-		try {
-			res = sqlSession.delete(NAMESPACE+"deleteRecvMessage", message_noList);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return res;
-	}
-
-	@Override
-	public int deleteSendMessage(int[] message_noList) {
-		int res = 0;
-		try {
-			res = sqlSession.delete(NAMESPACE+"deleteSendMessage", message_noList);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return res;
-	}
-
-	@Override
 	public List<MessageDto> getRecvMessagelist(HashMap<String, Object> map) {
 		List<MessageDto> list = null;
 		Criteria cri = (Criteria) map.get("cri");
@@ -166,6 +144,50 @@ public class MessageDaoImpl implements MessageDao {
 		int res = 0;
 		try {
 			res = sqlSession.selectOne(NAMESPACE + "idCheck", member_id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return res;
+	}
+
+	@Override
+	public int MultiDeleteRecvMessage(int[] message_noList) {
+		int res = 0;
+		try {
+			res = sqlSession.delete(NAMESPACE+"multiDeleteMessage", message_noList);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return res;
+	}
+
+	@Override
+	public int MultiDeleteSendMessage(int[] message_noList) {
+		int res = 0;
+		try {
+			res = sqlSession.delete(NAMESPACE+"multiDeleteMessage", message_noList);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return res;
+	}
+
+	@Override
+	public int deleteRecvMessage(int message_no) {
+		int res = 0;
+		try {
+			res = sqlSession.delete(NAMESPACE+"deleteMessage", message_no);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return res;
+	}
+
+	@Override
+	public int deleteSendMessage(int message_no) {
+		int res = 0;
+		try {
+			res = sqlSession.delete(NAMESPACE+"deleteMessage", message_no);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

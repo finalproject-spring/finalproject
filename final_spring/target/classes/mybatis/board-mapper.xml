@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="board">
+
+<select id="qnaList" resultType="BoardDto" parameterType="com.spring.recycle.paging.Criteria">
+	SELECT BOARD_NO, BOARD_ID, BOARD_TITLE, MEMBER_NO, BOARD_DATE, BOARD_SECRET, (SELECT COUNT(*) FROM REPLY r WHERE r.board_no = bd.board_no) AS replycount
+	FROM (SELECT BOARD_NO, BOARD_ID, BOARD_TITLE, MEMBER_NO, BOARD_DATE, BOARD_SECRET, ROW_NUMBER() OVER(ORDER BY BOARD_NO DESC) AS rn 
+	FROM BOARD WHERE BOARD_CATEGORY='문의' AND 1=1 <include refid="search"></include>) bd
+	WHERE rn BETWEEN #{rowStart} AND #{rowEnd}
+	ORDER BY BOARD_NO DESC
+</select>
+
+<sql id="search">
+	<if test="searchType != null">
+		<if test="searchType == 't'.toString()">AND BOARD_TITLE LIKE '%' || #{keyword} || '%'</if>
+		<if test="searchType == 'w'.toString()">AND BOARD_ID LIKE '%' || #{keyword} || '%'</if>
+	</if>
+</sql>
+
+<select id="qnaListCount" resultType="int">
+	SELECT COUNT(BOARD_NO) FROM BOARD WHERE BOARD_CATEGORY='문의' AND BOARD_NO > 0
+</select>
+
+<select id="qnaDetail" parameterType="int" resultType="BoardDto">
+	SELECT * FROM BOARD WHERE BOARD_NO=#{board_no}
+</select>
+
+<insert id="qnaInsert" parameterType="BoardDto">
+	INSERT INTO BOARD(BOARD_NO, BOARD_CATEGORY, BOARD_ID, BOARD_TITLE, BOARD_CONTENT, MEMBER_NO, BOARD_DATE,BOARD_SECRET)
+	VALUES(BOARDSEQ.NEXTVAL, #{board_category},#{board_id}, #{board_title}, #{board_content}, #{member_no}, SYSDATE, #{board_secret})
+</insert>
+
+<update id="qnaUpdate" parameterType="BoardDto">
+	UPDATE BOARD
+	SET BOARD_TITLE=#{board_title}, BOARD_CONTENT=#{board_content} WHERE BOARD_NO=#{board_no}
+</update>
+
+<delete id="qnaDelete" parameterType="int">
+	DELETE BOARD WHERE BOARD_NO=#{board_no}
+</delete>
+
+<insert id="qnaReply" parameterType="GroupReplyDto">
+	INSERT INTO REPLY(BOARD_NO ,BOARD_CATEGORY,REPLY_NO,REPLY_ID , REPLY_CONTENT, REPLY_DATE)
+	VALUES(#{board_no}, '문의', REPLYSEQ.NEXTVAL,#{reply_id},#{reply_content},SYSDATE)
+</insert>
+
+<select id="qnaReplyCount" parameterType="GroupReplyDto">
+	SELECT COUNT(REPLY_NO) REPLY
+</select>
+</mapper>

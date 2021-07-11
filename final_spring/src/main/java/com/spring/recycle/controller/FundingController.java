@@ -4,10 +4,6 @@ import java.beans.PropertyEditorSupport;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,7 +17,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.google.gson.JsonObject;
 import com.spring.recycle.model.biz.FundingBiz;
 import com.spring.recycle.model.dto.FundingDto;
+import com.spring.recycle.model.dto.MemberDto;
 import com.spring.recycle.util.FundingPageMaker;
 import com.spring.recycle.util.FundingSearchCriteria;
 
@@ -43,10 +39,13 @@ public class FundingController {
 	private FundingBiz biz;
 	
 	@RequestMapping(value="/funding_list.do", method = RequestMethod.GET)
-	public String listPage(Model model, @ModelAttribute("scri") FundingSearchCriteria scri) {
+	public String listPage(Model model, HttpServletRequest request,@ModelAttribute("scri") FundingSearchCriteria scri) {
 		if (scri.getFunding_filter().contains("전체보기")) {
 			scri.setFunding_filter("");
 		}
+		
+		MemberDto memberdto = (MemberDto) request.getSession().getAttribute("dto");
+		model.addAttribute("memberdto", memberdto);
 		model.addAttribute("list", biz.fundingList(scri));
 		
 		FundingPageMaker pageMaker = new FundingPageMaker();
@@ -57,26 +56,7 @@ public class FundingController {
 		
 		return "funding/funding_list";
 	}
-	@ResponseBody
-	@RequestMapping(value ="funding_ajax.do", method = { RequestMethod.POST, RequestMethod.GET })
-	public List<Object> fundingAjax(@RequestBody HashMap<String, Object> params) {
 
-		String filter = params.get("funding_filter").toString();
-		logger.info(filter);
-		FundingSearchCriteria scri = new FundingSearchCriteria();
-		scri.setFunding_filter(filter);
-		
-		FundingPageMaker pageMaker = new FundingPageMaker();
-		pageMaker.setCri(scri);
-		pageMaker.setTotalCount(biz.listCount(scri));
-		
-		List<Object> temp = new ArrayList<>(); temp.add(biz.fundingList(scri));
-		temp.add(pageMaker); System.out.println(temp);
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("list", biz.fundingList(scri));
-		map.put("pageMaker", pageMaker);
-		return temp;
-	}
 	
 	@RequestMapping("funding_insertform.do")
 	public String insertForm() {
@@ -85,8 +65,11 @@ public class FundingController {
 	}
 	
 	@RequestMapping("funding_detail.do")
-	public String selectOne(Model model, int funding_no) {
+	public String selectOne(Model model, HttpServletRequest request, int funding_no, FundingSearchCriteria scri) {
+		MemberDto memberdto = (MemberDto) request.getSession().getAttribute("dto");
+		model.addAttribute("memberdto", memberdto);
 		model.addAttribute("dto", biz.fundingDetail(funding_no));
+		model.addAttribute("scri", scri);
 		
 		return "funding/funding_detail";
 	}

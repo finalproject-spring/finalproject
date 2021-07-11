@@ -146,6 +146,7 @@
 </style>
 </head>
 <body>
+ <jsp:include page="../main/header.jsp"></jsp:include>
 	<div>
 		<form method="post" enctype="multipart/form-data" action="funding_updateres.do">
 			<input type="hidden" name="funding_no" value="${dto.funding_no }"/>

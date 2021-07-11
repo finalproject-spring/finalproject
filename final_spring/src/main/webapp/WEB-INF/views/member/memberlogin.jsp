@@ -124,7 +124,6 @@
                                 <input id = "login_button" type="submit" name="submit" class="btn btn-info btn-md" value="submit">
                                 <input id = "" type="submit" name="submit" class="btn btn-info btn-md" value="register" >
                             </div>
-                 
                         </form>
                     </div>
                 </div>
@@ -176,7 +175,11 @@
 			} 
 	});
 	});
-
 </script>
+
+<!-- 소셜로그인 -->
+	<div>간편로그인</div>
+	<div><a><img alt="네이버 로그인 로고" src="resources/images/naverlogo.png"></a></div>
+	<div><a><img alt="카카오 로그인 로고" src="resources/images/kakaologo.png"></a></div>
 </body>
 </html>

@@ -135,6 +135,7 @@
 </style>
 </head>
 <body>
+ <jsp:include page="../main/header.jsp"></jsp:include>
 	<div>
 		<form method="post" enctype="multipart/form-data" action="funding_insertres.do">
 			<div>

@@ -11,37 +11,51 @@
 <script type="text/javascript">
 
 	$(function(){
-		$("#muldel").click(function(){
-				$("form").submit();
+		$("#delete").click(function(){
+				$("#deleteForm").submit();
 		});
 	});
 
 </script>
+<style type="text/css">
+
+textarea.form-control {
+  height: 100%;
+} 
+
+</style>
 </head>
 <body>
-
+ <jsp:include page="../main/header.jsp"></jsp:include>
+ <div class="container">
 	<div>
 		<a href='message_recvList.do'>받은 쪽지함</a>
 		<a href='message_sendList.do'>보낸 쪽지함</a>
 	</div>
 	<div>보낸 쪽지</div>
 		<div>
-		<form action="message_senddel.do" method="get">
-			<input type="hidden" value="${dto.message_no }" name="message_noList"/>	
+		<form id="deleteForm" action="message_senddel.do" method="get">
+			<input type="hidden" value="${dto.message_no }" name="message_no"/>	
 		</form>
 	</div>
-	<input type="button" id="muldel" value="삭제"/>
+	<input type="button" id="delete" value="삭제"/>
 	
 
-	
-	<div>받는 사람 ${dto.message_recvid }</div>
-	<div>보낸 시간 			
-				<fmt:parseDate value="${dto.message_senddate }" pattern="yyyy/MM/dd" var="date"/>
-				<fmt:formatDate value="${date}" pattern="yyyy-MM-dd hh시 MM분" var="time"/>
-				${time }
+	<fmt:formatDate value="${dto.message_senddate}" pattern="yyyy-MM-dd hh:mm" var="date"/>
+	<form>
+		<div class="form-group">
+			<label>받는 사람</label>
+			<input type="text" value="${dto.message_recvid }" class="form-control" readonly="readonly">
+		</div>
+		<div class="form-group">
+			<label>보낸시간</label>
+			<input type="text" value="${date }" class="form-control" readonly="readonly">
+		</div>
+		<div class="form-group">
+			<label>내용</label>
+			<textarea rows="8" readonly="readonly" style="width: 100%; resize: none; border: 1px solid rgba(0, 0, 0, 0.1); font-size: 14px; border-radius: 0px; padding-left: 10px;">${dto.message_content }</textarea>
+		</div>
+	</form>
 	</div>
-
-	<div>내용${dto.message_content }</div>
-
 </body>
 </html>

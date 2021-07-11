@@ -26,10 +26,15 @@ public interface MessageBiz {
 	// 쪽지 읽음 처리
 	public int updateMessage(int message_no);
 	
+	// 받은 쪽지 다중 삭제 (수신)
+	public int MultiDeleteRecvMessage(int[] message_noList);
+	// 받은 쪽지 다중 삭제 (발신)
+	public int MultiDeleteSendMessage(int[] message_noList);
+
 	// 받은 쪽지 삭제 (수신)
-	public int deleteRecvMessage(int[] message_noList);
+	public int deleteRecvMessage(int message_no);
 	// 받은 쪽지 삭제 (발신)
-	public int deleteSendMessage(int[] message_noList);
+	public int deleteSendMessage(int message_no);	
 	
 	// 받은 쪽지함 & 페이징
 	public List<MessageDto> getRecvMessagelist(HashMap<String, Object> map);
