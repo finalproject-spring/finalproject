@@ -12,6 +12,7 @@ public class MemberDto {
 	private String member_pic;
 	private int member_role ;
 	private int member_delete;
+	private String member_socialid;
 	
 	
 	
@@ -19,7 +20,7 @@ public class MemberDto {
 		super();
 	}
 	public MemberDto(int member_no, String member_name, String member_id, String member_pw, String member_email,
-			String member_phone, String member_addr, String member_pic, int member_role, int member_delete) {
+			String member_phone, String member_addr, String member_pic, int member_role, int member_delete, String member_socialid) {
 		super();
 		this.member_no = member_no;
 		this.member_name = member_name;
@@ -91,6 +92,14 @@ public class MemberDto {
 	}
 	public void setMember_delete(int member_delete) {
 		this.member_delete = member_delete;
+	}
+	
+	
+	public String getMember_socialid() {
+		return member_socialid;
+	}
+	public void setMember_socialid(String member_socialid) {
+		this.member_socialid = member_socialid;
 	}
 	@Override
 	public String toString() {

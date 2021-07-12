@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,12 +11,42 @@
 <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,700' rel='stylesheet' type='text/css'>
 
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-	
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>	
 <link rel="stylesheet" href="resources/css/style.css">
 <script type="text/javascript" src="resources/js/jquery.min.js"></script>
 <script type="text/javascript" src="resources/js/popper.js"></script>
 <script type="text/javascript" src="resources/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="resources/js/main.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+<script type="text/javascript">
+
+// 전역변수 설정
+var socket  = null;
+$(document).ready(function(){
+    // 웹소켓 연결
+    sock = new SockJS("<c:url value="/message_ws"/>");
+    socket = sock;
+	
+    // 데이터를 전달 받았을때 
+    sock.open = onOpen;
+    sock.onmessage = onMessage; // toast 생성
+	sock.onclose = onClose;
+});
+
+ // toast생성 및 추가
+    function onMessage(evt){
+        var data = evt.data;
+        // toast
+        let toast = "<div class='toast' role='alert' aria-live='assertive' aria-atomic='true'>";
+        toast += "<div class='toast-header'><i class='fas fa-bell mr-2'></i><strong class='mr-auto'>알림</strong>";
+        toast += "<small class='text-muted'>just now</small><button type='button' class='ml-2 mb-1 close' data-dismiss='toast' aria-label='Close'>";
+        toast += "<span aria-hidden='true'>&times;</span></button>";
+        toast += "</div> <div class='toast-body'>" + data + "</div></div>";
+        $("#msgStack").append(toast);   // msgStack div에 생성한 toast 추가
+        $(".toast").toast({"animation": true, "autohide": false});
+        $('.toast').toast('show');
+    };	
+</script>
 <style type="text/css">
 
 li { list-style: none; float: left; padding: 6px; }
@@ -70,7 +101,7 @@ li { list-style: none; float: left; padding: 6px; }
 	        	<li class="nav-item"><a href="login_memberjoin.do" class="nav-link">회원가입</a></li>
 		
 		        <% } else { %>
-		        <li class="nav-item"><a href="message_recvList.do" class="nav-link">쪽지로고</a></li>
+		        <li class="nav-item" style="vertical-align:middle;"><a href="message_recvList.do" class="nav-link" style="font-size:22px; height:35px; vertical-align:middle; padding-top:3px;"><i class="far fa-envelope"></i><span id="msgNum"></span></a></li>
 		        <li class="nav-item"><a href="#" class="nav-link">마이페이지 로고</a></li>
 	        	<li class="nav-item"><a href="member_logout.do" class="nav-link">로그아웃</a></li>
 		        <% } %>

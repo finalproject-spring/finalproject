@@ -35,14 +35,23 @@
 		</interceptor>
 	</interceptors>
 
-	<beans:bean id="messageHandler" class="com.spring.recycle.websocket.MessageHandler"></beans:bean>
-	
+<!-- 	<beans:bean id="messageHandler" class="com.spring.recycle.websocket.MessageHandler"></beans:bean>
+ -->	
 	<!-- 쪽지 websocket handler / httpSession 접근 -->
-	<websocket:handlers>
-		<websocket:mapping handler="messageHandler" path="/wsMessage.do"/>
+<!-- 	<websocket:handlers>
+		<websocket:mapping handler="messageHandler" path="/wsmessage.do"/>
 		<websocket:handshake-interceptors>
 	         <beans:bean class="org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor"/>
 	      </websocket:handshake-interceptors>
-	</websocket:handlers>
+	      <websocket:sockjs/>
+	</websocket:handlers> -->
+	<beans:bean id="messageHandler" class="com.spring.recycle.websocket.MessageHandler" />
+<websocket:handlers>
+    <websocket:mapping handler="messageHandler" path="/message_ws" />
+    <websocket:handshake-interceptors>
+        <beans:bean class="org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor" />
+    </websocket:handshake-interceptors>	
+    <websocket:sockjs />
+</websocket:handlers>
 
 </beans:beans>

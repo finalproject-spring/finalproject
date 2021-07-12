@@ -165,5 +165,28 @@ public class MemberDaoImpl implements MemberDao {
 		
 		return res;
 	}
+
+	@Override
+	public MemberDto socialLogin(String member_id) {
+		MemberDto dto = null;
+		try {
+			dto = sqlSession.selectOne(NAMESPACE+"socialLogin", member_id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return dto;
+	}
+
+	@Override
+	public int socialJoin(MemberDto dto) {
+		int res = 0;
+		try {
+			res = sqlSession.insert(NAMESPACE+"socialJoin", dto);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		System.out.println("res :" + res);
+		return res;
+	}
 	
 }

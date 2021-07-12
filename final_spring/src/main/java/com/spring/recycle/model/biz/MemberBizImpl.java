@@ -81,6 +81,16 @@ public class MemberBizImpl implements MemberBiz {
 		return dao.memberwriteDelete(board_no);
 	}
 
+	@Override
+	public MemberDto socialLogin(String member_id) {
+		return dao.socialLogin(member_id);
+	}
+
+	@Override
+	public int socialJoin(MemberDto dto) {
+		return dao.socialJoin(dto);
+	}
+
 
 
 

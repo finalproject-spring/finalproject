@@ -179,7 +179,7 @@
 
 <!-- 소셜로그인 -->
 	<div>간편로그인</div>
-	<div><a><img alt="네이버 로그인 로고" src="resources/images/naverlogo.png"></a></div>
+	<div><a href=${naver_url }><img alt="네이버 로그인 로고" src="resources/images/naverlogo.png"></a></div>
 	<div><a><img alt="카카오 로그인 로고" src="resources/images/kakaologo.png"></a></div>
 </body>
 </html>

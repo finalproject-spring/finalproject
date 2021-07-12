@@ -3,8 +3,7 @@ package com.spring.recycle.controller;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
+import java.sql.SQLException;
 import java.util.Random;
 import java.util.UUID;
 
@@ -13,6 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.FileUtils;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,14 +22,19 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.github.scribejava.core.model.OAuth2AccessToken;
 import com.spring.recycle.model.biz.MemberBiz;
 import com.spring.recycle.model.dto.MemberDto;
+import com.spring.recycle.model.dto.NaverLoginDto;
 
 
 @Controller
@@ -43,12 +49,22 @@ public class MemberController {
 	   private BCryptPasswordEncoder pwEncoder;
 	   @Autowired
 	   private JavaMailSender mailSender;
+	   // 지현 추가
+	   private MemberDto dto = new MemberDto();
+	   private NaverLoginDto ndto = new NaverLoginDto();
 	   
 	   
 	   //로그인 페이지폼으로 가기 
 	   @RequestMapping(value = "/login_loginform.do" , method = RequestMethod.GET)
-	   public String loginForm() {
+	   public String loginForm(Model model, HttpSession session) {
 	      logger.info("[Controller] loginform.do");
+	      
+	      // 네이버
+	      NaverLoginDto dto = new NaverLoginDto();
+	      String naverAuthUrl = dto.getAuthorizationUrl(session);
+	      
+	      model.addAttribute("naver_url",naverAuthUrl);
+	      
 	      return "member/memberlogin";
 	   }
 	   
@@ -203,6 +219,51 @@ public class MemberController {
 		}
 	   
 
+		// 지현추가
+		// 네이버 로그인
+		@RequestMapping(value= "/login_navercallback.do")
+		public String naverLogin(Model model, @RequestParam String code, @RequestParam String state, HttpSession session,
+				HttpServletRequest request, RedirectAttributes redirect) throws Exception {
+			
+			OAuth2AccessToken oauthToken;			
+			oauthToken = ndto.getAccessToken(session, code, state);
 
+			// String을 json형태로 바꿈
+			String apiResult = ndto.getUserProfile(oauthToken);
+			JSONParser parser = new JSONParser();
+			Object obj = parser.parse(apiResult);
+			JSONObject jsonObj = (JSONObject) obj;
+			
+			JSONObject response_obj = (JSONObject) jsonObj.get("response");
+			
+			String naver_id = (String) response_obj.get("id");
+			String member_name = (String) response_obj.get("name");
+			String member_email = (String) response_obj.get("email");
+			String member_phone = (String) response_obj.get("mobile");
+			String member_socialid = "@naver@"+naver_id;
+			String member_pw = UUID.randomUUID().toString();
+
+			if(biz.idCheck(member_socialid) == 0) {
+				dto.setMember_socialid(member_socialid);
+				dto.setMember_name(member_name);
+				dto.setMember_email(member_email);
+				dto.setMember_phone(member_phone);
+				dto.setMember_pw(member_pw);
+				model.addAttribute("dto",dto);
+				return "member/member_socialsignup";
+			} else {
+				dto = biz.socialLogin(member_socialid);
+				session.setAttribute("dto", dto);
+				session.setMaxInactiveInterval(3600);
+				return "main/main";
+			}
+			
+		}
+		
+		@RequestMapping("/login_naverJoin.do")
+		public String naverJoin(MemberDto dto) {
+			biz.socialJoin(dto);
+			return "main/main";
+		}
 }
 

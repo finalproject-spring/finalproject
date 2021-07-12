@@ -15,7 +15,13 @@ public interface MemberDao {
 	   //id중복검사하기 
 	   public int idCheck(String member_id);
 
-	   // 지현 추가 - 관리자 페이지
+	   // 지현 추가
+	   //소셜로그인
+	   public MemberDto socialLogin(String member_id);
+	   // 소셜 회원가입
+	   public int socialJoin(MemberDto dto);
+	   
+	   /* 관리자 페이지 */
 	   // 전체 회원 조회
 	   public List<MemberDto> memberList();
 	   // 회원 상세 페이지

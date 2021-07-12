@@ -9,6 +9,7 @@
 		<typeAlias type="com.spring.recycle.model.dto.GroupReplyDto" alias="GroupReplyDto"/>
 		<typeAlias type="com.spring.recycle.model.dto.EventDto" alias="EventDto"/>
 		<typeAlias type="com.spring.recycle.model.dto.BoardDto" alias="BoardDto"/>
+		<typeAlias type="com.spring.recycle.model.dto.NaverLoginDto" alias="NaverLoginDto"/>
 	</typeAliases>
 	
 	<mappers>
