@@ -41,8 +41,8 @@ public class MessageDaoImpl implements MessageDao {
 	}
 
 	@Override
-	public int unreadMsgCount(String message_recvid) {
-		int count = 0;
+	public String unreadMsgCount(String message_recvid) {
+		String count = null;
 		try {
 			count = sqlSession.selectOne(NAMESPACE+"unreadMsgCount", message_recvid);
 		} catch (Exception e) {

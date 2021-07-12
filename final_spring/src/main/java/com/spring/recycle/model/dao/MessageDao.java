@@ -18,7 +18,7 @@ public interface MessageDao {
 	public int insertRecvMessage(MessageDto dto);
 	public int insertSendMessage(MessageDto dto);
 	
-	public int unreadMsgCount(String message_recvid);
+	public String unreadMsgCount(String message_recvid);
 	
 	public int updateMessage(int message_no);
 	

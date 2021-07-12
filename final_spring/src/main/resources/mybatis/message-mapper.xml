@@ -18,9 +18,9 @@
 </update>
 
 <!-- 읽지 않은 메세지 개수 -->
-<select id="unreadMsgCount" resultType="int">
+<select id="unreadMsgCount" resultType="String">
 	SELECT COUNT(*) FROM MESSAGE
-	WHERE READDATE = '9999-12-31' AND MESSAGE_RECVID = #{message_recvid}
+	WHERE MESSAGE_READDATE = '9999-12-31' AND MESSAGE_RECVID = #{message_recvid}
 </select>
 
 <!-- 받은 메세지 개수 -->

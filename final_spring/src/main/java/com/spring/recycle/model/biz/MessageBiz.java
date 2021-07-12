@@ -21,7 +21,7 @@ public interface MessageBiz {
 	public int insertSendMessage(MessageDto dto);
 	
 	// 읽지 않은 쪽지 개수
-	public int unreadMsgCount(String message_recvid);
+	public String unreadMsgCount(String message_recvid);
 	
 	// 쪽지 읽음 처리
 	public int updateMessage(int message_no);

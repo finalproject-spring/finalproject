@@ -26,7 +26,7 @@ public class MessageBizImpl implements MessageBiz {
 	}
 
 	@Override
-	public int unreadMsgCount(String message_recvid) {
+	public String unreadMsgCount(String message_recvid) {
 		return dao.unreadMsgCount(message_recvid);
 	}
 
