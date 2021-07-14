@@ -42,4 +42,9 @@
 		SELECT COUNT(FUNDING_NO) FROM FUNDING WHERE 1=1 AND FUNDING_FILTER like '%'||#{funding_filter}||'%' AND FUNDING_NO > 0
 	</select>
 	
+	<select id="selctAll" resultType="fundingDto">
+		SELECT FUNDING_NO, FUNDING_PIC, FUNDING_TITLE, FUNDING_FILTER, FUNDING_START, FUNDING_END, FUNDING_TA, FUNDING_CA
+		FROM FUNDING 
+	</select>
+	
 </mapper>

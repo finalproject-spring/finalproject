@@ -85,4 +85,16 @@ public class EventDaoImpl implements EventDao {
 		return res;
 	}
 
+	@Override
+	public List<EventDto> listAll() {
+		List<EventDto> list = new ArrayList<EventDto>();
+		
+		try {
+			list = sqlSession.selectList(NAMESPACE + "listAll");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
 }

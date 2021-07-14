@@ -2,18 +2,18 @@ package com.spring.recycle.util;
 
 import com.github.scribejava.core.builder.api.DefaultApi20;
 
-public class NaverLoginApi extends DefaultApi20 {
+public class naverLoginApi extends DefaultApi20 {
 
 		
-	public NaverLoginApi() {
+	public naverLoginApi() {
 	
 	}
 
     private static class InstanceHolder {
-        private static final NaverLoginApi INSTANCE = new NaverLoginApi();
+        private static final naverLoginApi INSTANCE = new naverLoginApi();
       }
 
-      public static NaverLoginApi instance() {
+      public static naverLoginApi instance() {
         return InstanceHolder.INSTANCE;
       }
 
@@ -22,6 +22,7 @@ public class NaverLoginApi extends DefaultApi20 {
 	public String getAccessTokenEndpoint() {
 		return "https://nid.naver.com/oauth2.0/token?grant_type=authorization_code";
 	}
+	
 
 	@Override
 	protected String getAuthorizationBaseUrl() {

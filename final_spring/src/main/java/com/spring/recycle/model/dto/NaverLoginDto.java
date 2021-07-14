@@ -14,7 +14,7 @@ import com.github.scribejava.core.model.OAuthRequest;
 import com.github.scribejava.core.model.Response;
 import com.github.scribejava.core.model.Verb;
 import com.github.scribejava.core.oauth.OAuth20Service;
-import com.spring.recycle.util.NaverLoginApi;
+import com.spring.recycle.util.naverLoginApi;
 
 public class NaverLoginDto {
 	
@@ -43,11 +43,11 @@ public class NaverLoginDto {
 	    		.apiSecret(CLIENT_SECRET)
 	    		.callback(REDIRECT_URI)
 	    		.state(state)
-	    		.build(NaverLoginApi.instance());
+	    		.build(naverLoginApi.instance());
 	
 	    return oauthService.getAuthorizationUrl();
     }
-    
+
 	/* 네아로 Callback 처리 및  AccessToken 획득 Method */
 	public OAuth2AccessToken getAccessToken(HttpSession session, String code, String state) throws IOException{
 		
@@ -60,7 +60,7 @@ public class NaverLoginDto {
 					.apiSecret(CLIENT_SECRET)
 					.callback(REDIRECT_URI)
 					.state(state)
-					.build(NaverLoginApi.instance());
+					.build(naverLoginApi.instance());
 					
 			/* Scribe에서 제공하는 AccessToken 획득 기능으로 네아로 Access Token을 획득 */
 			OAuth2AccessToken accessToken = oauthService.getAccessToken(code);
@@ -88,7 +88,7 @@ public class NaverLoginDto {
 	// Access Token을 이용하여 네이버 사용자 프로필 API를 호출
 	public String getUserProfile(OAuth2AccessToken oauthToken) throws IOException {
 		OAuth20Service oauthService = new ServiceBuilder().apiKey(CLIENT_ID).apiSecret(CLIENT_SECRET)
-				.callback(REDIRECT_URI).build(NaverLoginApi.instance());
+				.callback(REDIRECT_URI).build(naverLoginApi.instance());
 		OAuthRequest request = new OAuthRequest(Verb.GET, PROFILE_API_URL, oauthService);
 		oauthService.signRequest(oauthToken, request);
 		Response response = request.send();

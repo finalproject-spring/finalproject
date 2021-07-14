@@ -41,7 +41,7 @@
 
 				<div class="form-group" align="right">
 					<input type="submit" value="삭제하기"/>
-					<input type="button" value="뒤로가기" onclick="admin_memberList.do"/>
+					<input type="button" value="뒤로가기" onclick="location.href='admin_memberList.do'"/>
 				</div>
 			</form>
 		</div>

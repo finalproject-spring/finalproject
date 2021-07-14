@@ -22,5 +22,6 @@ public interface EventDao {
 	
 	public int listCount(EventSearchCriteria scri);
 
-
+	// event 전체 리스트 추가
+	public List<EventDto> listAll();
 }

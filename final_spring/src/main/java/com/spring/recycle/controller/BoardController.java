@@ -34,6 +34,13 @@ public class BoardController {
 	@Autowired
 	private GroupReplyBiz replybiz = new GroupReplyBizImpl();
 	
+	
+	@RequestMapping(value = "/board.do", method=RequestMethod.GET)
+	public String BoardList(Model model) {
+		
+		return "board/board_list";
+	}
+	
 	@RequestMapping(value="/qna_list.do", method = RequestMethod.GET)
 	public String qna_list(Model model, HttpServletRequest request, SearchCriteria scri) {
 		MemberDto dto = (MemberDto) request.getSession().getAttribute("dto");

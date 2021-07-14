@@ -5,7 +5,7 @@
  <!-- 로그인 -->
   <select id="login" parameterType="memberDto" resultType="memberDto">
    SELECT * FROM MEMBER
-   WHERE MEMBER_ID = #{member_id} 
+   WHERE MEMBER_ID = #{member_id} AND MEMBER_DELETE = 0
   </select>
   
   <!-- 회원가입 -->
@@ -23,12 +23,17 @@
 	<!-- 지현 추가 -->
 	<!-- 소셜 로그인 -->
 	<select id="socialLogin" parameterType="String" resultType="memberDto">
-		SELECT * FROM MEMBER WHERE MEMBER_ID = #{member_id}
+		SELECT * FROM MEMBER WHERE MEMBER_SOCIALID = #{member_socialid}
 	</select>
 	<insert id="socialJoin" parameterType="memberDto">
 		INSERT INTO MEMBER
-		VALUES(MEMBERSEQ.NEXTVAL, #{member_name}, #{member_id}, #{member_pw}, #{member_email}, #{member_phone}, #{member_addr}, null, 1, #{member_socialid})
+		VALUES(MEMBERSEQ.NEXTVAL, #{member_name}, #{member_id}, #{member_pw}, #{member_email}, #{member_phone}, #{member_addr}, null, 1, 0, #{member_socialid})
 	</insert>
+	<!-- 소셜id중복체크 -->
+	<select id="socialIdCheck" resultType="int" parameterType="String">
+		SELECT COUNT(*) FROM MEMBER
+    	WHERE MEMBER_SOCIALID = #{member_socialid}
+	</select>
 	
 	<!-- 회원 전체 조회 -->
 	<select id="memberList" resultType="memberDto">

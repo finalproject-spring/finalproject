@@ -19,18 +19,20 @@
 </script>
 <style type="text/css">
 
-textarea.form-control {
-  height: 100%;
-} 
+	textarea.form-control { height: 100%; } 
+
+	#message_menu {padding-bottom: 30px;}
+	#message_menu span { display:inline-block; width: 50%; height: 50px; line-height: 50px; text-align: center; border: 1px solid rgba(0,0,0,.1); cursor: pointer; }
+	
 
 </style>
 </head>
 <body>
  <jsp:include page="../main/header.jsp"></jsp:include>
  <div class="container">
-	<div>
-		<a href='message_recvList.do'>받은 쪽지함</a>
-		<a href='message_sendList.do'>보낸 쪽지함</a>
+	<div id="message_menu">
+		<span onclick="location.href='message_recvList.do'" style="float: left;">받은 쪽지함</span>
+		<span onclick="location.href='message_sendList.do'">보낸 쪽지함</span>
 	</div>
 	<div>보낸 쪽지</div>
 		<div>
@@ -38,10 +40,9 @@ textarea.form-control {
 			<input type="hidden" value="${dto.message_no }" name="message_no"/>	
 		</form>
 	</div>
-	<input type="button" id="delete" value="삭제"/>
-	
-
-	<fmt:formatDate value="${dto.message_senddate}" pattern="yyyy-MM-dd hh:mm" var="date"/>
+	<input type="button" id="delete" value="삭제" class="btn btn-info btn-sm"/>
+	<br/>
+	<fmt:formatDate value="${dto.message_senddate}" pattern="yyyy-MM-dd kk:mm" var="date"/>
 	<form>
 		<div class="form-group">
 			<label>받는 사람</label>

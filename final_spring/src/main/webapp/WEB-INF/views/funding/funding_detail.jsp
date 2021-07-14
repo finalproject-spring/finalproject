@@ -7,31 +7,10 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-
-<link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta2/dist/css/bootstrap-select.min.css">
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<!-- JavaScript Bundle with Popper -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta2/dist/js/bootstrap-select.min.js"></script>
 <script type="text/javascript">
 
-	$(document).ready(function(){
-		$('#count').selectpicker();	
-	});
-	
-	$(document).ready(function() {
-	    var pays = '${dto.funding_pay}'.replace(" ", "").split(",");
-	    var paydesc = '${dto.funding_paydesc}'.split("$%^");
-	    var selectbox = document.getElementById("selects");
-	
-	    for (var i in pays) {       
-	      	selectbox.options[i] = new Option(paydesc[i] + "\u00A0\u00A0\u00A0:\u00A0\u00A0\u00A0" + pays[i]+"원",paydesc[i] +"$%^"+ pays[i]);   	
-	    }
-	    $('#selects').selectpicker();
-	});
-	
-	$(document).ready(function(){		
+	$(document).ready(function(){	
 		var endDay = new Date('${dto.funding_end}');
 		var now = new Date();
 		var gap = now.getTime() - endDay.getTime();
@@ -45,110 +24,130 @@
 			document.getElementById('addPayBtn').disabled = true;
 		}
 		
+		var filter = '${dto.funding_filter}'.split(",");
+		var html = "";
+		
+		for(var i in filter) {
+			html += "<span id='funding_filter'>#"+filter[i]+" </span>"
+			
+		}
+		$('#dDay').before(html);
 	});
+	
+	function count(type) {
+		var numElement = document.getElementById('count');
+		var num = numElement.innerText;
+		var price = ${dto.funding_pay};
 		
-	function addPayment() {
-		var selected = $("#selects").val();
-		var selArr = selected.split("$%^");
-		var count = $("#count").val();
-		var paydesc = '${dto.funding_paydesc}'.split("$%^");
-		var box = document.getElementById("payBox");
-		var newP = document.createElement('p');
-		newP.innerHTML =
-			"<div>" + selArr[0] + "<span class='totalPay'>" + selArr[1] + "원</span></div><div>수량: " + count +" 개\u00A0\u00A0\u00A0<input type='button' value='X' onclick='remove(this.parentNode)'></div>";
+		if(type=='plus') {
+			if(parseInt(num) < 15) {
+				num = parseInt(num) + 1;
+				var totalPrice = price * num;
+				$('#total').text(totalPrice.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") + " 원");
+			} else {
+				alert("최대 선택 수량은 15개입니다.")
+			}
+
+		} else if(type=='minus') {
+			if(parseInt(num) > 1) {
+				num = parseInt(num) -1;
+			} else {
+				alert("최소 1개 이상 선택할 수 있습니다.")
+			}
+			
+		}
 		
-	    box.appendChild(newP);
-	    
-	    var pay = $(".totalPay").text();
-	    var pat2 = pay.replace(/[^0-9원]/g,"")
-	    var p4 = pat2.split('원');
-	    var num = 0;
-	    for(var i in p4) {
-	    	if(!isNaN(parseInt(p4[i]))) {
-	    		num  += parseInt(p4[i]) * parseInt(count);
-	    	} 
-	    }
-		$('#paymentConnection').val(num);	    
+		numElement.innerText = num;
 	}
-	  var remove = (obj) => {
-	    document.getElementById('payBox').removeChild(obj.parentNode);
-	}
-	  
+	
+
 	function fundingDelete(){
 		if(confirm("[관리자 전용] 삭제하면 복구할 수 없습니다.\n글을 삭제하시겠습니까?")) {
 			location.href='funding_delete.do?funding_no=${dto.funding_no}';
 		}
 		return false;
 	}
-	
-	function payment() {
-
-	}
 
 </script>
 <style type="text/css">
-	.title {font-size: 40px;}
- 	.container { background:rgb(255, 254, 254); padding:0; margin:0; }
-	.prog { width: 340px; background:rgb(189, 177, 177); }
-	.progs { height: 7px; background: rgb(225, 149, 240); color:#fff; line-height: 50px; }
-	
+	.container { color:black; }
+	.title { font-size: 40px; font-weight: 700; height: 180px; line-height: 180px; }
+	#img_wrap { float: left; margin-right: 100px; width:610px; height: 400px; }
+ 	.wrap { background:rgb(255, 254, 254); padding:0; margin:0; }
+	.prog { width: 450px; background:rgb(189, 177, 177); }
+	.progs { height: 6px; background: rgb(225, 149, 240); color:#fff; line-height: 50px; }
+	#info { width: 450px; height: 460px; font-size: 20px; }
+	strong { font-size: 30px; }
+	#clear::after { display: block; clear: both; content: ''; }
+	#funding_filter { font-size: 20px; font-weight:700; vertical-align: top; }
+	#dDay { font-weight: 700; }
+	#dDay, .wrap, #persent, #ca {padding-top: 18px;}
+	#ca {padding-bottom: 20px;}
+	#plus, #minus {background-color:#EBEBEB; border-radius: 25px; width: 20px; height: 20px; display: inline-block; line-height: 19px; text-align: center; vertical-align: middle; cursor: pointer;}
+	#payinfo {font-size: 16px; font-weight:700; padding: 0px 20px 0px 20px; height:80px; line-height: 80px; background-color: #F6F7F6; border-radius: 5px;}
+	#funding_btn {width: 450px; height: 50px;}
+	#info2 {background-color: #F1F5FE; font-weight:700; width: 610px; padding: 20px 10px 20px 10px}
+	#total {padding: 10px 0px 10px 0px}
+	#funding_content {padding: 100px 0px 100px 0px;}
+	#bottom_menu {padding-bottom: 100px;}
 </style>
 </head>
 <body>
  <jsp:include page="../main/header.jsp"></jsp:include>
-	<div>
+	<div class="container">
 	<form name="readForm" role="form" method="post">
 	  <input type="hidden" id="funding_no" name="funding_no" value="${dto.funding_no}" />
 	  <input type="hidden" id="page" name="page" value="${scri.page}"> 
 	  <input type="hidden" id="perPageNum" name="perPageNum" value="${scri.perPageNum}"> 
 	  <input type="hidden" id="funding_filter" name="funding_filter" value="${scri.funding_filter}"> 
 	</form>
-	<div class="title">${dto.funding_title }</div>
-		<div>
-		<img alt="펀딩 썸네일 사진" src="${dto.funding_pic}" style="width:600px; height: 400px;"></div>
-		<div>${dto.funding_filter }</div>
-		<fmt:parseNumber var="persent" integerOnly="true" value="${dto.funding_ca/dto.funding_ta*100 }"/>
-		<div class="container">
-			<div class="prog">
-				<div class="progs" style="width: ${persent }%; max-width:300px"></div>
+	<div align="center" class="title">${dto.funding_title }</div>
+	<div id="clear">	
+		<div id="img_wrap">
+			<img alt="펀딩 썸네일 사진" src="${dto.funding_pic}" style="width:610px; height: 405px;">
+		</div>
+		<div id="info" style="float: left;">
+			<fmt:parseNumber var="persent" integerOnly="true" value="${dto.funding_ca/dto.funding_ta*100 }"/>
+			<div id="dDay"></div>
+			<div class="wrap">
+				<div class="prog">
+					<div class="progs" style="width: ${persent }%; max-width:300px"></div>
+				</div>
 			</div>
+			<div id="persent"><strong>${persent }%</strong> 달성</div>
+			<div id="ca"><fmt:formatNumber var="ca" value="${dto.funding_ca}" pattern="#,###,###,###"/><strong>${ca }</strong> 원 펀딩</div>
+	 		<div id="payinfo">
+	 			<div style="text-align: left; float: left;">펀딩 가격</div>
+		 		<fmt:formatNumber var="payment" value="${dto.funding_pay }" pattern="#,###,###,###"/>
+				<div style="text-align: right;">${payment } 원</div>
+			</div>
+			<div align="right" style="font-size: 17px; padding-top: 30px;">
+				<span style="font-weight: 700;">수량</span>
+				<span id="plus" onclick="count('minus');">-</span>
+				<span id="count" style="font-weight: 700; padding: 0px 5px 0px 5px;">1</span>
+				<span id="minus" onclick="count('plus');">+</span>			
+			</div>
+			<hr/>
+			<div id="total" style="text-align: right;">${payment } 원</div>
+			<div id="payment">
+				<input type="button" id="funding_btn" value="펀딩하기" onclick="payment();"/>
+			</div>			
 		</div>
-		<div>${persent }% 달성</div>
-		<div><fmt:formatNumber var="ca" value="${dto.funding_ca}" pattern="#,###,###,###"/>현재 금액 ${ca }</div>
-		<div><fmt:formatNumber var="ta" value="${dto.funding_ta}" pattern="#,###,###,###"/>목표 금액 ${ta }</div>
-		<div id="dDay"></div>
+	</div>
+	<div id="info2">
+		<div><fmt:formatNumber var="ta" value="${dto.funding_ta}" pattern="#,###,###,###"/>목표 금액 ${ta } 원</div>
 		<div>펀딩 기간 ${dto.funding_start } ~ ${dto.funding_end }</div>
-		<div>펀딩 금액 설정
-			<select id="selects">
-			</select>
-			<div>수량</div>
-			<select id="count">
-			  <option>1</option>
-			  <option>2</option>
-			  <option>3</option>
-			  <option>4</option>
-			  <option>5</option>
-			  <option>6</option>
-			  <option>7</option>
-			  <option>8</option>
-			  <option>9</option>
-			  <option>10</option>
-			</select>
+	</div>	
+	<div id="funding_content">${dto.funding_content }</div>
+	<div id="bottom_menu">
+	<div style="float: left;"><input type="button" value="목록으로 " class="list_btn btn btn-primary" onclick="location.href='funding_list.do?page=${scri.page}&perPageNum=${scri.perPageNum}&funding_filter=${scri.funding_filter}'"/></div>
+		<c:if test="${memberdto.member_role eq 0}">
+		<div align="right">	
+			<input type="button" value="수정" class="list_btn btn btn-primary" onclick="location.href='funding_updateform.do?funding_no=${dto.funding_no}'"/>
+			<input type="button" value="글 삭제" class="list_btn btn btn-primary" onclick="fundingDelete();"/>
 		</div>
-		<div><input type="button" id="addPayBtn" value="선택" onclick="addPayment();"></div>
-		<div id="payBox"></div>
-		리워드 제공
-		<div><input type="text" id="paymentConnection" name="pay_amount" value="" readonly="readonly"/></div>
-		<div id="payment">
-			<input type="button" value="펀딩하기" onclick="payment();"/>
-		</div>
-		
-		<div>${dto.funding_content }</div>
-		<div><input type="button" value="목록" onclick="location.href='funding_list.do?page=${scri.page}&perPageNum=${scri.perPageNum}&funding_filter=${scri.funding_filter}'"/></div>
-	<c:if test="${memberdto.member_role eq 0}">
-		<div><input type="button" value="수정" onclick="location.href='funding_updateform.do?funding_no=${dto.funding_no}'"/></div>
-		<div><input type="button" value="글 삭제" onclick="fundingDelete();"/></div>
-	</c:if>
+		</c:if>
+	</div>
 	</div>
 </body>
 </html>

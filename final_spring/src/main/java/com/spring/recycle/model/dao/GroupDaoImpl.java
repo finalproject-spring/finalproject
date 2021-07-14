@@ -13,6 +13,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import com.spring.recycle.model.dto.GroupDto;
+import com.spring.recycle.util.GroupSearchCriteria;
+
 
 
 @Repository
@@ -23,19 +25,7 @@ public class GroupDaoImpl implements GroupDao {
 
 	
 
-	@Override
-	public List<GroupDto> list() {
-		List<GroupDto> list = new ArrayList<GroupDto>();
-		
-		try {
-			list = sqlSession.selectList(NAMESPACE+"list");
-		} catch (Exception e) {
-			System.out.println("[ERROR]:SELECT LIST");
-			e.printStackTrace();
-		}
 	
-		return list;
-	}
 
 	@Override
 	public GroupDto view(int board_no) {
@@ -95,6 +85,49 @@ public class GroupDaoImpl implements GroupDao {
 		}
 		return res;
 	}
+
+	@Override
+	public List<GroupDto> board_filter(String board_filter) {
+		List<GroupDto> list = new ArrayList<GroupDto>();
+		try {
+			list=sqlSession.selectList(NAMESPACE+"filter" , board_filter);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return list;
+	}
+
+	@Override
+	public List<GroupDto> boardList(GroupSearchCriteria scri) {
+		List<GroupDto> list = new ArrayList<GroupDto>();
+		
+		try {
+			list = sqlSession.selectList(NAMESPACE+"list",scri);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return list;
+	}
+
+	@Override
+	public int listCount(GroupSearchCriteria scri) {
+		int res = 0;
+		try {
+			res = sqlSession.selectOne(NAMESPACE+"listCount",scri);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return res;
+	}
+
+
+
 
 
 	

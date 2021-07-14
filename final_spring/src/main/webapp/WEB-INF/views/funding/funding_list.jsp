@@ -15,8 +15,6 @@
 <!-- AOS -->
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-
-
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script type="text/javascript">
 
@@ -50,8 +48,8 @@
 	.wrap { background:rgb(255, 254, 254); padding:0; margin:0; }
 	.prog { width: 327px; background:rgb(189, 177, 177); }
 	.progs { height: 6px; background: rgb(225, 149, 240); color:#fff; line-height: 50px; }
-	
-	li {list-style: none; float: left; padding: 6px;}		
+	li {list-style: none; float: left; padding: 6px;}
+	#paging { position : fixed; bottom : 5%;}
 </style>
 </head>
 <body>
@@ -122,7 +120,7 @@
 				</c:forEach>
 			</c:otherwise>
 		</c:choose> 
-		<div>
+		<div id="paging">
 			<ul>
 		    <c:if test="${pageMaker.prev}">
 			   	<li><a href="funding_list.do${pageMaker.makeQuery(pageMaker.startPage - 1)}&funding_filter=${scri.funding_filter}">이전</a></li>
@@ -136,7 +134,7 @@
 		  </ul>
 		</div>
 		<c:if test="${memberdto.member_role eq 0 }">
-			<div><input type="button" value="글 작성" onclick="location.href='funding_insertform.do'"/></div>
+			<div align="right" id="post"><input type="button" value="글 작성" onclick="location.href='funding_insertform.do'"/></div>
 		</c:if>
 	</div>
 

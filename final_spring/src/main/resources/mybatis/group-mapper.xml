@@ -8,13 +8,18 @@
 <result property="board_content" column="BOARD_CONTENT"/>
 <result property="board_date" column="BOARD_DATE"/>
 <result property="board_views" column="BOARD_VIEWS"/>
+<result property="board_filter" column="BOARD_FILTER"/>
 </resultMap>
 
 
-<select id="list" resultMap="GroupMap">
-select board_no ,board_id ,  board_title ,board_content, board_date , board_views
-from board
-order by board_no desc
+<select id="list" resultType="GroupDto" parameterType="com.spring.recycle.util.GroupSearchCriteria" >
+SELECT BOARD_NO , BOARD_ID , BOARD_TITLE , BOARD_CONTENT , BOARD_DATE , BOARD_VIEWS , BOARD_FILTER ,BOARD_CATEGORY
+FROM ( SELECT BOARD_NO ,BOARD_ID , BOARD_TITLE , BOARD_CONTENT ,BOARD_DATE, BOARD_VIEWS , BOARD_FILTER , BOARD_CATEGORY,  ROW_NUMBER() OVER(ORDER BY BOARD_NO DESC) AS rn FROM BOARD
+WHERE 1=1 AND BOARD_FILTER like '%'||#{board_filter}||'%' AND BOARD_NO > 0 AND BOARD_CATEGORY ='소모임'
+)  bd
+WHERE rn BETWEEN #{rowStart} AND #{rowEnd} 
+ORDER BY BOARD_NO DESC
+
 </select>
 
 <select id="view" resultType="GroupDto">
@@ -24,8 +29,8 @@ WHERE BOARD_NO = #{board_no}
 </select>
 
 <insert id="write" parameterType="GroupDto">
-INSERT INTO BOARD(BOARD_NO, BOARD_CATEGORY, BOARD_ID, BOARD_TITLE, BOARD_CONTENT, BOARD_VIEWS, BOARD_DATE, MEMBER_NO)
-VALUES(BOARDSEQ.NEXTVAL, '소모임', #{board_id}, #{board_title} ,#{board_content}, 0, SYSDATE, '3')
+INSERT INTO BOARD(BOARD_NO, BOARD_CATEGORY,BOARD_FILTER, BOARD_ID, BOARD_TITLE, BOARD_CONTENT, BOARD_VIEWS, BOARD_DATE, MEMBER_NO)
+VALUES(BOARDSEQ.NEXTVAL, '소모임',#{board_filter}, #{board_id}, #{board_title} ,#{board_content}, 0, SYSDATE, '3')
 </insert>
 
 <update id="modify" parameterType="GroupDto">
@@ -45,7 +50,9 @@ UPDATE BOARD
 SET BOARD_VIEWS = BOARD_VIEWS +1 
 WHERE BOARD_NO = #{BOARD_NO}
 </update>
-
+<select id="listCount" resultType="int" parameterType="com.spring.recycle.util.GroupSearchCriteria">
+		SELECT COUNT(BOARD_NO) FROM BOARD WHERE 1=1 AND BOARD_FILTER like '%'||#{board_filter}||'%' AND BOARD_NO > 0
+	</select>
 
 
 </mapper>

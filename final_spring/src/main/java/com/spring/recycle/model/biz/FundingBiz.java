@@ -16,4 +16,7 @@ public interface FundingBiz {
 	
 	public List<FundingDto> fundingList(FundingSearchCriteria scri);
 	public int listCount(FundingSearchCriteria scri);
+	
+	// funding 전체 리스트 추가
+	public List<FundingDto> fundingAll();
 }

@@ -1,6 +1,5 @@
 package com.spring.recycle.model.dto;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class MessageDto {
@@ -11,6 +10,7 @@ public class MessageDto {
 	private String message_content;
 	private Date message_senddate;
 	private Date message_readdate;
+	
 	
 	public MessageDto() {
 	}

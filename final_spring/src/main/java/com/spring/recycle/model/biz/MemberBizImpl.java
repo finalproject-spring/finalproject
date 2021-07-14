@@ -91,6 +91,11 @@ public class MemberBizImpl implements MemberBiz {
 		return dao.socialJoin(dto);
 	}
 
+	@Override
+	public int socialIdCheck(String member_socialid) {
+		return dao.socialIdCheck(member_socialid);
+	}
+
 
 
 

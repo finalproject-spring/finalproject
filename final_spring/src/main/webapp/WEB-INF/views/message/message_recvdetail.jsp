@@ -9,63 +9,8 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script type="text/javascript">
-
-	$(document).ready(function(){
-		
-		var action = '';
-		var url = '';
-		var type = '';
-	 	$("#createBtn").click(function(){
-			action='create';
-			type = 'POST';
-	 		$("#myModal").modal();
-	 	});
-
-	
-	 	$("#modalSubmit").click(function(){
-	 		url = 'message_insert.do';
-	 		
-	 		if ($.trim($("#message_content").val()) == "" || $.trim($("#message_content").val()) == null) {
-	 			alert("내용을 입력해주세요.");
-	 		} else {
-	 				
-	 		var data = {
-	 				"message_recvid" : $("#message_recvid").val(),
-	 				"message_content" : $("#message_content").val()
-	 		};
-	 		
-	 		$.ajax({
-	 			url : url,
-	 			type : 'POST',
-	 			data : data,
-	 			success: function(data){ $("#myModal").modal('toggle');
-	 				},
-	 			complete: function(data){ 
-	 				$('.modal-body').empty();
-	 				$('.modal-footer').empty();
-	 				$('.modal-body').html("<div>쪽지를 보냈습니다.</div>");
-	 				window.setTimeout(function(){
-	 					window.location.reload()
-	 				}, 950); }
-	 		});
-	 	}  		
-	 		
-	});
-
-});	
-	
-	$(function(){
-		$("#delete").click(function(){
-				$("#deleteForm").submit();
-		});
-	});
-
-</script>
 <style type="text/css">
-	.modal {
-	        text-align: center;
-	}
+	.modal { text-align: center; }
 	 
 	@media screen and (min-width: 768px) { 
 	        .modal:before {
@@ -81,14 +26,18 @@
 	        text-align: left;
 	        vertical-align: middle; 
 	}
+	
+	#message_menu {padding-bottom: 30px;}
+	#message_menu span { display:inline-block; width: 50%; height: 50px; line-height: 50px; text-align: center; border: 1px solid rgba(0,0,0,.1); cursor: pointer; }
+	
 </style>
 </head>
 <body>
  <jsp:include page="../main/header.jsp"></jsp:include>
  <div class="container">
-	<div>
-		<a href='message_recvList.do'>받은 쪽지함</a>
-		<a href='message_sendList.do'>보낸 쪽지함</a>
+	<div id="message_menu">
+		<span onclick="location.href='message_recvList.do'" style="float: left;">받은 쪽지함</span>
+		<span onclick="location.href='message_sendList.do'">보낸 쪽지함</span>
 	</div>
 	<div>받은 쪽지</div>
 
@@ -97,9 +46,12 @@
 			<input type="hidden" value="${dto.message_no }" name="message_no"/>	
 		</form>
 	</div>
-	 <button id="createBtn" class="btn btn-info btn-sm" data-target="#myModal" data-toggle="modal">답장하기</button>
-	 <input type="button" id="delete" value="삭제"/>
-	 <!-- Modal -->
+	<div style="text-align: right;">
+		<button id="createBtn" class="btn btn-info btn-sm" data-target="#myModal" data-toggle="modal">답장하기</button>
+		<input type="button" id="delete" value="삭제" class="btn btn-info btn-sm" style="background-color: gray;"/>
+	</div>
+	<br/>
+	<!-- Modal -->
 	<div class="modal fade" id="myModal" role="dialog">
 		<div class="modal-dialog">
 			<!-- Modal content-->
@@ -134,7 +86,7 @@
 	</div>
 	</div>
 	<div class="container">
-		<fmt:formatDate value="${dto.message_senddate}" pattern="yyyy-MM-dd hh:mm" var="date"/>
+		<fmt:formatDate value="${dto.message_senddate}" pattern="yyyy-MM-dd kk:mm" var="date"/>
 		<form>
 			<div class="form-group">
 				<label>보낸 사람</label>
@@ -150,5 +102,77 @@
 			</div>
 		</form>
 	</div>
+<script type="text/javascript">
+
+	$(document).ready(function(){
+		
+		var action = '';
+		var url = '';
+		var type = '';
+	 	$("#createBtn").click(function(){
+			action='create';
+			type = 'POST';
+	 		$("#myModal").modal();
+	 	});
+
+	
+	 	$("#modalSubmit").click(function(){
+	 		connectWS();
+	 		
+	 		if ($.trim($("#message_content").val()) == "" || $.trim($("#message_content").val()) == null) {
+	 			alert("내용을 입력해주세요.");
+	 		} else {
+	 			
+				send();	
+	 			$('.modal-body').empty();
+				$('.modal-footer').empty();
+				$('#message_content').empty();
+				$('.modal-body').html("<div>쪽지를 보냈습니다.</div>");
+	 			window.setTimeout(function(){ window.location.reload()}, 950);
+
+	 	}  			 		
+	});
+});	
+	
+    var socket = null;
+    var sock = new SockJS("<c:url value="/message_ws"/>");
+    socket = sock;
+    
+    function connectWS(){
+        sock.onopen = function(e) {
+
+        };
+        sock.onmessage = function(e) {
+        	            var splitdata =e.data.split(":");
+            if(splitdata[0].indexOf("msgNum") > -1)
+            	if(splitdata[1] != '0') {
+            		$("#msgNum").empty();
+            		$("#msgNum").append(" ["+splitdata[1]+"통의 쪽지가 왔습니다.]");
+           	} 
+        }
+        sock.onclose = function(){
+        	
+        }
+	
+        sock.onerror = function (err) {console.log('Errors : ' , err)};
+	}
+
+	
+    
+	function send(){
+
+		var message_recvid = $('#message_recvid').val();
+		var message_content = $('#message_content').val();
+		
+		sock.send(message_recvid + "," + message_content);
+	}	
+	
+	$(function(){
+		$("#delete").click(function(){
+				$("#deleteForm").submit();
+		});
+	});
+
+</script>
 </body>
 </html>

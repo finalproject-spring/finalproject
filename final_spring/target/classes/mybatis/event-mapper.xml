@@ -65,4 +65,9 @@ where event_no = #{event_no}
 select count(event_no) from event where 1=1 <include refid="search"></include> and event_no > 0
 </select>
 
+<select id="listAll" resultType="EventDto">
+	SELECT EVENT_NO, EVENT_TITLE, EVENT_CONTENT, EVENT_START, EVENT_END
+	FROM EVENT
+</select>
+
 </mapper>

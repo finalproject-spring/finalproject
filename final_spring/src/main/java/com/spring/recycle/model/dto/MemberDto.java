@@ -32,6 +32,7 @@ public class MemberDto {
 		this.member_pic = member_pic;
 		this.member_role = member_role;
 		this.member_delete = member_delete;
+		this.member_socialid = member_socialid;
 	}
 	public int getMember_no() {
 		return member_no;

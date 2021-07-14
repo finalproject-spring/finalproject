@@ -15,12 +15,10 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import com.spring.recycle.model.biz.MessageBiz;
 import com.spring.recycle.model.dto.MemberDto;
+import com.spring.recycle.model.dto.MessageDto;
 
 public class MessageHandler extends TextWebSocketHandler {
 	
-	// https://simsimjae.tistory.com/25
-	// https://stothey0804.github.io/project/WebSocketExam/
-	// https://hdhdeveloper.tistory.com/38
 	private Logger logger = LoggerFactory.getLogger(MessageHandler.class);
 	
 	@Autowired
@@ -49,13 +47,32 @@ public class MessageHandler extends TextWebSocketHandler {
 		String member_id = getMemberId(session);
 		
 		String msg = message.getPayload();
-		if(msg != null) {
+		if(member_id != null) {
+			String recvid = message.getPayload().split(",")[0];
+			String content = message.getPayload().split(",")[1];
+			
+			MessageDto dto = new MessageDto();
+			dto.setMessage_recvid(recvid);
+			dto.setMessage_sendid(member_id);
+			dto.setMessage_content(content);
+			
+			int result1 = biz.insertRecvMessage(dto);
+			int result2 = biz.insertSendMessage(dto);
+			
+			String msgNum = biz.unreadMsgCount(recvid);
+			
+			
+			if (users.containsKey(recvid)) {
+				TextMessage recvmsg = new TextMessage("msgNum :" + msgNum);
+				users.get(recvid).sendMessage(recvmsg);
+			}
 			
 		}
-		//int result = biz.unreadMsgCount(member_id);
 	
         for(WebSocketSession sess: sessions) {
-            sess.sendMessage(new TextMessage(member_id+": "+message.getPayload()));
+        	if(member_id != null) {
+        		sess.sendMessage(new TextMessage(member_id+" :"+message.getPayload()));
+        	}
         }
 
 	}
@@ -79,9 +96,12 @@ public class MessageHandler extends TextWebSocketHandler {
     // 접속한 유저의 http세션을 조회하여 id를 얻는 함수
 	private String getMemberId(WebSocketSession session) {
 		Map<String, Object> httpSession = session.getAttributes();
-		MemberDto dto = (MemberDto) httpSession.get("dto"); // 세션에 저장된 m_id 기준 조회
-		String member_id = dto.getMember_id();
-		return member_id==null? null: member_id;
+		MemberDto dto = (MemberDto) httpSession.get("dto");
+		if (dto != null) {
+			String member_id = dto.getMember_id();
+			return member_id;
+		}
+		return null;
 	}
 
 }

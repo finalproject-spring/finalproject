@@ -28,17 +28,22 @@ $(function(){
 	
 	li { list-style: none; float: left; padding: 6px; }
 	
+	#message_menu {padding-bottom: 30px;}
+	#message_menu span { display:inline-block; width: 50%; height: 50px; line-height: 50px; text-align: center; border: 1px solid rgba(0,0,0,.1); cursor: pointer; }
+	#paging { position : fixed; bottom : 5%;}
+	
 </style>
 </head>
 <body>
  <jsp:include page="../main/header.jsp"></jsp:include>
  <div class="container">
-	<div>
-		<a href='message_recvList.do'>받은 쪽지함</a></div>
-		<div>보낸 쪽지함</div>
-	<div>
+	<div id="message_menu">
+		<span onclick="location.href='message_recvList.do'" style="float: left;">받은 쪽지함</span>
+		<span onclick="location.href='message_sendList.do'" style="font-weight: 700;">보낸 쪽지함</span>
+	</div>
 
-	<div><input type="button" id="muldel" value="삭제"/></div>
+	<div style="text-align: right;"><input type="button" id="muldel" value="삭제" class="btn btn-info btn-sm"/></div>
+	<br/>
 	<form action="message_multi_senddel.do" method="get" id="multiDelete">
 	<table class="table table-hover" style="table-layout:fixed">
 		<col width="50"/>
@@ -77,7 +82,7 @@ $(function(){
 			<td>${dto.message_recvid }</td>
 			<td style="overflow:hidden;white-space:nowrap;text-overflow:ellipsis; max-width:450px;"><a href="message_sendDetail.do?message_no=${dto.message_no }">${dto.message_content }</a></td>
 			<td>
-				<fmt:formatDate value="${dto.message_senddate}" pattern="yy-MM-dd hh:mm" var="date"/>
+				<fmt:formatDate value="${dto.message_senddate}" pattern="yy-MM-dd kk:mm" var="date"/>
 			${date }
 			</td>
 		</tr>
@@ -86,7 +91,7 @@ $(function(){
 		</c:choose>
 	</table>
 	</form>
-		<div>
+		<div id="paging">
 		  <ul>
 		    <c:if test="${pageMaker.prev}">
 		    	<li><a href="message_sendList.do${pageMaker.makeQuery(pageMaker.startPage - 1)}">이전</a></li>

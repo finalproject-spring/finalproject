@@ -1,14 +1,24 @@
 package com.spring.recycle.controller;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.SQLException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
-
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.FileUtils;
@@ -33,6 +43,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.github.scribejava.core.model.OAuth2AccessToken;
 import com.spring.recycle.model.biz.MemberBiz;
+import com.spring.recycle.model.biz.kakaoBiz;
 import com.spring.recycle.model.dto.MemberDto;
 import com.spring.recycle.model.dto.NaverLoginDto;
 
@@ -49,9 +60,13 @@ public class MemberController {
 	   private BCryptPasswordEncoder pwEncoder;
 	   @Autowired
 	   private JavaMailSender mailSender;
+	   
 	   // 지현 추가
 	   private MemberDto dto = new MemberDto();
 	   private NaverLoginDto ndto = new NaverLoginDto();
+	   
+	   private final static String K_CLIENT_ID = "cc288a0383552958e9ae7ba110fadc1c";
+	   private final static String K_REDIRECT_URI = "http://localhost:8787/recycle/login_kakaocallback.do";
 	   
 	   
 	   //로그인 페이지폼으로 가기 
@@ -59,12 +74,15 @@ public class MemberController {
 	   public String loginForm(Model model, HttpSession session) {
 	      logger.info("[Controller] loginform.do");
 	      
-	      // 네이버
 	      NaverLoginDto dto = new NaverLoginDto();
 	      String naverAuthUrl = dto.getAuthorizationUrl(session);
 	      
+		  String state = UUID.randomUUID().toString();
+		  session.setAttribute("state", state);
+		  
+	      String kakaoAuthUrl = "https://kauth.kakao.com/oauth/authorize?client_id="+K_CLIENT_ID+"&redirect_uri="+K_REDIRECT_URI+"&response_type=code&prompt=login";
 	      model.addAttribute("naver_url",naverAuthUrl);
-	      
+	      model.addAttribute("kakao_url",kakaoAuthUrl);
 	      return "member/memberlogin";
 	   }
 	   
@@ -210,11 +228,19 @@ public class MemberController {
 	   }
 	   
 		@RequestMapping(value = "/member_logout.do" , method = RequestMethod.GET)
-		public String logout(HttpServletRequest request) {
+		public String logout(HttpServletRequest request, HttpSession session) throws IOException {
 			logger.info("Logout");
-		        
-			HttpSession session = request.getSession();
-			session.invalidate();
+		    
+			if(session.getAttribute("kakao_token") == null) {
+				session = request.getSession();
+				session.invalidate();
+			} else {
+				kakaoBiz k_biz = new kakaoBiz();
+				k_biz.kakaoLogout();
+				session = request.getSession();
+				session.invalidate();	
+			}
+
 			return "main/main";
 		}
 	   
@@ -243,26 +269,107 @@ public class MemberController {
 			String member_socialid = "@naver@"+naver_id;
 			String member_pw = UUID.randomUUID().toString();
 
-			if(biz.idCheck(member_socialid) == 0) {
+			if(biz.socialIdCheck(member_socialid) == 0) {
 				dto.setMember_socialid(member_socialid);
 				dto.setMember_name(member_name);
 				dto.setMember_email(member_email);
 				dto.setMember_phone(member_phone);
 				dto.setMember_pw(member_pw);
 				model.addAttribute("dto",dto);
-				return "member/member_socialsignup";
+				return "member/member_socialjoin";
 			} else {
 				dto = biz.socialLogin(member_socialid);
 				session.setAttribute("dto", dto);
 				session.setMaxInactiveInterval(3600);
-				return "main/main";
+				return "redirect:/login_main.do";
 			}
 			
 		}
 		
+
 		@RequestMapping("/login_naverJoin.do")
-		public String naverJoin(MemberDto dto) {
+		public String naverJoin(MemberDto dto, HttpServletResponse response) throws IOException {
 			biz.socialJoin(dto);
+			response.setContentType("text/html; charset=UTF-8");
+			PrintWriter out = response.getWriter();
+			out.println("<script>alert('회원가입이 완료되었습니다.'); </script>");
+			out.flush();
+			return "main/main";
+		}
+		
+		// 카카오 로그인
+		@RequestMapping(value="/login_kakaocallback.do")
+		public String kakaoLogin(Model model, @RequestParam("code") String code, HttpSession session) {
+			kakaoBiz k_biz = new kakaoBiz();
+			String token = k_biz.getAccessToken(code);
+			String header = "Bearer " + token;
+			session.setAttribute("kakao_token", token);
+			
+			try {
+				String kakao_apiURL = "https://kapi.kakao.com/v1/user/access_token_info";
+				URL url = new URL(kakao_apiURL);
+				HttpURLConnection con = (HttpURLConnection)url.openConnection();
+				con.setRequestMethod("GET");
+				con.setRequestProperty("Authorization", header);
+				int responseCode = con.getResponseCode();
+				BufferedReader br;
+				
+				if(responseCode==200) { // 정상 호출
+					br = new BufferedReader(new InputStreamReader(con.getInputStream()));
+				} else {  // 에러 발생
+					br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
+				}
+				
+				String inputLine;
+				StringBuffer res = new StringBuffer();
+				 while ((inputLine = br.readLine()) != null) {
+				res.append(inputLine);
+				}
+				br.close();
+
+				JSONParser parsing = new JSONParser();
+				Object obj = parsing.parse(res.toString());
+				JSONObject jsonObj = (JSONObject)obj;
+				long kakao_id = (long) jsonObj.get("id");
+				
+				String member_socialid = "@kakao@" + kakao_id;
+				String member_pw = UUID.randomUUID().toString();
+	
+				if (biz.socialIdCheck(member_socialid) == 0) {
+					dto.setMember_socialid(member_socialid);
+					dto.setMember_pw(member_pw);
+					model.addAttribute("dto",dto);
+
+
+					return "member/member_socialjoin";
+					
+				} else {
+					dto = biz.socialLogin(member_socialid);
+					session.setAttribute("dto", dto);
+					session.setMaxInactiveInterval(3600);
+					return "redirect:/login_main.do";
+				}
+					
+			} catch (Exception e) {
+				e.printStackTrace();
+			}	
+			
+			return "main/main";
+		}
+		
+		@RequestMapping("/login_kakaoJoin.do")
+		public String kakaoJoin(MemberDto dto, HttpServletResponse response) throws IOException {
+			biz.socialJoin(dto);
+			response.setContentType("text/html; charset=UTF-8");
+			PrintWriter out = response.getWriter();
+			out.println("<script>alert('회원가입이 완료되었습니다.'); </script>");
+			out.flush();
+
+			return "main/main";
+		}
+		
+		@RequestMapping("/login_main.do")
+		public String moveMain() {
 			return "main/main";
 		}
 }

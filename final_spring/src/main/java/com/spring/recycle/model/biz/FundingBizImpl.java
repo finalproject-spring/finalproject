@@ -57,6 +57,12 @@ public class FundingBizImpl implements FundingBiz {
 		return dao.listCount(scri);
 	}
 
+	@Override
+	public List<FundingDto> fundingAll() {
+		// TODO Auto-generated method stub
+		return dao.fundingAll();
+	}
+
 
 
 }

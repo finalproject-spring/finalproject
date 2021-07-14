@@ -28,15 +28,13 @@ public class GroupDto {
 	private String board_content;
 	private Date board_date;
 	private Integer board_views;
-	
+	private String board_filter;
 	
 	public GroupDto() {
 		super();
 	}
-
-
 	public GroupDto(int board_no, String board_id, String board_title, String board_content, Date board_date,
-			Integer board_views) {
+			Integer board_views, String board_filter) {
 		super();
 		this.board_no = board_no;
 		this.board_id = board_id;
@@ -44,67 +42,53 @@ public class GroupDto {
 		this.board_content = board_content;
 		this.board_date = board_date;
 		this.board_views = board_views;
+		this.board_filter = board_filter;
 	}
-
-
 	public int getBoard_no() {
 		return board_no;
 	}
-
-
 	public void setBoard_no(int board_no) {
 		this.board_no = board_no;
 	}
-
-
 	public String getBoard_id() {
 		return board_id;
 	}
-
-
 	public void setBoard_id(String board_id) {
 		this.board_id = board_id;
 	}
-
-
 	public String getBoard_title() {
 		return board_title;
 	}
-
-
 	public void setBoard_title(String board_title) {
 		this.board_title = board_title;
 	}
-
-
 	public String getBoard_content() {
 		return board_content;
 	}
-
-
 	public void setBoard_content(String board_content) {
 		this.board_content = board_content;
 	}
-
-
 	public Date getBoard_date() {
 		return board_date;
 	}
-
-
 	public void setBoard_date(Date board_date) {
 		this.board_date = board_date;
 	}
-
-
 	public Integer getBoard_views() {
 		return board_views;
 	}
-
-
 	public void setBoard_views(Integer board_views) {
 		this.board_views = board_views;
 	}
+	public String getBoard_filter() {
+		return board_filter;
+	}
+	public void setBoard_filter(String board_filter) {
+		this.board_filter = board_filter;
+	}
+	
+	
+	
 	
 	
 	

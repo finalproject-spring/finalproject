@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import com.spring.recycle.model.dao.GroupDao;
 import com.spring.recycle.model.dto.GroupDto;
+import com.spring.recycle.util.GroupSearchCriteria;
+
 
 
 
@@ -18,11 +20,7 @@ public class GroupBizImpl implements GroupBiz {
 	@Autowired
 	GroupDao dao;
 	
-	@Override
-	public List<GroupDto> list() {
-		// TODO Auto-generated method stub
-		return dao.list();
-	}
+	
 
 	@Override
 	public GroupDto view(int board_no) {
@@ -53,4 +51,29 @@ public class GroupBizImpl implements GroupBiz {
 		// TODO Auto-generated method stub
 		return dao.viewCount(board_no);
 	}
+
+	
+
+	@Override
+	public List<GroupDto> board_filter(String board_filter) {
+		// TODO Auto-generated method stub
+		return dao.board_filter(board_filter);
+	}
+
+	@Override
+	public List<GroupDto> boardList(GroupSearchCriteria scri) {
+		// TODO Auto-generated method stub
+		return dao.boardList(scri);
+	}
+
+	@Override
+	public int listCount(GroupSearchCriteria scri) {
+		// TODO Auto-generated method stub
+		return dao.listCount(scri);
+	}
+
+
+	
+
+
 }

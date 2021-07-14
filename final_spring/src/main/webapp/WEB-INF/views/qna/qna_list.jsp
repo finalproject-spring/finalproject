@@ -18,6 +18,7 @@
 </script>
 <style type="text/css">
 	li {list-style: none; float: left; padding: 6px;}
+	#paging { position : fixed; bottom : 5%;}
 </style>
 </head>
 <body>
@@ -47,7 +48,7 @@
 						</a>
 					</td>
 					<td>${dto.board_id }</td>
-					<td><fmt:formatDate value="${dto.board_date}" pattern="yy-MM-dd hh:mm" var="date"/>${date }</td>
+					<td><fmt:formatDate value="${dto.board_date}" pattern="yy-MM-dd kk:mm" var="date"/>${date }</td>
 				</tr>
 				</c:forEach>
 			</table>
@@ -78,7 +79,7 @@
 					</c:otherwise>
 				</c:choose>
 			</div>
-			<div>
+			<div id="paging">
 			  <ul>
 			    <c:if test="${pageMaker.prev}">
 			    	<li><a href="qna_list.do${pageMaker.makeSearch(pageMaker.startPage - 1)}">이전</a></li>

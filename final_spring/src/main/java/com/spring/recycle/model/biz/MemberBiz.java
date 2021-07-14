@@ -17,6 +17,8 @@ public interface MemberBiz {
 	   public MemberDto socialLogin(String member_id);
 	   // 소셜 회원가입
 	   public int socialJoin(MemberDto dto);
+	   // 소셜 아이디 체크 (없으면 회원가입 이동)
+	   public int socialIdCheck(String member_socialid);
 	   /* 관리자 페이지 */
 	   // 전체 회원 조회
 	   public List<MemberDto> memberList();

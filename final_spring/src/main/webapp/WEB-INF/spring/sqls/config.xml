@@ -10,6 +10,10 @@
 		<typeAlias type="com.spring.recycle.model.dto.EventDto" alias="EventDto"/>
 		<typeAlias type="com.spring.recycle.model.dto.BoardDto" alias="BoardDto"/>
 		<typeAlias type="com.spring.recycle.model.dto.NaverLoginDto" alias="NaverLoginDto"/>
+			<typeAlias type="com.spring.recycle.model.dto.ChatRoomDto" alias="chatRoomDto"/>
+		<typeAlias type="com.spring.recycle.model.dto.ChatMessageDto" alias="chatMessageDto"/>
+		<typeAlias type="com.spring.recycle.model.dto.DealBoardDto" alias="DealBoardDto"/>
+	
 	</typeAliases>
 	
 	<mappers>
@@ -20,6 +24,8 @@
 		<mapper resource="/mybatis/group_reply-mapper.xml"/>
 		<mapper resource="/mybatis/event-mapper.xml"/>
 		<mapper resource="/mybatis/board-mapper.xml"/>
+		<mapper resource="/mybatis/RoomChat-mapper.xml"/>
+		<mapper resource="/mybatis/DealBoard-mapper.xml"/>
 	</mappers>
 
 </configuration>

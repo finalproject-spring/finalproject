@@ -158,6 +158,7 @@
 	            success: function(data) {
 	                switch (data) {
 	                    case 0:
+	                    	
 	                        console.log("자동 가입 방지 봇 통과");
 	                        captcha = 0;
 	                		break;
@@ -180,6 +181,6 @@
 <!-- 소셜로그인 -->
 	<div>간편로그인</div>
 	<div><a href=${naver_url }><img alt="네이버 로그인 로고" src="resources/images/naverlogo.png"></a></div>
-	<div><a><img alt="카카오 로그인 로고" src="resources/images/kakaologo.png"></a></div>
+	<div><a href=${kakao_url }><img alt="카카오 로그인 로고" src="resources/images/kakaologo.png"></a></div>
 </body>
 </html>

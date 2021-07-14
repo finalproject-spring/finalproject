@@ -17,39 +17,13 @@
 <script type="text/javascript" src="resources/js/main.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
 <script type="text/javascript">
-/* 
-// 전역변수 설정
-var socket  = null;
-$(document).ready(function(){
-    // 웹소켓 연결
-    sock = new SockJS("<c:url value="/message_ws"/>");
-    socket = sock;
-	
-    // 데이터를 전달 받았을때 
-    sock.open = onOpen;
-    sock.onmessage = onMessage; // toast 생성
-	sock.onclose = onClose;
-}); */
-
-/*  // toast생성 및 추가
-    function onMessage(evt){
-        var data = evt.data;
-        // toast
-        let toast = "<div class='toast' role='alert' aria-live='assertive' aria-atomic='true'>";
-        toast += "<div class='toast-header'><i class='fas fa-bell mr-2'></i><strong class='mr-auto'>알림</strong>";
-        toast += "<small class='text-muted'>just now</small><button type='button' class='ml-2 mb-1 close' data-dismiss='toast' aria-label='Close'>";
-        toast += "<span aria-hidden='true'>&times;</span></button>";
-        toast += "</div> <div class='toast-body'>" + data + "</div></div>";
-        $("#msgStack").append(toast);   // msgStack div에 생성한 toast 추가
-        $(".toast").toast({"animation": true, "autohide": false});
-        $('.toast').toast('show');
-    };	 */
     
     var socket = null;
     var sock = new SockJS("<c:url value="/message_ws"/>");
-    socket =sock;
+    socket = sock;
     $(document).ready(function(){
-                connectWS();
+		connectWS();
+
     });
 
         function connectWS(){
@@ -60,6 +34,7 @@ $(document).ready(function(){
                 var splitdata =e.data.split(":");
                 if(splitdata[0].indexOf("msgNum") > -1)
                 	if(splitdata[1] != '0') {
+                		$("#msgNum").empty();
                 		$("#msgNum").append(" ["+splitdata[1]+"통의 쪽지가 왔습니다.]");
                 	} 
             }
@@ -99,15 +74,15 @@ li { list-style: none; float: left; padding: 6px; }
 	        	<li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">정보안내</a>
               <div class="dropdown-menu" aria-labelledby="dropdown04">
-              	<a class="dropdown-item" href="#">Page 1</a>
-                <a class="dropdown-item" href="#">Page 2</a>
-                <a class="dropdown-item" href="#">Page 3</a>
-                <a class="dropdown-item" href="#">Page 4</a>
+              	<a class="dropdown-item" href="calendar.do">Calendar</a>
+                <a class="dropdown-item" href="teacherble.do">Teacherble</a>
+                <a class="dropdown-item" href="board.do">정보 게시판</a>
+                <a class="dropdown-item" href="#">나중에 창민님 지도 api</a>
               </div>
             </li>
 	        	<li class="nav-item"><a href="funding_list.do" class="nav-link">펀딩</a></li>
 	        	<li class="nav-item"><a href="group_list.do" class="nav-link">소모임</a></li>
-	        	<li class="nav-item"><a href="#" class="nav-link">회원거래</a></li>
+	        	<li class="nav-item"><a href="dealList.do" class="nav-link">회원거래</a></li>
 	         <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="dropdown02" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">공지 및 이벤트</a>
               <div class="dropdown-menu" aria-labelledby="dropdown04">
@@ -134,7 +109,7 @@ li { list-style: none; float: left; padding: 6px; }
 	    </div>
 	  </nav>
     <!-- END nav -->
-
 	</section>
+
 	</body>
 </html>

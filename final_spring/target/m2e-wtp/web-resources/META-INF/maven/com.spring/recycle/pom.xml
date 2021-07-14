@@ -283,7 +283,7 @@
 		    <groupId>org.apache.commons</groupId>
 		    <artifactId>commons-lang3</artifactId>
 		    <version>3.11</version>
-		</dependency>
+		</dependency>				
 		<!-- json-simple -->
 		<dependency>
 			<groupId>com.googlecode.json-simple</groupId>

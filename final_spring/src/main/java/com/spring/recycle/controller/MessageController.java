@@ -158,5 +158,12 @@ public class MessageController {
 		int res = biz.idCheck(member_id);
 		return res;
 	}
+	
+	@RequestMapping("/message_unReadMsgChk.do")
+	@ResponseBody
+	public String message_unReadMsgChk(String member_id) {
+		String res = biz.unreadMsgCount(member_id);
+		return res;
+	}
 
 }

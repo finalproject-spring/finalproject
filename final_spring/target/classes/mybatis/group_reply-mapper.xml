@@ -11,9 +11,9 @@
 
 <!-- 댓글 조회  -->
 <select id="group_readReply" resultType="GroupReplyDto" parameterType="Integer">
-select reply_no , reply_content , reply_id ,reply_date
-from reply
-where board_no = #{board_no}
+SELECT REPLY_NO, REPLY_CONTENT, REPLY_ID, REPLY_DATE
+FROM REPLY WHERE BOARD_NO = #{board_no}
+ORDER BY REPLY_DATE
 </select>
 
 <!-- 댓글 작성 -->
@@ -22,6 +22,10 @@ INSERT INTO REPLY(BOARD_NO ,BOARD_CATEGORY,REPLY_NO,REPLY_ID , REPLY_CONTENT, RE
 VALUES(#{board_no}, '소모임' , REPLYSEQ.NEXTVAL,#{reply_id},#{reply_content},SYSDATE)
 </insert>
 
+<!-- 댓글 삭제 -->
+<delete id="group_deleteReply" parameterType="int">
+DELETE REPLY WHERE REPLY_NO = #{reply_no}
+</delete>
 
 
 

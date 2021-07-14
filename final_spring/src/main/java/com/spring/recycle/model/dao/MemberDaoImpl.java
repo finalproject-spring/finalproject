@@ -188,5 +188,17 @@ public class MemberDaoImpl implements MemberDao {
 		System.out.println("res :" + res);
 		return res;
 	}
+
+	@Override
+	public int socialIdCheck(String member_socialid) {
+	      int res = 0;
+	      try { 
+	    	  res =sqlSession.selectOne(NAMESPACE+"socialIdCheck",member_socialid);
+	      } catch (Exception e) {
+	    	  e.printStackTrace();
+	      }
+
+	      return res;
+	}
 	
 }

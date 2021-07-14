@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="RoomChat">
+	<resultMap type="chatMessageDto" id="ChatMessageDto">
+		<result property="chat_no" column="chat_no"/>
+		<result property="room_no" column="room_no"/>
+		<result property="chat_id" column="chat_id"/>
+		<result property="message" column="message"/>
+		<result property="send_date" column="send_date"/>
+	</resultMap>
+	<resultMap type="chatRoomDto" id="ChatRoomDto">
+		<result property="room_no" column="room_no"/>
+		<result property="room_name" column="room_name"/>
+		<result property="create_date" column="create_date"/>
+		<result property="creator_name" column="creator_name"/>
+		<result property="board_no" column="board_no"/>
+	</resultMap>
+	
+	<insert id="insertChat" parameterType="ChatMessageDto">
+	INSERT INTO CHATMESSAGE 
+	VALUES(CHATMESSAGESEQ.NEXTVAL, #{room_no}, #{chat_id}, #{message}, SYSDATE)
+	</insert>
+	
+	<select id="selectChat" parameterType="Integer" resultType="ChatMessageDto">
+	SELECT * FROM CHATMESSAGE 
+	WHERE ROOM_NO = #{room_no}
+	ORDER BY CHAT_NO DESC
+	</select>
+	
+	<select id="getName" parameterType="String" resultType="String"> <!-- (selectOne 전용) id로 세션 옮기니까 이름 가져오기(채팅은 이름으로 채팅침) -->
+	SELECT MEMBER_NAME FROM MEMBER 
+	WHERE MEMBER_ID = #{creator_id}
+	</select>
+	
+	<select id="getRoomId" parameterType="String" resultType="Integer"> <!-- (selectOne 전용) name으로 id 가져오기 -->
+	SELECT ROOM_NO FROM CHATROOM 
+	WHERE ROOM_NAME = #{room_name} AND ROOM_DELETE = 0
+	</select>
+	
+	<select id="selectRoom" resultType="ChatRoomDto" parameterType="int">
+	SELECT * FROM CHATROOM 
+	WHERE ROOM_DELETE = 0 AND BOARD_NO = #{board_no}
+	ORDER BY ROOM_NO DESC
+	</select>
+	
+	<select id="roomList" resultType="ChatRoomDto">
+	SELECT * FROM CHATROOM 
+	WHERE ROOM_DELETE = 0
+	ORDER BY ROOM_NO DESC
+	</select>
+	
+	<insert id="insertRoom" parameterType="ChatRoomDto">
+	INSERT INTO CHATROOM 
+	VALUES(CHATROOMSEQ.NEXTVAL, #{room_name}, SYSDATE, #{creator_name}, #{board_no}, 0)
+	</insert>
+	
+	<select id="checkRoom" parameterType="ChatRoomDto" resultType="String">
+	SELECT ROOM_NAME FROM CHATROOM 
+	WHERE ROOM_NAME = #{room_name} AND ROOM_DELETE = 0
+	</select>
+	
+	<update id="deleteRoom" parameterType="Integer">
+	UPDATE CHATROOM SET ROOM_DELETE = 1
+	WHERE ROOM_NO = #{room_no}
+	</update>
+	
+	<select id="CheckCreator" parameterType="ChatRoomDto" resultType="String"> <!-- (selectOne 전용) id와 name이 동일한 방의 id를 리턴 -->
+	SELECT ROOM_NO FROM CHATROOM 
+	WHERE ROOM_NAME = #{room_name} AND CREATOR_NAME = #{creator_name}  AND ROOM_DELETE = 0
+	</select>
+	
+</mapper>

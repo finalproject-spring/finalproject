@@ -132,18 +132,19 @@
 				</c:if>
 				</section>
 				<br/>
+				<br/>
 				<table>
 					<c:forEach items="${replylist }" var="groupReply">
 						<div style="line-height: 30px;">
-							<div style="font-weight: 700;">${groupReply.reply_id }</div>
-							<div style="font-size: 13px;"><fmt:formatDate value="${groupReply.reply_date}" pattern="yyyy-MM-dd hh:mm" /></div>
+							<div style="font-weight: 700; float: left;">${groupReply.reply_id }</div>
+							<div onclick="group_replydelete.do?reply_no=${groupReply.reply_no}" style="text-align: right; margin-right: 20px; cursor: pointer;"><i class="fas fa-times"></i></div>
+							<div style="font-size: 13px;"><fmt:formatDate value="${groupReply.reply_date}" pattern="yyyy-MM-dd kk:mm" /></div>
 							<div style="color: black;">${groupReply.reply_content }</div>
 						</div>
-						<div>　</div>
+						<br/>
 					</c:forEach>
 				</table>
 				<br/>
-
 				<c:if test="${memberdto.member_role eq 0}">
 				<form name="replyform" action="qna_reply.do" method="post">
 					<input type="hidden" id="board_no" name="board_no" value="${dto.board_no }">

@@ -97,4 +97,16 @@ public class FundingDaoImpl implements FundingDao {
 		return res;
 	}
 
+	@Override
+	public List<FundingDto> fundingAll() {
+		List<FundingDto> list = new ArrayList<FundingDto>();
+		
+		try {
+			list = sqlSession.selectList(NAMESPACE + "selctAll");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
 }

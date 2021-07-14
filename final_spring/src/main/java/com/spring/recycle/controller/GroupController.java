@@ -1,10 +1,15 @@
+
 package com.spring.recycle.controller;
 
 
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,8 +22,10 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.spring.recycle.model.biz.GroupBiz;
@@ -28,6 +35,10 @@ import com.spring.recycle.model.biz.GroupReplyBizImpl;
 import com.spring.recycle.model.dao.GroupDao;
 import com.spring.recycle.model.dto.GroupDto;
 import com.spring.recycle.model.dto.GroupReplyDto;
+import com.spring.recycle.model.dto.MemberDto;
+import com.spring.recycle.util.GroupPageMaker;
+import com.spring.recycle.util.GroupSearchCriteria;
+
 
 
 @Controller
@@ -45,14 +56,51 @@ public class GroupController {
 	private static final Logger logger = LoggerFactory.getLogger(GroupController.class);
 	
 	@RequestMapping(value = "/group_list.do", method = RequestMethod.GET)
-	public String selectList(Model model) {
-		model.addAttribute("list", biz.list());
+	public String selectList(Model model , @ModelAttribute("scri") GroupSearchCriteria scri) {
+		
+		if(scri.getBoard_filter().contains("전체보기")) {
+			scri.setBoard_filter("");
+		}
+		
+		model.addAttribute("list",biz.boardList(scri));
+		
+		GroupPageMaker pageMaker = new GroupPageMaker();
+		pageMaker.setCri(scri);
+		pageMaker.setTotalCount(biz.listCount(scri));
+		model.addAttribute("scri" , scri);
+		model.addAttribute("pageMaker", pageMaker);
 		
 		return "group/grouplist";
 	}
+	@ResponseBody
+	@RequestMapping(value = "board_ajax.do" , method ={ RequestMethod.POST, RequestMethod.GET } )
+	public List<Object> groupAjax(@RequestBody HashMap<String,Object> params){
+		
+		String filter = params.get("board_filter").toString();
+		logger.info(filter);
+		GroupSearchCriteria scri = new GroupSearchCriteria();
+		scri.setBoard_filter(filter);
+		
+		GroupPageMaker pageMaker = new GroupPageMaker();
+		pageMaker.setCri(scri);
+		pageMaker.setTotalCount(biz.listCount(scri));
+		
+		List<Object> temp = new ArrayList<Object>(); temp.add(biz.boardList(scri));
+		temp.add(pageMaker); System.out.println(temp);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("list", biz.boardList(scri));
+		map.put("pageMaker", pageMaker);
+	
+		return temp;
+		
+	}
+	
 	
 	@RequestMapping("/group_insertform.do")
-	public String insertForm() {
+	public String insertForm(Model model , HttpServletRequest request) {
+		MemberDto dto = (MemberDto)request.getSession().getAttribute("dto");
+		model.addAttribute("dto",dto );
+		
 		return "group/groupinsert";
 	}
 	
@@ -130,6 +178,11 @@ public class GroupController {
 	//댓글 작성 
 	@RequestMapping(value = "/group_replywrite.do" , method = RequestMethod.POST)
 	public String writerReply(int board_no, String reply_content, String reply_id) {
+		
+		/*
+		 * 
+		 * int board_no, int reply_no, String reply_content, String reply_id, Date reply_date
+		 */
 		GroupReplyDto dto = new GroupReplyDto(board_no ,0, reply_content , reply_id,null);
 		replybiz.writeReply(dto);
 	
