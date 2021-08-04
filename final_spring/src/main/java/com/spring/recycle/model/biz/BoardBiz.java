@@ -22,5 +22,7 @@ public interface BoardBiz {
 	public int qnaDelete(int board_no);
 	// 댓글
 	public int qnaReply(GroupReplyDto dto);
+	// 댓글 삭제
+	public int qnaReplyDelete(int reply_no);
 
 }

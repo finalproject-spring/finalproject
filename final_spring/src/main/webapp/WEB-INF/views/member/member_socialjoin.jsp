@@ -154,26 +154,280 @@
 
 	#naver{ background-color:#2DB400; color:white; font-weight: 700px; padding:3px; }
 	#kakao{ background-color:#F7E600; color:black; font-weight: 700px; padding:3px; }
+
+.social_header {font-weight: 700; font-size: 25px;}
+
+.wrap{
+   width : 650px;
+   margin: auto;
+
+}
+
+/* 페이지 제목 */
+.subjecet{
+    width: 100%;
+    height: 120px;
+   
+}
+.subjecet span{
+   margin-left: 31px;
+    font-size: 55px;
+    font-weight: 600;
+    color: #71C55D;
+    
+}
 	
-	.address_wrap { width: 500px;}
+	/* 아이디 영역 */
+.id_wrap{
+   width: 100%;
+    margin-top: 15px;
+}
+.id_name{
+   font-size: 25px;
+    font-weight: 700;
+    
+}
+.id_input_box{
+   border-bottom: 1px solid black;
+   height:31px;
+    
+   
+}
+.id_input{
+   width:100%;
+   height:100%;
+   border:none;
+   font-size:28px;
+   border-bottom: 1px solid black;
+}
+   /* 중복아이디 존재하지 않는경우 */
+   .id_input_re_1{
+      color : green;
+      display : none;
+   }
+   /* 중복아이디 존재하는 경우 */
+   .id_input_re_2{
+      color : red;
+      display : none;
+   }
+
+/* 이름 영역 */
+.user_wrap{
+   width: 100%;
+    margin-top: 30px;
+}
+.user_name{
+   font-size: 25px;
+    font-weight: 700;
+    margin-bottom : 15px;
+}
+.user_input_box{
+   border-bottom: 1px solid black;
+   height:31px;
+   
+   
+}
+.user_input{
+   width:100%;
+   height:100%;
+   border:none;
+   font-size:28px;
+}
+
+/*전화번호 영역 */
+.phone_wrap{
+   width: 100%;
+    margin-top: 30px;
+}
+.phone_name{
+   font-size: 25px;
+    font-weight: 700;
+    margin-bottom : 15px;
+}
+.phone_input_box{
+   border-bottom: 1px solid black;
+   height:31px;
+     
+   
+}
+.phone_input{
+   width:100%;
+   height:100%;
+   border:none;
+   font-size:20px;
+}
+
+
+/* 메일 영역 */
+.mail_wrap{
+   width: 100%;
+    margin-top: 20px;
+}
+.mail_name{
+   font-size: 25px;
+    font-weight: 700;
+    margin-bottom : 15px;
+}
+.mail_input_box{
+   border-bottom: 1px solid black;
+   height:31px;
+  
+   
+}
+.mail_input{
+   width:100%;
+   height:100%;
+   border:none;
+   font-size:28px;
+}
+.mail_check_wrap{
+   margin-top: 20px;   
+}
+.mail_check_input_box{
+   border-bottom: 1px solid black;
+    height: 31px;
+    width: 61%;
+    float: left;
+}
+.mail_check_input_box_false{
+   background-color:#ebebe4;
+}
+.mail_check_input_box_true{
+   background-color:white;
+}
+.mail_check_input{
+   width:100%;
+   height:100%;
+   border:none;
+   font-size:28px;
+}
+.mail_check_button{
+    border-radius:50px; 
+    height: 45px;
+    width: 180px;
+    float: right;
+    line-height: 45px;
+    text-align: center;
+    font-size: 20px;
+    font-weight: 900;
+    background-color: #71C55D;
+    cursor: pointer;
+}
+.correct{
+   color : green;
+}
+.incorrect{
+   color : red;
+}
+
+
+/* 주소 영역 */
+.address_wrap{
+   width: 100%;
+    margin-top: 30px;
+}
+.address_name{
+   font-size: 25px;
+    font-weight: 700;
+    margin-bottom : 15px;
+}
+.address_input_1_box{
+   border-bottom: 1px solid black;
+    height: 31px;
+    width: 61%;
+    float: left;   
+}
+.address_input_1{
+   width:100%;
+   height:100%;
+   border:none;
+   font-size:28px;   
+}
+.address_button{
+    border-radius:50px;
+    height: 51px;
+    width: 30%;
+    float: right;
+    line-height: 50px;
+    text-align: center;
+    font-size: 20px;
+    font-weight: 700;
+    background-color: #71C55D;
+    cursor: pointer;
+    color: white;
+    border: 1px solid #71C55D;
+   
+}
+.address_input_2_wrap{
+   margin-top: 20px;
+}
+.address_input_2_box{
+   border-bottom: 1px solid black;
+   height:31px;
+   
+}
+.address_input_2{
+   width:100%;
+   height:100%;
+   border:none;
+   font-size:28px;
+}
+
+.address_input_3_wrap{
+   margin-top: 20px;
+}
+.address_input_3_box{
+   border-bottom: 1px solid black;
+   height:31px;  
+   
+}
+.address_input_3{
+   width:100%;
+   height:100%;
+   border:none;
+   font-size:28px;
+}
+
+/* 가입하기 버튼 */
+.join_button_wrap{
+   margin-top: 60px;
+   margin-bottom : 40px;
+   text-align: center;
+}
+.join_button{
+	border: 1px solid #71C55D;
+ 	border-radius:50px;
+    width: 200px;
+    height: 60px;
+    background-color: #71C55D ;
+    font-size: 28px;
+    font-weight: 700;
+    color: white;
+}
 </style>
 </head>
 <body>
 <jsp:include page="../main/header.jsp"></jsp:include>
-	<div class="container">
+	<div class="wrap">
+		<div class="subjecet">
+			<span>Save earth , save us <i  style="-webkit-text-stroke: 3px  #0e3803;" class="fas fa-globe-asia"></i></span>
+        </div>  	
 	<c:choose>
 		<c:when test="${fn:contains(dto.member_socialid,'@naver@')}">
+		<div class="social_header">
 			<div><span id="naver">네이버</span> 처음 로그인 시 회원가입이 필요합니다.</div>
 			<div>추가정보를 입력해 주세요.</div>
+		</div>
+			<br/>
 			<form action="login_naverJoin.do" method="post" onsubmit="return naverCheck();">
 				<input type="hidden" value="${dto.member_socialid }" name="member_socialid"/>
 				<input type="hidden" value="${dto.member_name }" name="member_name"/>
 				<input type="hidden" value="${dto.member_email }" name="member_email"/>
 				<input type="hidden" value="${dto.member_phone }" name="member_phone"/>
 				<input type="hidden" value="${dto.member_pw }" name="member_pw"/>
-				<div>ID</div>
+				<div class="id_name">ID</div>
 				<div>사이트 내에서 보여지는 아이디로 소셜 로그인 시 아이디 입력 없이 로그인 가능합니다.</div>
-				<div>
+				<div class="id_wrap">
 					 <input class="id_input" type="text" name="member_id"/>
 				</div>
 				<span class="id_input_re_1" style="display: none;">사용가능한 아이디 입니다.</span> 
@@ -200,20 +454,24 @@
 	                  </div>
 	               </div>
 	            </div>
-	            <div align="center">
-					<button type="submit" class="list_btn btn btn-primary">가입하기</button>	
+	            <br/>
+	            <div align="center" class="join_button_wrap">
+					<button type="submit" class="join_button">가입하기</button>	
 				</div>
 			</form>
 		</c:when>
 		<c:otherwise>
+			<div class="social_header">
 			<div><span id="kakao">카카오</span> 처음 로그인 시 회원가입이 필요합니다.</div>
 			<div>추가정보를 입력해 주세요.</div>
+			</div>
+			<br/>
 			<form action="login_kakaoJoin.do" method="post" onsubmit="return kakaoCheck();">
 				<input type="hidden" value="${dto.member_socialid }" name="member_socialid"/>
 				<input type="hidden" value="${dto.member_pw }" name="member_pw"/>
-				<div>ID</div>
+				<div class="id_name">ID</div>
 				<div>사이트 내에서 보여지는 아이디로 소셜 로그인 시 아이디 입력 없이 로그인 가능합니다.</div>
-				<div>
+				<div class="id_wrap">
 					 <input class="id_input" type="text" name="member_id" required="required"/>
 				</div>
 				<span class="id_input_re_1" style="display: none;">사용가능한 아이디 입니다.</span> 
@@ -260,8 +518,9 @@
 	                  </div>
 	               </div>
 	            </div>
-	            <div align="center">
-					<button type="submit" class="list_btn btn btn-primary">가입하기</button>	
+	            <br/>
+	            <div align="center" class="join_button_wrap">
+					<button type="submit" class="join_button">가입하기</button>	
 				</div>
 			</form>
 		</c:otherwise>

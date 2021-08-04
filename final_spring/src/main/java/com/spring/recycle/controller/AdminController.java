@@ -1,5 +1,8 @@
 package com.spring.recycle.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
@@ -10,8 +13,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.spring.recycle.model.biz.MemberBiz;
+import com.spring.recycle.model.biz.PaymentBiz;
 import com.spring.recycle.model.dto.BoardDto;
 import com.spring.recycle.model.dto.MemberDto;
+import com.spring.recycle.model.dto.PaymentDto;
+import com.spring.recycle.paging.Criteria;
+import com.spring.recycle.paging.PageMaker;
+import com.spring.recycle.paging.SearchCriteria;
 
 @Controller
 public class AdminController {
@@ -21,10 +29,26 @@ public class AdminController {
 	@Autowired
 	private MemberBiz biz;
 	
+	@Autowired
+	private PaymentBiz pbiz;
+	
+	@RequestMapping("/admin_main.do")
+	public String main() {
+		return "admin/admin_main";
+	}
+	
 	@RequestMapping("/admin_memberList.do")
-	public String memberList(Model model) {
+	public String memberList(Model model, SearchCriteria scri ) {
 		model.addAttribute("count", biz.memberCount());
-		model.addAttribute("list", biz.memberList());
+		model.addAttribute("list", biz.memberListPage(scri));
+		
+		PageMaker pageMaker = new PageMaker();
+		pageMaker.setCri(scri);
+		pageMaker.setTotalCount(biz.listCount(scri));
+		
+		model.addAttribute("pageMaker", pageMaker);
+		model.addAttribute("scri", scri);
+		
 		return "admin/admin_memberlist";
 	}
 	
@@ -51,7 +75,6 @@ public class AdminController {
 	public String memberDelete(int member_no) {
 		
 		int res = biz.memberDelete(member_no);
-		logger.info("=====================res = " + res);
 		
 		if (res > 0) {
 			return "redirect:/admin_memberList.do";
@@ -85,6 +108,31 @@ public class AdminController {
 			return "redirect:/admin_memberDetail.do?member_no="+member_no;
 		}
 		return "redirect:/admin_memberDetail.do?member_no="+member_no;
+	}
+	
+	@RequestMapping("/admin_payList.do")
+	public String payList(Model model, SearchCriteria scri) {
+		List<PaymentDto> list = new ArrayList<>();
+		list = pbiz.paymentList(scri);
+		int cancelCount = pbiz.paymentCancelCount();
+		model.addAttribute("list",list);
+		model.addAttribute("cancelCount",cancelCount);
+		
+		PageMaker pageMaker = new PageMaker();
+		pageMaker.setCri(scri);
+		pageMaker.setTotalCount(pbiz.listCount(scri));
+		model.addAttribute("scri",scri);
+		model.addAttribute("pageMaker", pageMaker);
+		
+		return "admin/admin_paylist";
+	}
+	
+	@RequestMapping("/admin_payCancelList.do")
+	public String payCancelList(Model model) {
+		List<PaymentDto> list = new ArrayList<>();
+		list = pbiz.paymentCancelList();
+		model.addAttribute("list",list);
+		return "admin/admin_paycancellist";
 	}
 
 }

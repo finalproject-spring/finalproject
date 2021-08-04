@@ -98,10 +98,22 @@ public class BoardDaoImpl implements BoardDao {
 		
 		try {
 			res = sqlSession.insert(NAMESPACE+"qnaReply", dto);
-		} catch (Exception e) {
+		} catch (Exception  e) {
 			e.printStackTrace();
 		}
 		
+		return res;
+	}
+
+	@Override
+	public int qnaReplyDelete(int reply_no) {
+		int res = 0;
+		
+		try {
+			res = sqlSession.delete(NAMESPACE+"qnaReplyDelete", reply_no);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return res;
 	}
 

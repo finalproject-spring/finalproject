@@ -40,9 +40,6 @@ public class DealDaoImpl implements DealDao {
 	public int InsertDeal(DealBoardDto dto) {
 		int res = 0;
 		try {
-			// #{board_id}, #{board_title}, #{board_content}, #{member_no}
-			dto.setMember_no(sqlsession.selectOne(NAMESPACE + "getId", dto));
-			System.out.println(dto.getBoard_price());
 			res = sqlsession.insert(NAMESPACE + "insertDealBoard", dto);
 		} catch (Exception e) {
 			e.printStackTrace();

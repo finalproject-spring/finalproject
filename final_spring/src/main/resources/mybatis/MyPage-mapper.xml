@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="IMyPage">
+
+<update id="updatePW" parameterType="memberDto">
+UPDATE MEMBER SET MEMBER_PW = #{member_pw}
+WHERE MEMBER_ID = #{member_id}
+</update>
+
+<select id="selectPW" parameterType="String" resultType="String">
+SELECT MEMBER_PW FROM MEMBER
+WHERE MEMBER_ID = #{member_id}
+</select>
+
+<update id="delete" parameterType="String">
+UPDATE MEMBER SET MEMBER_DELETE = 1
+WHERE MEMBER_ID = #{member_id}
+</update>
+
+<select id="payMentList" parameterType="String" resultType="PaymentDto">
+SELECT * FROM PAYMENT 
+WHERE PAY_BUYER = #{member_id}
+</select>
+
+<update id="payMentDelete" parameterType="Integer">
+UPDATE PAYMENT SET PAY_STATUS = '결제취소대기'
+WHERE PAY_NUM = #{pay_num}
+</update>
+
+</mapper>

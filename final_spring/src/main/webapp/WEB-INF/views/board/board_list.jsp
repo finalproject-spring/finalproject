@@ -1,15 +1,25 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap" rel="stylesheet">
+
+
 
 <style type="text/css">
 
 	.main-body{
-		width : 1800px;
+		width : 1300px;
 		height: 500px;
 		margin: 0 auto;
 	}
@@ -132,113 +142,416 @@
 		background: rgba(0, 0, 0, 0.8);
 	}
 	
+	 div.question-box {
+        margin: 10px 0 20px 0;
+        text-align: center;
+      }
+      div.newsbox {
+        width: 300px;
+        display: -webkit-inline-box;
+      }
+
+      div.newsbox > div {
+        border: 1.5px solid #181818;
+        padding: 10px;
+        margin: 20px;
+      }
+
+      div.newsbox > div > a > img {
+      	width: 300px;
+    	height: 200px;
+      }
+
+      div.newsbox > div > div.title-box {
+        margin: 30px 0 30px 0;
+      }
+      
+      div.newsbox > div > div > a {
+        color: #181818;
+        font-size: 16px;
+        font-weight: bold;
+      }
+      
+      div.newsbox > div > div > h5 {
+        color: #5d5d5d;
+        margin: 4px 0 2px 0;
+      }
+
 	.text-box{
 		display: inline-block;
-	    width: 600px;
+	    width: 700px;
 	    position: absolute;
 	    margin: 25px;
 	}
 	
+	.main-footer{
+        width: 100%;
+	    height: 600px;
+	    overflow: scroll;
+	    overflow-y: hidden;
+	    margin: 0 auto;
+	    background-color: #d3ffc5;
+	    padding: 0px 25px 0px 25px;
+	}
+	
+	.text-body{
+		position:absolute;
+	}
+	
+	.txt1{
+		width: 630px;
+	}
+	
+	.css-class-name{
+        width: 1300px;
+	    height: 400px;
+	    margin: 10px auto;
+	    border-bottom: 1px solid gainsboro;
+	}
+	
+	.img-class-name{
+		width: 500px;
+	    height: 400px;
+	    padding: 30px;
+        border-radius: 40px;
+	}
+	
+	.text-box-page{
+		width: 700px;
+		height: 400px;
+		display: inline-block;
+		position: absolute;
+	}
+	
+	.page-title{
+	    text-align: center;
+	    width: 700px;
+        margin-top: 120px;
+        font-weight: 700;
+	}
+	
+	.page-content{
+		text-align: center;
+	    width: 700px;
+	}
+	
+	@import url(https://fonts.googleapis.com/css?family=Cabin:700);
+
+	body {
+	  padding-top: 2em;
+	}
+	
+	.circle-container {
+		position: relative;
+		perspective: 1000;	
+	    margin: 70px auto 30px auto;
+	}
+			
+	.circle-container:hover .circle {
+		transform: rotate3d(45, 45, 0, 180deg);
+	}
+			
+	.circle-container:hover .outer-ring {
+		transform: rotate3d(45, 0, 0, 180deg);
+	}
+	
+	.circle-container:hover .outer-outer-ring {
+		transform: rotate3d(0, 45, 0, 180deg);
+	}
+			
+	.circle-container, .front, .back {
+	    width: 500px;
+    	height: 500px;
+		background-color: rgba(0,0,0,0);
+	}
+			
+	.circle, .outer-ring, .outer-outer-ring {
+		transition: 0.5s;
+		transform-style: preserve-3d;
+		transition-timing-function: cubic-bezier(0.785, 0.135, 0.150, 0.860);
+	}
+			
+	.circle {
+		position: relative;
+	    width: 500px;
+    	height: 500px;
+	}
+			
+	.front, .back {
+		border-radius: 50%;
+		box-shadow: 0px 0px 20px rgba(0,0,0,0.4);
+		backface-visibility: hidden;
+		position: absolute;
+		top: 0;
+		left: 0;
+	  line-height: 140px;
+	}
+			
+	
+			
+	.front p, .back p {
+		margin-top: 300px;
+	    font-family: cabin, sans-serif;
+	    font-weight: 700;
+	    font-size: 85px;
+	    text-align: center;
+	    color: #faffc7;
+	    text-shadow: 0 0 20px #000;
+	}
+			
+	.back {
+		transform: rotate3d(45,45,0,180deg);
+	  background-color: white;  
+		background-image: url(https://www.urbanbrush.net/web/wp-content/uploads/edd/2021/05/urbanbrush-20210514105708156990-548x548.jpg);
+	  background-size: auto 100%, cover;
+	}
+			
+	.back-logo {
+		width: 60%;
+		display: block;
+		margin: 2em auto;
+	}
+			
+	.outer-ring {
+		position: absolute;
+		top: -10px;
+		left: -10px;
+		border-radius: 50%;
+		border: 2px solid #fff;
+	    width: 520px;
+    	height: 520px;
+		background-color: rgba(255,255,255,0);
+		box-shadow: 0px 0px 20px rgba(0,0,0,0.4);
+	}
+	
+	.outer-outer-ring {
+		position: absolute;
+		top: -20px;
+		left: -20px;
+		border-radius: 50%;
+		border: 2px solid #fff;
+		width: 211px;
+		height: 211px;
+		background-color: rgba(255,255,255,0);
+		box-shadow: 0px 0px 20px rgba(0,0,0,0.4);
+	}
+	
+	.front {
+		background-color: #fff;
+		z-index: 2;
+	    background-image: url(https://cdn.pixabay.com/photo/2020/01/21/11/40/world-4782728_640.jpg);
+	    background-size: auto 95%, cover;
+	}
+	
+	.main-text{
+	    width: 315px;
+    	margin: 20px auto;
+    	text-align: center;
+	}
+	
+	.newsbox-container{
+		width: 200px;
+	}
+	
+	.main-text p, .main-text h2, .question-box h3{
+		font-family: 'Do Hyeon', sans-serif;
+		font-weight:500;
+	}
+	
+	.main-text p{
+		font-size: 19px;
+	}
+	
+	.page-date{
+	    width: 250px;
+    	margin: 0px auto;
+	}
+	
 
 </style>
+ <script>
+ 
+ 	  window.onload = function(){
+ 		 let keyword = '친환경';
+
+         $('#news').html('');
+
+         let target_url = 'https://newsapi.org/v2/everything?q='+keyword+'&apiKey=5d6c1a1d4c0d4de1a60bc34087bb8655';
+
+         $.ajax({
+           type: "GET",
+           url: target_url,
+           data: {},
+           success: function(response){
+               let articles = response['articles'];
+               if(articles == 0){
+             	  alert('해당 검색어와 일치하는 뉴스가 없습니다.');
+               }
+               console.log(response['articles']);
+               for (let i = 0 ; i < articles.length; i++){
+                 let url = articles[i]['url'];
+                 let title = articles[i]['title'];
+                 let imgurl = articles[i]['urlToImage'];
+                 let date = articles[i]['publishedAt'];
+                 let author = articles[i]['author'];
+                 let content = articles[i]['content'];
+
+                 let temp_html = '<div>\
+                 				  <a href="'+url+'" target="_blank">\
+                                   <img src="'+imgurl+'" width="100%"></a>\
+                                   <div class="title-box">\
+                                   <a href="'+url+'" target="_blank">'+title+'</a>\
+                                   <h5>'+date+' | '+author+'</h5>\
+                                   </div>\
+                                 </div>';
+                 $('#news').append(temp_html);
+               }
+             }
+         })
+ 	  }
+ 
+      function q1() {
+        let keyword = $('#input-keyword').val();
+        if (keyword == '') {
+          keyword = '친환경';
+          return;
+        }
+
+        $('#news').html('');
+
+        let target_url = 'https://newsapi.org/v2/everything?q='+keyword+'&apiKey=5d6c1a1d4c0d4de1a60bc34087bb8655';
+
+        $.ajax({
+          type: "GET",
+          url: target_url,
+          data: {},
+          success: function(response){
+              let articles = response['articles'];
+              if(articles == 0){
+            	  alert('해당 검색어와 일치하는 뉴스가 없습니다.');
+              }
+              console.log(response['articles']);
+              for (let i = 0 ; i < articles.length; i++){
+                let url = articles[i]['url'];
+                let title = articles[i]['title'];
+                let imgurl = articles[i]['urlToImage'];
+                let date = articles[i]['publishedAt'];
+                let author = articles[i]['author'];
+                let content = articles[i]['content'];
+
+                let temp_html = '<div>\
+                				  <a href="'+url+'" target="_blank">\
+                                  <img src="'+imgurl+'" width="100%"></a>\
+                                  <div class="title-box">\
+                                  <a href="'+url+'" target="_blank">'+title+'</a>\
+                                  <h5>'+date+' | '+author+'</h5>\
+                                  </div>\
+                                </div>';
+                $('#news').append(temp_html);
+              }
+            }
+        })
+
+      }
+</script>
+
+
+
+
 
 </head>
 <body>
-<jsp:include page="../main/header.jsp"></jsp:include>
-	
-	<div class="main-body">
-	
-		<ul class="slides">
-		    <input type="radio" name="radio-btn" id="img-1" checked />
-		    <li class="slide-container">
-				<div class="slide">
-					<img src="https://img1.daumcdn.net/thumb/R720x0.q80/?scode=mtistory2&fname=http%3A%2F%2Fcfile21.uf.tistory.com%2Fimage%2F267B9D375832947019E276" />
-		        </div>
-				<div class="nav">
-					<label for="img-6" class="prev">&#x2039;</label>
-					<label for="img-2" class="next">&#x203a;</label>
+	<jsp:include page="../main/header.jsp"></jsp:include>
+	<div class="main-circle">
+		<div class="circle-container">
+			<div class="outer-ring"></div>
+		  
+			<div class="circle">
+				<div class="front">
+					<p>save earth</p>
 				</div>
-		    </li>
-		
-		    <input type="radio" name="radio-btn" id="img-2" />
-		    <li class="slide-container">
-		        <div class="slide">
-		          <img src="https://dimg.donga.com/wps/NEWS/IMAGE/2020/07/15/101972884.2.jpg" />
-		        </div>
-				<div class="nav">
-					<label for="img-1" class="prev">&#x2039;</label>
-					<label for="img-3" class="next">&#x203a;</label>
+				<div class="back">
+					<p>save us</p>
 				</div>
-		    </li>
-		
-		    <input type="radio" name="radio-btn" id="img-3" />
-		    <li class="slide-container">
-		        <div class="slide">
-		          <img src="https://pimg.daara.co.kr/kidd/photo/2020/04/24/thumbs/thumb_520390_1587716456_38.jpg" />
-		        </div>
-				<div class="nav">
-					<label for="img-2" class="prev">&#x2039;</label>
-					<label for="img-4" class="next">&#x203a;</label>
-				</div>
-		    </li>
-		
-		    <input type="radio" name="radio-btn" id="img-4" />
-		    <li class="slide-container">
-		        <div class="slide">
-		          <img src="http://talk.hyundai-steel.com/wp-content/uploads/2019/07/5532_%ED%99%98%EA%B2%BD%EB%B3%B4%ED%98%B8%EC%8D%B8.jpg" />
-		        </div>
-				<div class="nav">
-					<label for="img-3" class="prev">&#x2039;</label>
-					<label for="img-5" class="next">&#x203a;</label>
-				</div>
-		    </li>
-		
-		    <input type="radio" name="radio-btn" id="img-5" />
-		    <li class="slide-container">
-		        <div class="slide">
-		          <img src="https://www.trusens.com/contentassets/0aa9b99c6570472ab072c0d4a724950f/imagekaodo.png?width=1254&height=836" />
-		        </div>
-				<div class="nav">
-					<label for="img-4" class="prev">&#x2039;</label>
-					<label for="img-6" class="next">&#x203a;</label>
-				</div>
-		    </li>
-		
-		    <input type="radio" name="radio-btn" id="img-6" />
-		    <li class="slide-container">
-		        <div class="slide">
-		          <img src="https://cdn.pixabay.com/photo/2018/09/05/07/09/nature-3655651_960_720.jpg" />
-		        </div>
-				<div class="nav">
-					<label for="img-5" class="prev">&#x2039;</label>
-					<label for="img-1" class="next">&#x203a;</label>
-				</div>
-		    </li>
-		
-		    <li class="nav-dots">
-		      <label for="img-1" class="nav-dot" id="img-dot-1"></label>
-		      <label for="img-2" class="nav-dot" id="img-dot-2"></label>
-		      <label for="img-3" class="nav-dot" id="img-dot-3"></label>
-		      <label for="img-4" class="nav-dot" id="img-dot-4"></label>
-		      <label for="img-5" class="nav-dot" id="img-dot-5"></label>
-		      <label for="img-6" class="nav-dot" id="img-dot-6"></label>
-		    </li>
-		</ul>
-	
-		<div class="text-box">
-			<div class="text-header">
-			
-				<h1>환경보호정보</h1>
-			
 			</div>
-			
-			<div class="text-body">
-				<span>환경보호정보관련페이지입니다.</span>
-			</div>
-			
+		</div>
+		
+		<div class="main-text">
+			<h2 >환경보호</h2>
+			<p>
+				지구를 지키는 것이 우리를 지키는 것입니다. <br/>
+				지구를 지킬 수 있는 방법이 무엇이 있는지 검색 및 정보를 통해 얻을 수 있습니다.
+			</p>
 		</div>
 	
+		
 	</div>
+	
+	<div class="main-footer">
+		<div class="question-box">
+		 	<h3>최신 뉴스 기사 검색</h3>
+	      	<input type="text" id="input-keyword" placeholder="ex)친환경">
+	     	<button onclick="q1()">검색</button>      
+    	</div>
+    	<hr/>
+    	<div class="newsbox-container">
+    		<div class="newsbox" id="news">
+	    	</div>	
+    	</div>
+    </div>
+	
+	<script>
+	
+	var pages = [];
+	
+	<c:forEach items="${list }" var="info">
+		pages.push({title:"${info.info_title}", content:"${info.info_content}", src:"${info.info_pic}", start:"${info.info_start}", end:"${info.info_end}"});
+	</c:forEach>
+	
+	console.log(pages.length); 
+	
+	var page = pages.length;
+	var i = 0;
+	$(window).scroll(function(){
+		if(i < page){
+			if($(window).scrollTop() == $(document).height() - $(window).height()){
+				var container = document.createElement("div");
+				container.className = "css-class-name";
+				
+				var img = document.createElement("img");
+				img.className = "img-class-name";
+				img.src = pages[i].src;
+				
+				var tbox = document.createElement("div");
+				tbox.className = "text-box-page";
+				
+				var title = document.createElement("h1");
+				title.className = "page-title"
+				title.innerHTML = pages[i].title;
+				
+				var content = document.createElement("p");
+				content.className = "page-content"
+				content.innerHTML = pages[i].content + "<br/>"
+				
+				var date = document.createElement("p");
+				date.className = "page-date";
+				date.innerHTML = pages[i].start + "부터 ~ " + pages[i].end + "까지";
+				
+				$("body").append(container);
+				container.appendChild(img);
+				container.appendChild(tbox);
+				tbox.appendChild(title);
+				tbox.appendChild(content);
+				tbox.appendChild(date);
+				i++;
+			} 
+		}
+	});
+		
+	
+	</script>
+	
+
 	
 
 </body>

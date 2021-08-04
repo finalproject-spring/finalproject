@@ -13,7 +13,7 @@ public interface RoomChatDao {
 	public int insertRoom(ChatRoomDto dto);
 	public int deleteRoom(ChatRoomDto dto);
 	
-	public List<ChatMessageDto> selectMessage(int room_no);
+	public List<ChatMessageDto> selectMessage(String room_name);
 	public List<ChatRoomDto> selectRoom(int board_no);
 	public List<ChatRoomDto> roomList();
 }

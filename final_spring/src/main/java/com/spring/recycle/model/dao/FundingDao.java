@@ -21,4 +21,8 @@ public interface FundingDao {
 	public int listCount(FundingSearchCriteria scri);
 	// funding 전체 리스트 추가
 	public List<FundingDto> fundingAll();
+	// funding 결제 금액 업데이트
+	public int caUpdate(FundingDto dto);
+	// funding 결제 취소 금액 업데이트
+	public int cancelCaUpdate(FundingDto dto);
 }

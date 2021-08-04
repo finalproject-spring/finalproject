@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="info">
+
+<resultMap type="InfoDto" id="InfoDto">
+<result property="info_no" column="INFO_NO"/>
+<result property="info_pic" column="INFO_PIC"/>
+<result property="info_title" column="INFO_TITLE"/>
+<result property="info_content" column="INFO_CONTENT"/>
+<result property="info_start" column="INFO_START"/>
+<result property="info_end" column="INFO_END"/>
+</resultMap>
+
+	<select id="infoList" resultMap="InfoDto">
+		SELECT * FROM INFO
+	</select>
+
+</mapper>

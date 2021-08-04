@@ -17,6 +17,12 @@
 	}
 
 </script>
+<style type="text/css">
+	.listBtn {background-color: #71c55d; border: 1px solid #71c55d; color: white; width: 90px; height: 39px; border-radius: 13px; font-size: 15px;}
+	#replyWriteBtn {background-color: #71c55d; border: 1px solid #71c55d; color: white; width: 68px; height: 38px; border-radius: 13px; font-size: 15px; }
+	.updateBtn {background-color: #71c55d; border: 1px solid #71c55d; color: white; width: 65px; height: 39px; border-radius: 13px; font-size: 15px; }
+	.deleteBtn {background-color: white; border: 2px solid #71c55d; color: #71c55d; width: 64px; height: 38px; border-radius: 13px; font-size: 15px; }
+</style>
 </head>
 <body>
 <jsp:include page="../main/header.jsp"></jsp:include>
@@ -53,12 +59,12 @@
 						</div>
 					</form>
 					<div align="left" style="float:left;">
-						<button type="button" class="list_btn btn btn-primary" onclick="location.href='qna_list.do?page=${scri.page}&perPageNum=${scri.perPageNum}&searchType=${scri.searchType}&keyword=${scri.keyword}'">목록으로</button>
+						<button type="button" class="listBtn" onclick="location.href='qna_list.do?page=${scri.page}&perPageNum=${scri.perPageNum}&searchType=${scri.searchType}&keyword=${scri.keyword}'">목록으로</button>
 					</div>
 					<c:if test="${memberdto.member_role eq 0 || memberdto.member_id eq dto.board_id}">
 						<div align="right">	
-							<button type="button" class="list_btn btn btn-primary" onclick="location.href='qna_updateform.do?board_no=${dto.board_no}'">수정</button>
-							<button type="button" class="list_btn btn btn-primary" onclick="qnaDelete();">삭제</button>	
+							<button type="button" class="updateBtn" onclick="location.href='qna_updateform.do?board_no=${dto.board_no}'">수정</button>
+							<button type="button" class="deleteBtn" onclick="qnaDelete();">삭제</button>	
 						</div>
 					</c:if>
 					</section>
@@ -66,11 +72,14 @@
 					<table>
 						<c:forEach items="${replylist }" var="groupReply">
 							<div style="line-height: 30px;">
-								<div style="font-weight: 700;">${groupReply.reply_id }</div>
+								<div style="font-weight: 700; float: left;">[관리자] ${groupReply.reply_id }</div>
+								<c:if test="${memberdto.member_role eq 0}">
+									<div style="text-align: right; margin-right: 20px; cursor: pointer;"><i style="color:#CCC9C9" class="fas fa-times" onclick="location.href='qna_replyDelete.do?reply_no=${groupReply.reply_no}&board_no=${dto.board_no }'"></i></div>
+								</c:if>
 								<div style="font-size: 13px;"><fmt:formatDate value="${groupReply.reply_date}" pattern="yyyy-MM-dd hh:mm" /></div>
 								<div style="color: black;">${groupReply.reply_content }</div>
 							</div>
-							<div>　</div>
+							<br/>
 						</c:forEach>
 					</table>
 					<br/>
@@ -122,12 +131,12 @@
 					</div>
 				</form>
 				<div align="left" style="float:left;">
-					<button type="button" class="list_btn btn btn-primary" onclick="location.href='qna_list.do?page=${scri.page}&perPageNum=${scri.perPageNum}&searchType=${scri.searchType}&keyword=${scri.keyword}'">목록으로</button>
+					<button type="button" class="listBtn" onclick="location.href='qna_list.do?page=${scri.page}&perPageNum=${scri.perPageNum}&searchType=${scri.searchType}&keyword=${scri.keyword}'">목록으로</button>
 				</div>
 				<c:if test="${memberdto.member_role eq 0 || memberdto.member_id eq dto.board_id}">
 					<div align="right">	
-						<button type="button" class="list_btn btn btn-primary" onclick="location.href='qna_updateform.do?board_no=${dto.board_no}'">수정</button>
-						<button type="button" class="list_btn btn btn-primary" onclick="qnaDelete();">삭제</button>	
+						<button type="button" class="updateBtn" onclick="location.href='qna_updateform.do?board_no=${dto.board_no}'">수정</button>
+						<button type="button" class="deleteBtn" onclick="qnaDelete();">삭제</button>	
 					</div>
 				</c:if>
 				</section>
@@ -136,8 +145,10 @@
 				<table>
 					<c:forEach items="${replylist }" var="groupReply">
 						<div style="line-height: 30px;">
-							<div style="font-weight: 700; float: left;">${groupReply.reply_id }</div>
-							<div onclick="group_replydelete.do?reply_no=${groupReply.reply_no}" style="text-align: right; margin-right: 20px; cursor: pointer;"><i class="fas fa-times"></i></div>
+							<div style="font-weight: 700; float: left;">[관리자] ${groupReply.reply_id }</div>
+							<c:if test="${memberdto.member_role eq 0}">
+								<div style="text-align: right; margin-right: 20px; cursor: pointer;"><i style="color:#CCC9C9" class="fas fa-times" onclick="location.href='qna_replyDelete.do?reply_no=${groupReply.reply_no}&board_no=${dto.board_no }'"></i></div>
+							</c:if>
 							<div style="font-size: 13px;"><fmt:formatDate value="${groupReply.reply_date}" pattern="yyyy-MM-dd kk:mm" /></div>
 							<div style="color: black;">${groupReply.reply_content }</div>
 						</div>
@@ -154,19 +165,21 @@
 						<textarea class="form-control-lg" style="resize: none; overflow: auto; height: 100px; width: 100%; border: 1px solid rgba(0, 0, 0, 0.1); font-size: 14px" id="reply_content"name="reply_content"></textarea>
 					</div>
 					<div>
-						<button type="button" class="list_btn btn btn-primary" id="replyWriteBtn">작성</button>
+						<button type="button" id="replyWriteBtn">작성</button>
 					</div>
 				</form>
 				</c:if>
 		</c:otherwise>
 	</c:choose>		
 </div>
+<br/>
 <script type="text/javascript">
 	$("#replyWriteBtn").on("click",function(){
 		var formObj = $("form[name='replyform']").eq(0);
 		formObj.submit();
-	})
+	});
 </script>
+
 
 </body>
 </html>

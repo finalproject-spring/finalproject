@@ -40,8 +40,8 @@ public class RoomChatBizImpl implements RoomChatBiz {
 	}
 
 	@Override
-	public List<ChatMessageDto> selectMessage(int room_no) {
-		return dao.selectMessage(room_no);
+	public List<ChatMessageDto> selectMessage(String room) {
+		return dao.selectMessage(room);
 	}
 
 	@Override

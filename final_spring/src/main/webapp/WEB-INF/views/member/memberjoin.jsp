@@ -28,24 +28,23 @@
 .wrap{
    width : 650px;
    margin: auto;
+
 }
+
 /* 페이지 제목 */
 .subjecet{
-   width: 100%;
+    width: 100%;
     height: 120px;
-    background-color: #8EC0E4;
+   
 }
 .subjecet span{
    margin-left: 31px;
-    font-size: 80px;
-    font-weight: 900;
-    color: white;
+    font-size: 55px;
+    font-weight: 600;
+    color: #71C55D;
+    
 }
-.phote_wrap{
-width: 200%;
-    margin-top: 20px;
 
-}
 /* 아이디 영역 */
 .id_wrap{
    width: 100%;
@@ -53,12 +52,14 @@ width: 200%;
 }
 .id_name{
    font-size: 25px;
-    font-weight: bold;
+    font-weight: ;
+    margin-bottom : 20px;
+    
 }
 .id_input_box{
-   border: 1px solid black;
+   border-bottom: 1px solid black;
    height:31px;
-   padding: 10px 14px;   
+     
    
 }
 .id_input{
@@ -85,12 +86,13 @@ width: 200%;
 }
 .pw_name{
    font-size: 25px;
-    font-weight: bold;
+    font-weight: ;
+    margin-bottom : 20px;
 }
 .pw_input_box{
-   border: 1px solid black;
+   border-bottom: 1px solid black;
    height:31px;
-   padding: 10px 14px;   
+  
    
 }
 .pw_input{
@@ -103,16 +105,17 @@ width: 200%;
 /* 비밀번호 확인 영역 */
 .pwck_wrap{
    width: 100%;
-    margin-top: 20px;
+    margin-top: 25px;
 }
 .pwck_name{
    font-size: 25px;
-    font-weight: bold;
+    font-weight: ;
+    margin-bottom : 20px;
 }
 .pwck_input_box{
-   border: 1px solid black;
+   border-bottom: 1px solid black;
    height:31px;
-   padding: 10px 14px;   
+   
    
 }
 .pwck_input{
@@ -129,12 +132,13 @@ width: 200%;
 }
 .user_name{
    font-size: 25px;
-    font-weight: bold;
+    font-weight: ;
+    margin-bottom : 20px;
 }
 .user_input_box{
-   border: 1px solid black;
+   border-bottom: 1px solid black;
    height:31px;
-   padding: 10px 14px;   
+   
    
 }
 .user_input{
@@ -151,12 +155,13 @@ width: 200%;
 }
 .phone_name{
    font-size: 25px;
-    font-weight: bold;
+    font-weight: ;
+    margin-bottom : 20px;
 }
 .phone_input_box{
-   border: 1px solid black;
+   border-bottom: 1px solid black;
    height:31px;
-   padding: 10px 14px;   
+     
    
 }
 .phone_input{
@@ -174,12 +179,13 @@ width: 200%;
 }
 .mail_name{
    font-size: 25px;
-    font-weight: bold;
+    font-weight: ;
+    margin-bottom : 20px;
 }
 .mail_input_box{
-   border: 1px solid black;
+   border-bottom: 1px solid black;
    height:31px;
-   padding: 10px 14px;   
+  
    
 }
 .mail_input{
@@ -192,9 +198,8 @@ width: 200%;
    margin-top: 20px;   
 }
 .mail_check_input_box{
-   border: 1px solid black;
+   border-bottom: 1px solid black;
     height: 31px;
-    padding: 10px 14px;
     width: 61%;
     float: left;
 }
@@ -211,15 +216,15 @@ width: 200%;
    font-size:28px;
 }
 .mail_check_button{
-    border: 1px solid black;
+    border-radius:50px; 
     height: 51px;
     width: 30%;
     float: right;
     line-height: 50px;
     text-align: center;
-    font-size: 30px;
+    font-size: 20px;
     font-weight: 900;
-    background-color: #ececf7;
+    background-color: #71C55D;
     cursor: pointer;
 }
 .correct{
@@ -237,12 +242,12 @@ width: 200%;
 }
 .address_name{
    font-size: 25px;
-    font-weight: bold;
+    font-weight: ;
+    margin-bottom : 20px;
 }
 .address_input_1_box{
-   border: 1px solid black;
+   border-bottom: 1px solid black;
     height: 31px;
-    padding: 10px 14px;
     width: 61%;
     float: left;   
 }
@@ -253,24 +258,25 @@ width: 200%;
    font-size:28px;   
 }
 .address_button{
-    border: 1px solid black;
+    border-radius:50px;
     height: 51px;
     width: 30%;
     float: right;
     line-height: 50px;
     text-align: center;
-    font-size: 30px;
+    font-size: 20px;
     font-weight: 900;
-    background-color: #ececf7;
-    cursor: pointer;   
+    background-color: #71C55D;
+    cursor: pointer;
+       
+   
 }
 .address_input_2_wrap{
    margin-top: 20px;
 }
 .address_input_2_box{
-   border: 1px solid black;
+   border-bottom: 1px solid black;
    height:31px;
-   padding: 10px 14px;   
    
 }
 .address_input_2{
@@ -284,9 +290,8 @@ width: 200%;
    margin-top: 20px;
 }
 .address_input_3_box{
-   border: 1px solid black;
-   height:31px;
-   padding: 10px 14px;   
+   border-bottom: 1px solid black;
+   height:31px;  
    
 }
 .address_input_3{
@@ -298,16 +303,18 @@ width: 200%;
 
 /* 가입하기 버튼 */
 .join_button_wrap{
-   margin-top: 40px;
+   margin-top: 60px;
+   margin-bottom : 40px;
    text-align: center;
 }
 .join_button{
-   width: 100%;
-    height: 80px;
-    background-color: ;
-    font-size: 40px;
-    font-weight: 900;
-    color: skyblue;
+ 	border-radius:50px;
+    width: 50%;
+    height: 65px;
+    background-color: #71C55D ;
+    font-size: 35px;
+    font-weight: 500;
+    color: ;
 }
 
 /* 유효성 검사 문구 */
@@ -334,6 +341,7 @@ width: 200%;
    display: none;
 }
 
+
 /* 비밀번호 확인 일치 유효성검사 */
 .pwck_input_re_1{
       color : green;
@@ -350,35 +358,28 @@ width: 200%;
 }
 
 
-/* 프로필 사진 */
 
-.select_img img{
-margin: 20px 0;
-}
+
+
   </style>
+  
+ 
   
 </head>
 <body>
-
+<jsp:include page="../main/header.jsp"></jsp:include>
 
    <div class="wrapper">
       <form id="join_form" method="post">
          <div class="wrap">
             <div class="subjecet">
-               <span>회원가입</span>
+               <span>Save earth , save us <i  style="-webkit-text-stroke: 3px  #0e3803;" class="fas fa-globe-asia"></i></span>
             </div>  
- 		  <!-- 프로필 사진 -->
-            <div class="phote_wrap">
-               <div class="user_name">Photo</div>
-               <input type="file" id="Img" name="uploadfile" onchange="readURL(this);" accept="image/*" required="required" multiple="multiple"/>
-               <span class="photo_name_ck">이름을 입력해주세요.</span>
-               <!-- 미리보기 -->
-               <img id="select_img"></img>
-               <input type="hidden" id="member_pic" value="사진경로" name="member_pic"/>
-            </div>
-            <!-- 이름 -->
+
+
+				<!-- 이름 -->
             <div class="user_wrap">
-               <div class="user_name">Name</div>
+               <div class="user_name"><i style="color:#71C55D; " class="fas fa-check"></i> Name</div>
                <div class="user_input_box">
                   <input class="user_input" name="member_name">
                </div>
@@ -387,25 +388,25 @@ margin: 20px 0;
 
             <!-- 아이디 -->
             <div class="id_wrap">
-               <div class="id_name">Id</div>
+               <div class="id_name"><i style="color:#71C55D; " class="fas fa-check"></i> Id</div>
                <div class="id_input_box">
                   <input class="id_input" name="member_id">
                </div>
                <span class="id_input_re_1">사용가능한 아이디 입니다.</span> <span
-                  class="id_input_re_2">아이디가 이미 존재합니다..</span> <span
-                  class="final_id_ck">아이디를 입력해주세요.</span>
+                  class="id_input_re_2">아이디가 이미 존재합니다 </span> 
+                  <span class="final_id_ck">아이디를 입력해주세요.</span>
             </div>
 
             <!-- 비밀번호 -->
             <div class="pw_wrap">
-               <div class="pw_name">Password</div>
+               <div class="pw_name"><i style="color:#71C55D; " class="fas fa-check"></i> Password</div>
                <div class="pw_input_box">
                   <input class="pw_input" name="member_pw">
                </div>
                <span class="final_pw_ck">비밀번호를 입력해주세요.</span>
             </div>
             <div class="pwck_wrap">
-               <div class="pwck_name">Check your Password</div>
+               <div class="pwck_name"> <i style="color:#71C55D; " class="fas fa-check"></i> Check your Password</div>
                <div class="pwck_input_box">
                   <input class="pwck_input">
                </div>
@@ -415,7 +416,7 @@ margin: 20px 0;
             </div>
 
             <div class="mail_wrap">
-               <div class="mail_name">Email</div>
+               <div class="mail_name"><i style="color:#71C55D; " class="fas fa-check"></i> Email</div>
                <div class="mail_input_box">
                   <input class="mail_input" name="member_email">
                </div>
@@ -426,7 +427,7 @@ margin: 20px 0;
                      <input class="mail_check_input" disabled="disabled">
                   </div>
                   <div class="mail_check_button">
-                     <span>인증번호 전송</span>
+                     <span>인증번호 전송 <i class="fas fa-envelope"></i></span>
                   </div>
                   <div class="clearfix"></div>
                   <span id="mail_check_input_box_warn"></span>
@@ -434,7 +435,7 @@ margin: 20px 0;
             </div>
             <!-- phone -->
             <div class="phone_wrap">
-               <div class="phone_name">Phone</div>
+               <div class="phone_name"> <i style="color:#71C55D; " class="fas fa-check"></i> Phone</div>
                <div class="phone_input_box">
                   <input class="phone_input" name="member_phone">
                </div>
@@ -445,14 +446,14 @@ margin: 20px 0;
 
             <!-- 주소 -->
             <div class="address_wrap">
-               <div class="address_name">Addr</div>
+               <div class="address_name"><i style="color:#71C55D; " class="fas fa-check"></i> Addr</div>
                <div class="address_input_1_wrap">
                   <div class="address_input_1_box">
                      <input class="address_input_1" name="member_addr"
                         readonly="readonly">
                   </div>
                   <div class="address_button" onclick="execution_daum_address()">
-                     <span>주소 찾기</span>
+                     <span>주소 찾기 <i class="fas fa-map-marker-alt"></i></span>
                   </div>
                   <div class="clearfix"></div>
                </div>
@@ -473,8 +474,10 @@ margin: 20px 0;
             
             <!-- 가입버튼 -->
             <div class="join_button_wrap">
-               <input type="button" class="join_button" value="가입하기">
+              <input type="button" class="join_button" value="가입하기"> 
             </div>
+            
+             
          </div>
       </form>
    </div>
@@ -495,8 +498,7 @@ var mailCheck = false;         // 이메일
 var mailnumCheck = false;      // 이메일 인증번호 확인
 var addressCheck = false;       // 주소
 var phoneCheck = false;         // 전화번호
-var member_pic = true;
-var uploadfile = true;
+
 $(document).ready(function(){
    //회원가입 버튼(회원가입 기능 작동)
    $(".join_button").click(function(){
@@ -509,8 +511,8 @@ $(document).ready(function(){
       var mail = $('.mail_input').val();         // 이메일 입력란
       var phone = $('.phone_input').val();        // 전화번호 입력란
       var addr = $('.address_input_3').val();      // 주소 입력란
-      var uploadfile = $('#img').val();
-      var member_pic = $('#member_pic').val();
+  
+     
       /* 아이디 유효성검사 */
       if(id == ""){
          $('.final_id_ck').css('display','block');
@@ -584,8 +586,10 @@ $(document).ready(function(){
       }
       
       
+   
+      
       /* 최종 유효성 검사 */
-      if(idCheck&&idckCheck&&pwCheck&&pwckCheck&&pwckcorCheck&&nameCheck&&mailCheck&&mailnumCheck&&addressCheck&&phoneCheck&&member_pic&&uploadfile){
+      if(idCheck&&idckCheck&&pwCheck&&pwckCheck&&pwckcorCheck&&nameCheck&&mailCheck&&mailnumCheck&&addressCheck&&phoneCheck){
          $("#join_form").attr("action", "login_memberjoinres.do");
          $("#join_form").submit();
       }      

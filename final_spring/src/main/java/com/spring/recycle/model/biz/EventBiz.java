@@ -21,4 +21,7 @@ public interface EventBiz {
 	
 	// event 전체 리스트 추가
 	public List<EventDto> listAll();
+	
+	//전체 게시물 수 
+	public int eventCount();
 }

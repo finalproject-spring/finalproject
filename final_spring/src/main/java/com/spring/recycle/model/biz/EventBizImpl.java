@@ -53,4 +53,10 @@ public class EventBizImpl implements EventBiz {
 		return dao.listAll();
 	}
 
+	@Override
+	public int eventCount() {
+		// TODO Auto-generated method stub
+		return dao.eventCount();
+	}
+
 }

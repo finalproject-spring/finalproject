@@ -72,6 +72,12 @@ public class GroupBizImpl implements GroupBiz {
 		return dao.listCount(scri);
 	}
 
+	@Override
+	public int boardCount() {
+		// TODO Auto-generated method stub
+		return dao.boardCount();
+	}
+
 
 	
 

@@ -126,6 +126,18 @@ public class GroupDaoImpl implements GroupDao {
 		return res;
 	}
 
+	@Override
+	public int boardCount() {
+		int count = 0;
+		try {
+			count = sqlSession.selectOne(NAMESPACE+"board_count");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return count;
+	}
+
 
 
 

@@ -1,4 +1,4 @@
-package com.spring.recycle.controller;
+ package com.spring.recycle.controller;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -12,16 +12,20 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 import javax.mail.internet.MimeMessage;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.mail.HtmlEmail;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
@@ -33,19 +37,24 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.util.WebUtils;
 
 import com.github.scribejava.core.model.OAuth2AccessToken;
 import com.spring.recycle.model.biz.MemberBiz;
 import com.spring.recycle.model.biz.kakaoBiz;
+import com.spring.recycle.model.dao.MemberDao;
 import com.spring.recycle.model.dto.MemberDto;
 import com.spring.recycle.model.dto.NaverLoginDto;
+import com.spring.recycle.util.ScriptUtils;
 
 
 @Controller
@@ -60,20 +69,27 @@ public class MemberController {
 	   private BCryptPasswordEncoder pwEncoder;
 	   @Autowired
 	   private JavaMailSender mailSender;
+	   @Autowired
+	   private MemberDao dao;
 	   
 	   // 지현 추가
 	   private MemberDto dto = new MemberDto();
 	   private NaverLoginDto ndto = new NaverLoginDto();
 	   
 	   private final static String K_CLIENT_ID = "cc288a0383552958e9ae7ba110fadc1c";
-	   private final static String K_REDIRECT_URI = "http://localhost:8787/recycle/login_kakaocallback.do";
-	   
+	   //로컬호스트용
+	   // private final static String K_REDIRECT_URI = "http://localhost:8787/recycle/login_kakaocallback.do";
+	   //서버용
+	   private final static String K_REDIRECT_URI = "http://qclass.iptime.org:8787/recycle/login_kakaocallback.do";
 	   
 	   //로그인 페이지폼으로 가기 
 	   @RequestMapping(value = "/login_loginform.do" , method = RequestMethod.GET)
 	   public String loginForm(Model model, HttpSession session) {
 	      logger.info("[Controller] loginform.do");
 	      
+	      if(session.getAttribute("dto") != null) {
+	    	  return "main/main";
+	      }
 	      NaverLoginDto dto = new NaverLoginDto();
 	      String naverAuthUrl = dto.getAuthorizationUrl(session);
 	      
@@ -88,11 +104,16 @@ public class MemberController {
 	   
 	   
 	   @RequestMapping( value = "/login.do" , method = RequestMethod.POST)
-	   public String login(HttpServletRequest request , MemberDto dto , RedirectAttributes redirect) {
+	   public String login(HttpServletRequest request , MemberDto dto , RedirectAttributes redirect, HttpServletResponse response) throws IOException {
 	      
 	      logger.info("[Controller] login.do");
 	      
 	      HttpSession session = request.getSession();
+	      
+	      if (session.getAttribute("dto") != null) {
+	    	  session.removeAttribute("dto");
+	      }
+	      
 	      String rawPw = "";    //사용자가 회원가입할 때 사용한 비번 
 	      String encodePw = ""; //db에저장된 인코딩된 비번
 	      
@@ -104,26 +125,37 @@ public class MemberController {
 	            dto2.setMember_pw(""); //인코딩된 비밀번호 지움 
 	            session.setAttribute("dto", dto2); // session에 사용자이 정보 저장
 	            session.setMaxInactiveInterval(3600); // session 시간 60분
+	            // 로그인 유지 쿠키 적용
+	            if (dto.isUseCookie()) {
+	            	Cookie cookie = new Cookie("loginCookie", session.getId());
+	            	cookie.setPath("/");
+	            	int amount = 60*60*24*7;
+	            	cookie.setMaxAge(amount);
+	            	response.addCookie(cookie);
+	            	Date sessionLimit = new Date(System.currentTimeMillis() + (1000*amount));
+	            	logger.info("================"+dto2.getMember_id() + session.getId() + sessionLimit);
+	            	biz.keepLogin(dto2.getMember_id(), session.getId(), sessionLimit);
+	            }
+	            
 	            return "main/main"; // 메인페이지로 이동
 	         
 	         }else {
-	            redirect.addFlashAttribute("result", dto2);
-	            return "member/memberjoin";
+	        	ScriptUtils.alertAndMovePage(response, "로그인에 실패했습니다.","login_loginform.do");
 	         }
 	      }else { // 일치하는 id가 존재하지 않을 경우
-	         
 	         redirect.addFlashAttribute("result", dto2);
-	         return "member/memberlogin";
+	         ScriptUtils.alertAndMovePage(response, "일치하는 회원 정보가 없습니다.","login_loginform.do");
 	      }
+		return "main/main";
 	      
 	   }
 	   
 	   
 	   @ResponseBody
-	   @RequestMapping(value = "/login_VerifyRecaptcha", method = RequestMethod.POST)
+	   @RequestMapping(value = "/login_VerifyRecaptcha.do", method = RequestMethod.POST)
 	   public int VerifyRecaptcha(HttpServletRequest request) {
 	      logger.info("캡챠");
-	       VerifyRecaptcha.setSecretKey("6LdFpmQbAAAAAJzJo-RJ_OX12Un8pkcRPO8y7B3O");
+	       VerifyRecaptcha.setSecretKey("6LfoNKcbAAAAALy-0-TXaFeZrRzgsl64Fd3de8ng");
 	       String gRecaptchaResponse = request.getParameter("recaptcha");
 	       try {
 	          if(VerifyRecaptcha.verify(gRecaptchaResponse))
@@ -136,35 +168,25 @@ public class MemberController {
 	   }
 	   
 	   @RequestMapping("/login_memberjoin.do")
-	   public String Success() {
+	   public String Success(HttpSession session) {
 	      logger.info("회원가입 페이지 로 이동");
+	      if(session.getAttribute("dto") != null) {
+	    	  return "main/main";
+	      }
 	      return "member/memberjoin";      
 	   }
 	   
 	   @RequestMapping(value = "/login_memberjoinres.do" , method = RequestMethod.POST)
 	   public String joinRes(MemberDto dto, HttpServletRequest request, MultipartFile uploadfile) throws IOException {
 		   
-		   logger.info("dto : " + dto);
-		   logger.info("uploadfile :" + uploadfile);
-		   logger.info("upload file name : " + uploadfile.getOriginalFilename());
-		   logger.info("upload file size: " + uploadfile.getSize());
-		   String contextRoot = request.getSession().getServletContext().getRealPath("/");
-		   String fileRoot = contextRoot + "resources/fileupload/member_img/";
-		   String originalFileName = uploadfile.getOriginalFilename();	//오리지날 파일명
-		   String extension = originalFileName.substring(originalFileName.lastIndexOf("."));	//파일 확장자
-		   String savedFileName = UUID.randomUUID() + extension;	//저장될 파일 명
-		   File targetFile = new File(fileRoot + savedFileName);
-		   InputStream fileStream;
-		   fileStream = uploadfile.getInputStream();
-		   FileUtils.copyInputStreamToFile(fileStream, targetFile);
-		   dto.setMember_pic("resources/fileupload/member_img/"+savedFileName);
-
-		   String rawPw="";
-		   String encodePw="";
+		  String rawPw="";
+		  String encodePw="";
 	      rawPw = dto.getMember_pw();
 	      encodePw = pwEncoder.encode(rawPw);
 	      dto.setMember_pw(encodePw);
 	      biz.join(dto);
+	      
+	      
 	      
 	      return "member/memberlogin";
 	   }
@@ -228,17 +250,26 @@ public class MemberController {
 	   }
 	   
 		@RequestMapping(value = "/member_logout.do" , method = RequestMethod.GET)
-		public String logout(HttpServletRequest request, HttpSession session) throws IOException {
+		public String logout(HttpServletRequest request, HttpSession session, HttpServletResponse response) throws IOException {
 			logger.info("Logout");
 		    
-			if(session.getAttribute("kakao_token") == null) {
-				session = request.getSession();
-				session.invalidate();
-			} else {
+			if(session.getAttribute("kakao_token") != null) {
 				kakaoBiz k_biz = new kakaoBiz();
 				k_biz.kakaoLogout();
-				session = request.getSession();
-				session.invalidate();	
+			}
+			
+			session = request.getSession();
+			session.invalidate();	
+			
+			Cookie loginCookie = WebUtils.getCookie(request, "loginCookie");
+			if (loginCookie != null) {
+	              loginCookie.setPath("/");
+	                // 쿠키는 없앨 때 유효시간을 0으로 설정
+	                loginCookie.setMaxAge(0);
+	                response.addCookie(loginCookie);
+	                
+	                Date date =new Date(System.currentTimeMillis());
+	                biz.keepLogin(dto.getMember_id(), session.getId(), date);
 			}
 
 			return "main/main";
@@ -372,5 +403,123 @@ public class MemberController {
 		public String moveMain() {
 			return "main/main";
 		}
+	
+		
+		//아이디 찾기 폼으로 가기
+		@RequestMapping("/findId_form.do")
+		public String find_id_form() {
+			return "member/findId_form";
+		}
+
+		
+		@RequestMapping(value = "/findIdres.do" , method = RequestMethod.POST)
+		public String find_id(HttpServletResponse response , @RequestParam("member_email") String member_email , Model model) throws IOException {
+			response.setContentType("text/html;charset=utf-8");
+			PrintWriter out = response.getWriter();
+			String member_id = biz.find_id(member_email);
+			
+			
+			model.addAttribute("member_id", biz.find_id(member_email));
+			
+			if (member_id ==null) {
+				out.println("<script>");
+				out.println("alert('가입된 아이디가 없습니다.');");
+				out.println("history.go(-1);");
+				out.println("</script>");
+				out.close();
+				return null;
+			}else {
+				return "member/findId";
+			}
+			
+		}
+		
+		//비밀번호 찾기 폼으로 가기
+		@RequestMapping("/findPw_form.do")
+		public String find_pw_form() {
+			return "member/findPw_form";
+		}
+		
+
+
+		//임시비밀번호 메일 보내기 
+		public void send_mail(MemberDto dto , String div) {
+			// Mail Server 설정
+			String charSet = "utf-8";
+			String hostSMTP = "smtp.naver.com";
+			String hostSMTPid = "taeheeworld@naver.com";
+			String hostSMTPpwd = "asd123!!";
+
+			// 보내는 사람 EMail, 제목, 내용
+			String fromEmail = "taeheeworld@naver.com";
+			String fromName = "Save earth ,save us";
+			String subject = "";
+			String msg = "";
+			
+			
+			if(div.equals("find_pw")) {
+				
+				subject = "Save earth ,save us 임시 비밀번호 입니다.";
+				msg += "<div align='center' style='border:1px solid black; font-family:verdana'>";
+				msg += "<h3 style='color: blue;'>";
+				msg += dto.getMember_id() + "님의 임시 비밀번호 입니다. 비밀번호를 변경하여 사용하세요.</h3>";
+				msg += "<p>임시 비밀번호 : ";
+				msg += dto.getMember_pw() + "</p></div>";
+				
+			}
+			
+			String mail = dto.getMember_email();
+			try {
+				HtmlEmail email = new HtmlEmail();
+				email.setDebug(true);
+				email.setCharset(charSet);
+				email.setSSL(true);
+				email.setHostName(hostSMTP);
+				email.setSmtpPort(587);
+
+				email.setAuthentication(hostSMTPid, hostSMTPpwd);
+				email.setTLS(true);
+				email.addTo(mail, charSet);
+				email.setFrom(fromEmail, fromName, charSet);
+				email.setSubject(subject);
+				email.setHtmlMsg(msg);
+				email.send();
+			} catch (Exception e) {
+				System.out.println("메일발송 실패 : " + e);
+			}
+
+		}
+		
+		@RequestMapping(value = "/find_pw.do" , method = RequestMethod.POST)
+		public String find_pw(HttpServletResponse response , @ModelAttribute MemberDto dto ) throws Exception {
+			
+			response.setContentType("text/html;charset=utf-8");
+			PrintWriter out = response.getWriter();
+			System.out.println(dto.getMember_id());
+			
+			if(dao.idCheck(dto.getMember_id()) == 0) { //가입된 아이디가 없으면,, 
+				out.print("아이디가 없습니다.");
+				out.close();
+			}else if(!dto.getMember_email().equals(dto.getMember_email())){// 가입된 이메일이 아니면
+				out.print("잘못된 이메일 입니다.");
+				out.close();
+			}else { //임시비밀번호 생성함
+				String pw = "";
+				for (int i = 0; i < 12; i++) {
+					pw += (char) ((Math.random() * 26) + 97);
+				}
+				dto.setMember_pw(pwEncoder.encode(pw)); //비밀번호 변경
+				
+				dao.update_pw(dto); //비밀번호 변경 메일 발송
+				dto.setMember_pw(pw);
+				send_mail(dto, "find_pw");
+				out.print("이메일로 임시 비밀번호를 발송하였습니다.");
+				out.close();
+			
+			}
+			
+			return null;
+		}
+		
 }
 

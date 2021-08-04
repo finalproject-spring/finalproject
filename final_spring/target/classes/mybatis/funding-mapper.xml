@@ -47,4 +47,16 @@
 		FROM FUNDING 
 	</select>
 	
+	<update id="caUpdate" parameterType="fundingDto">
+		UPDATE FUNDING
+		SET FUNDING_CA = FUNDING_CA + #{funding_ca}
+		WHERE FUNDING_NO = #{funding_no}
+	</update>
+	
+	<update id="cancelCaUpdate" parameterType="fundingDto">
+		UPDATE FUNDING
+		SET FUNDING_CA = FUNDING_CA - #{funding_ca}
+		WHERE FUNDING_NO = #{funding_no}
+	</update>
+	
 </mapper>

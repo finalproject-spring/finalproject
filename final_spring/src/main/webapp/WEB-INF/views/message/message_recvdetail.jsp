@@ -27,19 +27,47 @@
 	        vertical-align: middle; 
 	}
 	
+	#createBtn { background:#1AAB8A; text-align:center; color:#fff; border:none; position:relative; font-size:15px; width: 90px; height: 37px;
+	  cursor:pointer; transition:800ms ease all; outline:none; border-radius: 10px; }
+	#createBtn:hover { background:#fff; color:#1AAB8A;} 
+	#createBtn:before,#createBtn:after{
+	  content:'';
+	  position:absolute;
+	  top:0;
+	  right:0;
+	  height:2px;
+	  width:0;
+	  background: #1AAB8A;
+	  transition:400ms ease all;
+	}
+	#createBtn:after{
+	  right:inherit;
+	  top:inherit;
+	  left:0;
+	  bottom:0;
+	}
+	#createBtn:hover:before,#createBtn:hover:after{
+	  width:100%;
+	  transition:800ms ease all;
+	}
+	
+	#deleteBtn {background-color: gray; text-align:center; color:#fff; border:none; position:relative; font-size:15px; width: 70px; height: 37px;
+	  cursor:pointer; transition:800ms ease all; outline:none; border-radius: 10px; }
+	#deleteBtn:hover { background-color:#fff; color:gray;} 
 	#message_menu {padding-bottom: 30px;}
 	#message_menu span { display:inline-block; width: 50%; height: 50px; line-height: 50px; text-align: center; border: 1px solid rgba(0,0,0,.1); cursor: pointer; }
-	
+	#msg_header {font-size: 22px; color: #505050}
 </style>
 </head>
 <body>
  <jsp:include page="../main/header.jsp"></jsp:include>
+ <br/>
  <div class="container">
 	<div id="message_menu">
 		<span onclick="location.href='message_recvList.do'" style="float: left;">받은 쪽지함</span>
 		<span onclick="location.href='message_sendList.do'">보낸 쪽지함</span>
 	</div>
-	<div>받은 쪽지</div>
+	<div id="msg_header"><i class="fas fa-envelope-open-text"></i> 받은 쪽지</div>
 
 	<div>
 		<form id="deleteForm" action="message_recvdel.do" method="get">
@@ -47,8 +75,8 @@
 		</form>
 	</div>
 	<div style="text-align: right;">
-		<button id="createBtn" class="btn btn-info btn-sm" data-target="#myModal" data-toggle="modal">답장하기</button>
-		<input type="button" id="delete" value="삭제" class="btn btn-info btn-sm" style="background-color: gray;"/>
+		<button id="createBtn" data-target="#myModal" data-toggle="modal">답장하기</button>
+		<input type="button" id="deleteBtn" value="삭제"/>
 	</div>
 	<br/>
 	<!-- Modal -->
@@ -124,12 +152,10 @@
 	 		} else {
 	 			
 				send();	
-	 			$('.modal-body').empty();
-				$('.modal-footer').empty();
-				$('#message_content').empty();
-				$('.modal-body').html("<div>쪽지를 보냈습니다.</div>");
-	 			window.setTimeout(function(){ window.location.reload()}, 950);
 
+				$('#message_content').empty();
+			 	$("#myModal").modal('toggle');
+ 			 	alert("쪽지를 보냈습니다!");
 	 	}  			 		
 	});
 });	
@@ -168,7 +194,7 @@
 	}	
 	
 	$(function(){
-		$("#delete").click(function(){
+		$("#deleteBtn").click(function(){
 				$("#deleteForm").submit();
 		});
 	});

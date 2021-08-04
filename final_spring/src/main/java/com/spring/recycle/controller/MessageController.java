@@ -1,9 +1,12 @@
 package com.spring.recycle.controller;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -112,9 +115,10 @@ public class MessageController {
 	}
 	
 	@RequestMapping("/message_recvdel.do")
-	public String recvDelete(int message_no) {
+	public String recvDelete(int message_no) throws IOException {
 		
 		if(biz.deleteRecvMessage(message_no) > 0) {
+
 			return "redirect:message_recvList.do";
 		}
 		
@@ -122,9 +126,10 @@ public class MessageController {
 	}
 	
 	@RequestMapping("/message_senddel.do")
-	public String sendDelete(int message_no) {
+	public String sendDelete(int message_no, HttpServletResponse response) throws IOException {
 		
 		if(biz.deleteSendMessage(message_no) > 0) {
+
 			return "redirect:message_sendList.do";
 		}
 		
@@ -147,7 +152,6 @@ public class MessageController {
 			System.out.println("no= " + no);
 		}
 		int result = biz.MultiDeleteSendMessage(dto.getMessage_noList());
-		System.out.println("삭제된 레코드 수 = " +result);
 		return "redirect:message_sendList.do";
 	}
 	

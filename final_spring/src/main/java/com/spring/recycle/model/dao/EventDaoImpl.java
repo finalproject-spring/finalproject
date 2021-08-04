@@ -97,4 +97,17 @@ public class EventDaoImpl implements EventDao {
 		return list;
 	}
 
+	@Override
+	public int eventCount() {
+		int count = 0;
+		
+		try {
+			count = sqlSession.selectOne(NAMESPACE+"event_count");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return count;
+	}
+
 }

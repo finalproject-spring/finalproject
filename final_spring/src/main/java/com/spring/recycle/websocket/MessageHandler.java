@@ -13,6 +13,7 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
+import com.spring.recycle.model.biz.MemberBiz;
 import com.spring.recycle.model.biz.MessageBiz;
 import com.spring.recycle.model.dto.MemberDto;
 import com.spring.recycle.model.dto.MessageDto;
@@ -23,6 +24,9 @@ public class MessageHandler extends TextWebSocketHandler {
 	
 	@Autowired
 	private MessageBiz biz;
+	
+	@Autowired
+	private MemberBiz membiz;
 	
 	//로그인 한 전체
 	private List<WebSocketSession> sessions = new ArrayList<WebSocketSession>();
@@ -45,28 +49,52 @@ public class MessageHandler extends TextWebSocketHandler {
 	@Override
 	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
 		String member_id = getMemberId(session);
+		List<MemberDto> list = membiz.memberList();
+		MessageDto dto = new MessageDto();
 		
-		String msg = message.getPayload();
 		if(member_id != null) {
-			String recvid = message.getPayload().split(",")[0];
-			String content = message.getPayload().split(",")[1];
-			
-			MessageDto dto = new MessageDto();
-			dto.setMessage_recvid(recvid);
-			dto.setMessage_sendid(member_id);
-			dto.setMessage_content(content);
-			
-			int result1 = biz.insertRecvMessage(dto);
-			int result2 = biz.insertSendMessage(dto);
-			
-			String msgNum = biz.unreadMsgCount(recvid);
-			
-			
-			if (users.containsKey(recvid)) {
-				TextMessage recvmsg = new TextMessage("msgNum :" + msgNum);
-				users.get(recvid).sendMessage(recvmsg);
+			// 전체 쪽지
+			if(message.getPayload().split(",")[0].equals("all")) {
+				String content = message.getPayload().split(",")[1];
+				for (int i = 0; i <list.size(); i++) {
+					if(!list.get(i).getMember_id().equals("admin")) {
+						String recvid = list.get(i).getMember_id();
+						dto.setMessage_sendid("admin");
+						dto.setMessage_content(content);
+						dto.setMessage_recvid(recvid);
+						
+						biz.insertRecvMessage(dto);
+						biz.insertSendMessage(dto);
+						
+						String msgNum = biz.unreadMsgCount(recvid);
+						
+						if (users.containsKey(recvid)) {
+							TextMessage recvmsg = new TextMessage("msgNum :" + msgNum);
+							users.get(recvid).sendMessage(recvmsg);
+						
+						}
+					}
+				}
+				
+			} else {
+				String recvid = message.getPayload().split(",")[0];
+				String content = message.getPayload().split(",")[1];
+				
+				dto.setMessage_recvid(recvid);
+				dto.setMessage_sendid(member_id);
+				dto.setMessage_content(content);
+				
+				biz.insertRecvMessage(dto);
+				biz.insertSendMessage(dto);
+				
+				String msgNum = biz.unreadMsgCount(recvid);
+				
+				
+				if (users.containsKey(recvid)) {
+					TextMessage recvmsg = new TextMessage("msgNum :" + msgNum);
+					users.get(recvid).sendMessage(recvmsg);
+				}
 			}
-			
 		}
 	
         for(WebSocketSession sess: sessions) {

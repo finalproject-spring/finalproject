@@ -2,10 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="board">
 
-<select id="qnaList" resultType="BoardDto" parameterType="com.spring.recycle.paging.Criteria">
+<select id="qnaList" resultType="BoardDto" parameterType="com.spring.recycle.paging.SearchCriteria">
 	SELECT BOARD_NO, BOARD_ID, BOARD_TITLE, MEMBER_NO, BOARD_DATE, BOARD_SECRET, (SELECT COUNT(*) FROM REPLY r WHERE r.board_no = bd.board_no) AS replycount
 	FROM (SELECT BOARD_NO, BOARD_ID, BOARD_TITLE, MEMBER_NO, BOARD_DATE, BOARD_SECRET, ROW_NUMBER() OVER(ORDER BY BOARD_NO DESC) AS rn 
-	FROM BOARD WHERE BOARD_CATEGORY='문의' AND 1=1 <include refid="search"></include>) bd
+	FROM BOARD WHERE 1=1 <include refid="search"></include> AND BOARD_CATEGORY='문의') bd
 	WHERE rn BETWEEN #{rowStart} AND #{rowEnd}
 	ORDER BY BOARD_NO DESC
 </select>
@@ -17,8 +17,8 @@
 	</if>
 </sql>
 
-<select id="qnaListCount" resultType="int">
-	SELECT COUNT(BOARD_NO) FROM BOARD WHERE BOARD_CATEGORY='문의' AND BOARD_NO > 0
+<select id="qnaListCount" parameterType="com.spring.recycle.paging.SearchCriteria" resultType="int">
+	SELECT COUNT(BOARD_NO) FROM BOARD WHERE BOARD_CATEGORY='문의' AND 1=1 <include refid="search"></include> AND BOARD_NO > 0
 </select>
 
 <select id="qnaDetail" parameterType="int" resultType="BoardDto">
@@ -47,4 +47,8 @@
 <select id="qnaReplyCount" parameterType="GroupReplyDto">
 	SELECT COUNT(REPLY_NO) REPLY
 </select>
+
+<delete id="qnaReplyDelete" parameterType="int">
+	DELETE FROM REPLY WHERE REPLY_NO=#{reply_no}
+</delete>
 </mapper>

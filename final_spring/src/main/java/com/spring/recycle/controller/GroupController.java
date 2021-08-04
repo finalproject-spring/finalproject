@@ -38,6 +38,7 @@ import com.spring.recycle.model.dto.GroupReplyDto;
 import com.spring.recycle.model.dto.MemberDto;
 import com.spring.recycle.util.GroupPageMaker;
 import com.spring.recycle.util.GroupSearchCriteria;
+import com.spring.recycle.util.ScriptUtils;
 
 
 
@@ -56,8 +57,9 @@ public class GroupController {
 	private static final Logger logger = LoggerFactory.getLogger(GroupController.class);
 	
 	@RequestMapping(value = "/group_list.do", method = RequestMethod.GET)
-	public String selectList(Model model , @ModelAttribute("scri") GroupSearchCriteria scri) {
-		
+	public String selectList(HttpServletRequest request,Model model , @ModelAttribute("scri") GroupSearchCriteria scri) {
+		MemberDto dto = (MemberDto) request.getSession().getAttribute("dto");
+		model.addAttribute("memberdto", dto);
 		if(scri.getBoard_filter().contains("전체보기")) {
 			scri.setBoard_filter("");
 		}
@@ -69,6 +71,7 @@ public class GroupController {
 		pageMaker.setTotalCount(biz.listCount(scri));
 		model.addAttribute("scri" , scri);
 		model.addAttribute("pageMaker", pageMaker);
+		model.addAttribute("count", biz.boardCount());
 		
 		return "group/grouplist";
 	}
@@ -123,20 +126,26 @@ public class GroupController {
 		return "redirect:group_list.do";
 	}
 	
-	@RequestMapping("/group_view.do")
-	public String selectOne(@ModelAttribute("dto") GroupDto dto, Model model , int board_no) {
-		model.addAttribute("dto" , biz.view(board_no));
-		
-		//조회수 증가
-		biz.viewCount(dto.getBoard_no());
-		
-		//댓글 조회
-		List<GroupReplyDto> replyList  = replybiz.readReply(dto.getBoard_no());
-		model.addAttribute("replylist", replyList);
-		
-		
-		return "group/groupselect";
-	}
+
+	   @RequestMapping("/group_view.do")
+	   public String selectOne(HttpServletRequest request,@ModelAttribute("dto") GroupDto dto, Model model , int board_no) {
+	      
+	      //조회수 증가
+	      biz.viewCount(dto.getBoard_no());
+	      
+	      //댓글 조회
+	      List<GroupReplyDto> replyList  = new ArrayList<GroupReplyDto>();
+	      replyList = replybiz.readReply(board_no);
+	      model.addAttribute("dto" , biz.view(board_no));
+	      model.addAttribute("replylist", replyList);
+	      MemberDto memberdto = (MemberDto) request.getSession().getAttribute("dto");
+	      model.addAttribute("memberdto", memberdto);
+	      if (memberdto != null) {
+	    	  model.addAttribute("memberdto", memberdto);
+	    	  model.addAttribute("id", memberdto.getMember_id());
+	      }
+	      return "group/groupselect";
+	   }
 	
 	@RequestMapping("/group_updateform.do")
 	public String updateForm(Model model , int board_no) {
@@ -177,16 +186,22 @@ public class GroupController {
 	
 	//댓글 작성 
 	@RequestMapping(value = "/group_replywrite.do" , method = RequestMethod.POST)
-	public String writerReply(int board_no, String reply_content, String reply_id) {
+	public String writerReply(int board_no,GroupReplyDto dto) {
 		
 		/*
 		 * 
 		 * int board_no, int reply_no, String reply_content, String reply_id, Date reply_date
 		 */
-		GroupReplyDto dto = new GroupReplyDto(board_no ,0, reply_content , reply_id,null);
 		replybiz.writeReply(dto);
 	
-		return "redirect:group_view.do?board_no="+dto.getBoard_no();
+		return "redirect:group_view.do?board_no="+board_no;
+	}
+	
+	@RequestMapping(value = "/group_deleteReply.do", method = RequestMethod.POST)
+	public void WriterDelete(int board_no , int reply_no , HttpServletResponse response) throws IOException {
+		replybiz.deleteReply(reply_no);
+		ScriptUtils.alertAndMovePage(response,"댓글이 삭제되었습니다.", "qna_detail.do?board_no="+board_no);
+		
 	}
 
 }

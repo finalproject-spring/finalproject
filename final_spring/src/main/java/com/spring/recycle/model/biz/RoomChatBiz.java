@@ -11,7 +11,7 @@ public interface RoomChatBiz {
 	public boolean insertRoom(ChatRoomDto dto);
 	public boolean deleteRoom(ChatRoomDto dto);
 	
-	public List<ChatMessageDto> selectMessage(int room_no);
+	public List<ChatMessageDto> selectMessage(String room);
 	public List<ChatRoomDto> selectRoom(int board_no);
 	public List<ChatRoomDto> roomlist();
 }

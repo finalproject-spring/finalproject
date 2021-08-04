@@ -1,9 +1,12 @@
 package com.spring.recycle.controller;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +25,7 @@ import com.spring.recycle.model.dto.GroupReplyDto;
 import com.spring.recycle.model.dto.MemberDto;
 import com.spring.recycle.paging.PageMaker;
 import com.spring.recycle.paging.SearchCriteria;
+import com.spring.recycle.util.ScriptUtils;
 
 @Controller
 public class BoardController {
@@ -33,13 +37,7 @@ public class BoardController {
 	
 	@Autowired
 	private GroupReplyBiz replybiz = new GroupReplyBizImpl();
-	
-	
-	@RequestMapping(value = "/board.do", method=RequestMethod.GET)
-	public String BoardList(Model model) {
-		
-		return "board/board_list";
-	}
+
 	
 	@RequestMapping(value="/qna_list.do", method = RequestMethod.GET)
 	public String qna_list(Model model, HttpServletRequest request, SearchCriteria scri) {
@@ -123,5 +121,12 @@ public class BoardController {
 		biz.qnaReply(dto);
 		return "redirect:/qna_detail.do?board_no="+board_no;
 	}
+	
+	@RequestMapping(value="/qna_replyDelete.do", method= RequestMethod.GET)
+	public void qna_replyDelete(int board_no, int reply_no, HttpServletResponse response) throws IOException {
+		biz.qnaReplyDelete(reply_no);
+		ScriptUtils.alertAndMovePage(response,"댓글이 삭제되었습니다.", "qna_detail.do?board_no="+board_no);
+	}
+
 
 }

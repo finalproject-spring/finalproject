@@ -27,5 +27,8 @@ public interface GroupBiz {
 	public List<GroupDto> boardList(GroupSearchCriteria scri);
 	
 	public int listCount(GroupSearchCriteria scri);
+	
+	//전체 게시물 수 
+	public int boardCount();
 
 }

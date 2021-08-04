@@ -23,7 +23,7 @@ ORDER BY BOARD_NO DESC
 </select>
 
 <select id="view" resultType="GroupDto">
-select board_no ,board_id ,  board_title ,board_content, board_date , board_views
+select board_no ,board_id ,  board_title ,board_content, board_date , board_views , board_filter
 from board
 WHERE BOARD_NO = #{board_no}
 </select>
@@ -35,7 +35,7 @@ VALUES(BOARDSEQ.NEXTVAL, '소모임',#{board_filter}, #{board_id}, #{board_title
 
 <update id="modify" parameterType="GroupDto">
 UPDATE BOARD
-SET BOARD_TITLE = #{board_title} , BOARD_CONTENT = #{board_title} 
+SET BOARD_TITLE = #{board_title} , BOARD_CONTENT = #{board_content} 
 WHERE BOARD_NO = #{board_no}
 </update>
 
@@ -53,6 +53,10 @@ WHERE BOARD_NO = #{BOARD_NO}
 <select id="listCount" resultType="int" parameterType="com.spring.recycle.util.GroupSearchCriteria">
 		SELECT COUNT(BOARD_NO) FROM BOARD WHERE 1=1 AND BOARD_FILTER like '%'||#{board_filter}||'%' AND BOARD_NO > 0
 	</select>
-
+	
+<!-- 전체 게시물 수  -->
+<select id="board_count" resultType="int">
+SELECT COUNT(BOARD_NO) FROM BOARD WHERE  BOARD_CATEGORY='소모임'
+</select>
 
 </mapper>

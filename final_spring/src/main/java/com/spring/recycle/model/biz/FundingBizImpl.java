@@ -63,6 +63,18 @@ public class FundingBizImpl implements FundingBiz {
 		return dao.fundingAll();
 	}
 
+	@Override
+	public int caUpdate(FundingDto dto) {
+		// TODO Auto-generated method stub
+		return dao.caUpdate(dto);
+	}
+
+	@Override
+	public int cancelCaUpdate(FundingDto dto) {
+		// TODO Auto-generated method stub
+		return dao.cancelCaUpdate(dto);
+	}
+
 
 
 }

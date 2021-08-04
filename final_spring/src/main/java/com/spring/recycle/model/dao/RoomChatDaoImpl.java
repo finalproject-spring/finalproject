@@ -63,9 +63,10 @@ public class RoomChatDaoImpl implements RoomChatDao {
 	}
 
 	@Override
-	public List<ChatMessageDto> selectMessage(int room_no) { // 메세지 로그
+	public List<ChatMessageDto> selectMessage(String room_name) { // 메세지 로그
 		List<ChatMessageDto> res = null;
 		try {
+			int room_no = sqlSession.selectOne(NAMESPACE + "getRoomId", room_name);
 			res = sqlSession.selectList(NAMESPACE + "selectChat", room_no);
 		} catch (Exception e) {
 			e.printStackTrace();

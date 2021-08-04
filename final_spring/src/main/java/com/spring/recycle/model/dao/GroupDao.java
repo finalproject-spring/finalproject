@@ -29,4 +29,7 @@ public interface GroupDao {
 	
 	public int listCount(GroupSearchCriteria scri);
 	
+	//전체 게시물 수 
+	public int boardCount();
+	
 }

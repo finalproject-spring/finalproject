@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="payment">
+
+	<select id="payment_list" resultType="PaymentDto">
+	SELECT * FROM PAYMENT
+	</select>
+	
+	<insert id="payment_insert" parameterType="PaymentDto">
+	INSERT INTO PAYMENT(PAY_NUM ,PAY_PRODUCT,PAY_PRODUCTER, PAY_STATUS,PAY_CATEGORY,PAY_BUYER,PAY_DATE,PAY_COUNT,PAY_PRICE,FUNDING_NO, MERCHANT_UID)
+	VALUES(PAYMENTSEQ.NEXTVAL, #{pay_product},'admin', '결제완료','펀딩',#{pay_buyer}, SYSDATE,#{pay_count},#{pay_price},#{funding_no}, #{merchant_uid})
+	</insert>
+
+	<select id="paymentList" parameterType="com.spring.recycle.paging.SearchCriteria" resultType="PaymentDto">
+		SELECT PAY_NUM, PAY_PRODUCT, PAY_CATEGORY, PAY_STATUS, PAY_BUYER, PAY_PRODUCTER, PAY_COUNT, PAY_PRICE, FUNDING_NO, PAY_DATE, MERCHANT_UID
+		FROM (SELECT PAY_NUM, PAY_PRODUCT, PAY_CATEGORY, PAY_STATUS, PAY_BUYER, PAY_PRODUCTER, PAY_COUNT, PAY_PRICE, FUNDING_NO, PAY_DATE, MERCHANT_UID,
+		ROW_NUMBER() OVER(ORDER BY PAY_NUM DESC) as rn
+		FROM PAYMENT WHERE 1=1 <include refid="search"></include>) pm
+		WHERE rn BETWEEN #{rowStart} AND #{rowEnd}
+		ORDER BY PAY_NUM DESC
+	</select>
+	
+	<select id="paymentCancelList" resultType="PaymentDto">
+		SELECT * FROM PAYMENT WHERE PAY_STATUS='결제취소대기' ORDER BY PAY_NUM DESC
+	</select>
+	
+	<select id="listCount" parameterType="com.spring.recycle.paging.SearchCriteria" resultType="int">
+		SELECT COUNT(PAY_NUM) FROM PAYMENT WHERE 1=1 <include refid="search"></include>	
+	</select>
+	
+	<select id="paymentCancelCount" resultType="int">
+		SELECT COUNT(PAY_NUM) FROM PAYMENT WHERE PAY_STATUS='결제취소대기'
+	</select>
+	
+	<sql id="search">
+		<if test="searchType != null">
+			<if test="searchType == 'id'.toString()">AND PAY_BUYER LIKE '%' || #{keyword} || '%'</if>
+			<if test="searchType == 'pd'.toString()">AND PAY_PRODUCT LIKE '%' || #{keyword} || '%'</if>
+			<if test="searchType == 'st'.toString()">AND PAY_STATUS LIKE '%' || #{keyword} || '%'</if>
+		</if>
+	</sql>
+	
+	<select id="paymentDetail" parameterType="int" resultType="PaymentDto">
+		SELECT * FROM PAYMENT WHERE PAY_NUM =#{pay_num}
+	</select>
+	
+	<select id="paymentDetail2" parameterType="String" resultType="PaymentDto">
+		SELECT * FROM PAYMENT WHERE MERCHANT_UID = #{merchant_uid}
+	</select>
+	
+	<update id="paymentCancelSuccess">
+		UPDATE PAYMENT SET PAY_STATUS = '결제취소' WHERE PAY_NUM=#{pay_num}
+	</update>
+</mapper>

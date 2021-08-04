@@ -4,17 +4,11 @@
     <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
-<!-- 합쳐지고 최소화된 최신 CSS -->
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-		<!-- 부가적인 테마 -->
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
-		
-		<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.css" integrity="sha512-6g9IGCc67eh+xK03Z8ILcnKLbJnKBW+qpEdoUVD/4hBa2Ghiq5dQgeNOGWJfGoe9tdCRM4GpJMnsRXa2FDJp9Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.18/css/bootstrap-select.min.css" integrity="sha512-ARJR74swou2y0Q2V9k0GbzQ/5vJ2RBSoCWokg4zkfM29Fb3vZEQyv0iWBMW/yvKgyHSR/7D64pFMmU8nYmbRkg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
 <!-- multi select -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.css" integrity="sha512-6g9IGCc67eh+xK03Z8ILcnKLbJnKBW+qpEdoUVD/4hBa2Ghiq5dQgeNOGWJfGoe9tdCRM4GpJMnsRXa2FDJp9Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.18/css/bootstrap-select.min.css" integrity="sha512-ARJR74swou2y0Q2V9k0GbzQ/5vJ2RBSoCWokg4zkfM29Fb3vZEQyv0iWBMW/yvKgyHSR/7D64pFMmU8nYmbRkg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -104,6 +98,10 @@ function addFilter() {
 	$('#selected').prop("value", selected);
 }
 
+function loginChk(){
+	alert("로그인이 필요합니다.");
+	location.href='login_loginform.do';
+}
 
 </script>
 <style type="text/css">
@@ -116,21 +114,61 @@ body { margin: 0; padding: 0; }
 	.progs { height: 6px; background: rgb(225, 149, 240); color:#fff; line-height: 50px; }
 
 li {list-style: none; float: left; display:inline; padding: 6px;}
+
+#button1{
+  border-radius:5px;
+  background:#1AAB8A;
+  color:#fff;
+  border:none;
+  position:relative;
+  height:35px;
+  font-size:1.3em;
+  padding:0 1em;
+  cursor:pointer;
+  transition:800ms ease all;
+  outline:none;
+  
+}
+#button1:hover{
+  background:#fff;
+  color:#1AAB8A;
+}
+
+.blinking{ -webkit-animation:blink 1s ease-in-out infinite alternate; -moz-animation:blink 1s ease-in-out infinite alternate; animation:blink 1s ease-in-out infinite alternate; } @-webkit-keyframes blink{ 0% {opacity:0;} 100% {opacity:1;} } @-moz-keyframes blink{ 0% {opacity:0;} 100% {opacity:1;} } @keyframes blink{ 0% {opacity:0;} 100% {opacity:1;} }
+.searchinput {  border:0; background-color: transparent; color: #999;
+font-size: 18px;line-height: 40px;width: 30px;height: 40px;text-align: center;
+font-family: "Font Awesome 5 Free"; font-weight: 400; font-style: normal;
+font-variant: normal;text-rendering: auto;
+-webkit-font-smoothing: antialiased;}
+​select:focus {
+	outline: none;
+}
+input:focus {
+	outline: none;
+}
+option:focus {
+	outline: none;
+}
+.delinput {  border:0; background-color: transparent; color: #999;
+font-size: 12px;line-height: 40px;width: 30px;height: 40px;text-align: center;
+font-family: "Font Awesome 5 Free"; font-weight: 400; font-style: normal;
+font-variant: normal;text-rendering: auto;
+-webkit-font-smoothing: antialiased;}
 </style>
+
 </head>
 <body>
 
 <jsp:include page="../main/header.jsp"></jsp:include>
-<ul>
-		<li><a href="./group_insertform.do">글 작성</a></li>
-	</ul>
+
 	<div class="container">
 		<header>
-			<h1>소모임 게시판</h1>
+			<h1 style=" font-size: 19.8px; font-weight:600; float: left; color: #363636; ">Let's save earth together</h1>
+			<em style=" font-style:normal;  font-size: 14.8px; font-weight:600;  color: #1AAB8A; padding: 3px 3px;  " > ${count }</em>
 		</header>
 		<hr/>
 		<div class="form-group">
-		<div class="multi_select_box">
+		<div class="multi_select_box" style="float: left ;">
 			<select id="multi_select" title="카테고리를 선택하세요." multiple="multiple" onchange="addFilter();" required="required">
 			     <option value="전체보기">전체보기</option>
 				<option value="온라인 토론">온라인 토론</option>
@@ -144,7 +182,7 @@ li {list-style: none; float: left; display:inline; padding: 6px;}
 			<input type="hidden" id="page" name="page" value="${scri.page}"> 
  			<input type="hidden" id="perPageNum" name="perPageNum" value="${scri.perPageNum}"> 
   			<input type="hidden" id="selected" name="board_filter" value=""/>
-			<input type="button" id="searchBtn" value="검색"/>
+			<input type="button" id="searchBtn" value="&#xF002;"  class="searchinput" style="font-family:Arial, FontAwesome;" /> 
 			<script type="text/javascript">
 				$(function() {
 					$('#searchBtn').click(function() {
@@ -166,28 +204,33 @@ li {list-style: none; float: left; display:inline; padding: 6px;}
 							<table class="table table-hover">
 								<thead>
 									<tr>
-										<th><input id="allCheck" type="checkbox" name="allCheck"/> </th>
-										<th>번호</th>
-										<th>제목</th>
-										<th>카테고리</th>
-										<th>작성자</th>
-										<th>작성일</th>
-										<th>조회수</th>
+										<th style=" font-size: 14px; font-weight: 680; font-size: 13px; color: #363636; "><input id="allCheck" type="checkbox" name="allCheck"/> </th>
+										<th style=" font-size: 14px; font-weight: 680; font-size: 13px; color: #363636; ">카테고리</th>
+										<th style=" font-size: 14px; font-weight: 680; font-size: 13px; color: #363636; ">제목</th>
+										<th style=" font-size: 14px; font-weight: 680; font-size: 13px; color: #363636; ">글쓴이</th>
+										<th style=" font-size: 14px; font-weight: 680; font-size: 13px; color: #363636; ">작성일</th>
+										<th style=" font-size: 14px; font-weight: 680; font-size: 13px; color: #363636; ">조회수</th>
 									</tr>
 								</thead>
 								
 								<c:forEach items="${list }" var="dto">
 									<tr>
-										<td><input name="RowCheck" type="checkbox" value="${dto.board_no }"/></td>
-										<td>${dto.board_no }</td>
-										<td>
-											<a href="group_view.do?board_no=${dto.board_no }">${dto.board_title }</a>
+																<td><input name="RowCheck" type="checkbox" value="${dto.board_no }"/></td>
+										
+									
+										<td style="font-weight: 600; font-size: 13px; color: #36363666;">${dto.board_filter }</td>
+											<td>
+											<a style="font-weight: 680; font-size: 13px; color: #363636;  "  href="group_view.do?board_no=${dto.board_no }">${dto.board_title }</a>
+        									<c:if test="${dto.board_views >= 50 }">
+            								<span class="image blinking" style="color:#c90c0c; ">hot!!</span>
+        									</c:if>
+											
+											
 										</td>
-										<td>${dto.board_filter }</td>
-										<td>${dto.board_id }</td>
-										<td><fmt:formatDate value="${dto.board_date}"
+										<td style="font-weight: 600; color: #36363666;">${dto.board_id }</td>
+										<td style="font-weight:600; color: #36363666;"><fmt:formatDate value="${dto.board_date}"
 									pattern="yyyy-MM-dd" /></td>
-										<td>${dto.board_views }</td>
+										<td style="font-weight:600; color: #36363666;">${dto.board_views }</td>
 										<td>
 										
 										</td>
@@ -198,13 +241,13 @@ li {list-style: none; float: left; display:inline; padding: 6px;}
 	<div>
   <ul>
     <c:if test="${pageMaker.prev}">
-    	<li><a href="group_list.do${pageMaker.makeQuery(pageMaker.startPage - 1)}">이전</a></li>
+    	<li><a style="font-weight: 680; font-size: 18px; color: #999; " href="group_list.do${pageMaker.makeQuery(pageMaker.startPage - 1)}">이전</a></li>
     </c:if> 
     <c:forEach begin="${pageMaker.startPage}" end="${pageMaker.endPage}" var="idx">
-    	<li><a href="group_list.do${pageMaker.makeQuery(idx)}">${idx}</a></li>
+    	<li><a style="font-weight: 710; font-size: 18px; color: #999; " href="group_list.do${pageMaker.makeQuery(idx)}">${idx}</a></li>
     </c:forEach>
     <c:if test="${pageMaker.next && pageMaker.endPage > 0}">
-    	<li><a href="group_list.do${pageMaker.makeQuery(pageMaker.endPage + 1)}">다음</a></li>
+    	<li><a style="font-weight: 710; font-size: 18px; color: #999; " href="group_list.do${pageMaker.makeQuery(pageMaker.endPage + 1)}">다음</a></li>
     </c:if> 
   </ul>
 </div>
@@ -212,9 +255,22 @@ li {list-style: none; float: left; display:inline; padding: 6px;}
 				</form>
 				
 			</section>
+			
+			<c:if test="${memberdto.member_role eq 0 }">
 			<div class="form-group">
-					<button type="button" class="list_btn btn btn-primary" onclick="deleteValue();" >선택삭제</button>
+					<button type="button" class="delinput"  onclick="deleteValue();" ><i class="fas fa-trash-alt"></i></button>
 				</div>
+				</c:if>
+				<div align="right">
+				<c:choose>
+					<c:when test="${empty memberdto }">
+						<input id="button1" type="button" value="글작성"  onclick="loginChk();"/>
+					</c:when>
+					<c:otherwise>
+						<input  id="button1" type="button" value="글작성"  onclick="location.href='group_insertform.do'"/>
+					</c:otherwise>
+				</c:choose>
+			</div>
 		</div>
 </body>
 </html>

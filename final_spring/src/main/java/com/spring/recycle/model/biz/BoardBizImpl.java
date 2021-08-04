@@ -51,4 +51,9 @@ public class BoardBizImpl implements BoardBiz {
 		return dao.qnaReply(dto);
 	}
 
+	@Override
+	public int qnaReplyDelete(int reply_no) {
+		return dao.qnaReplyDelete(reply_no);
+	}
+
 }

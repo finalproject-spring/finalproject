@@ -5,10 +5,12 @@
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:websocket="http://www.springframework.org/schema/websocket"
 	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
 	xsi:schemaLocation="http://www.springframework.org/schema/websocket http://www.springframework.org/schema/websocket/spring-websocket-4.3.xsd
 		http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd
 		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
 
 	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
@@ -27,24 +29,16 @@
 	
 	<context:component-scan base-package="com.spring.recycle" />
 	
+	<aop:aspectj-autoproxy></aop:aspectj-autoproxy>
+	
 	<!-- interceptor -->
  	<interceptors>
 		<interceptor>
 			<mapping path="/*"/>
-			<beans:bean class="com.spring.recycle.common.interceptor.LogInterceptor"/>
+			<beans:bean class="com.spring.recycle.common.interceptor.AuthenticationInterceptor"/>
 		</interceptor>
 	</interceptors>
 
-<!-- 	<beans:bean id="messageHandler" class="com.spring.recycle.websocket.MessageHandler"></beans:bean>
- -->	
-	<!-- 쪽지 websocket handler / httpSession 접근 -->
-<!-- 	<websocket:handlers>
-		<websocket:mapping handler="messageHandler" path="/wsmessage.do"/>
-		<websocket:handshake-interceptors>
-	         <beans:bean class="org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor"/>
-	      </websocket:handshake-interceptors>
-	      <websocket:sockjs/>
-	</websocket:handlers> -->
 	<beans:bean id="messageHandler" class="com.spring.recycle.websocket.MessageHandler" />
 <websocket:handlers>
     <websocket:mapping handler="messageHandler" path="/message_ws" />

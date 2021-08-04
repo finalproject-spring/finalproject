@@ -20,8 +20,12 @@ public class NaverLoginDto {
 	
     private final static String CLIENT_ID = "Dtr8TGOgOVrViLQVPs49";
     private final static String CLIENT_SECRET = "KDjAzImi7C";
-    private final static String REDIRECT_URI = "http://localhost:8787/recycle/login_navercallback.do";
-	private final static String SESSION_STATE = "oauth_state";
+    // 로컬호스트용
+    //private final static String REDIRECT_URI = "http://localhost:8787/recycle/login_navercallback.do";
+	// 서버용
+    private final static String REDIRECT_URI = "http://qclass.iptime.org:8787/recycle/login_navercallback.do";
+    
+    private final static String SESSION_STATE = "oauth_state";
 	// 프로필 조회 API URL
 	private final static String PROFILE_API_URL = "https://openapi.naver.com/v1/nid/me";
     

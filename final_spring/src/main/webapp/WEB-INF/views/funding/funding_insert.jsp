@@ -31,7 +31,7 @@
 
 #main_title { float: left; padding-right: 50px;}
 
-#preview { width: 450px; height: 300px; background-color: gray; }
+#preview { width: 450px; height: 300px; background-color:#D5D5D5;}
 
 #funding_title { width: 500px; font-size: 20px; border: 1px solid rgba(0, 0, 0, 0.1); }
 
@@ -39,10 +39,17 @@
 
 #clear::after { display: block; clear: both; content: ''; }
 
+#dates {text-align: center; padding: 20px 0px 20px 0px }
+
+#collection, #user_pay {padding: 10px 0px 10px 0px}
+
+#paydesc, #pay {width: 907px;}
+
 </style>
 </head>
+<jsp:include page="../main/header.jsp"></jsp:include>
 <body>
- <jsp:include page="../main/header.jsp"></jsp:include>
+<br/>
 	<div class="container">
 		<form method="post" enctype="multipart/form-data" action="funding_insertres.do">
 			<div id="clear" >
@@ -51,7 +58,7 @@
 					<input type="file" name="uploadfile" onchange="readURL(this);" accept="image/*" required="required" multiple="multiple"/>
 				</div>
 				<div class="form-group" style="padding: 50px 0px 20px 0px;">
-					<div>펀딩 제목</div> 
+					<div id="collection">펀딩 제목</div> 
 					<input type="text" required="required" name="funding_title" id="funding_title" class="form-control" />
 				</div>
 				<div class="row">
@@ -60,7 +67,7 @@
 					    <option value="환경보호">환경보호</option>
 					    <option value="업싸이클링">업싸이클링</option>
 					    <option value="기후재난">기후재난</option>
-					    <option value="재활용">재활용</option>
+					    <option value="제로웨이스트">제로웨이스트</option>
 					    <option value="친환경">친환경</option>
 					    <option value="플라스틱 쓰레기">플라스틱 쓰레기</option>
 					    <option value="동물보호">동물보호</option>
@@ -73,7 +80,7 @@
 		</div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.bundle.js" integrity="sha512-iqhWkvLOXVDz+Lr//ZryEKNvZ5pmgdKEe58Wh/VwfTGwTku0MKbuLhjJ1zUAJu8iSbOqfLcXrrxJ61+27THi2Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.18/js/bootstrap-select.min.js" integrity="sha512-yDlE7vpGDP7o2eftkCiPZ+yuUyEcaBwoJoIhdXv71KZWugFqEphIS3PU60lEkFaz8RxaVsMpSvQxMBaKVwA5xg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-		<div style="text-align: center;">
+		<div id="dates">
 			<div class="form-group" style="display: inline-block;">
 				<label>펀딩 시작일</label>
 				<input type="date" name="funding_start" class="form-control" style="width:450px;" required="required"/>
@@ -83,24 +90,25 @@
 				<input type="date" name="funding_end" class="form-control" style="width:450px;" required="required"/>
 			</div>
 		</div>
-		<div style="margin: 0 auto;">
+		<div style="margin: 0 auto; margin-left: 100px;">
 			<div>
-				<div>목표 모금액</div>
-				<input type="text" name="funding_ta" required="required"/> 원
+				<div id="collection">목표 모금액</div>
+				<input type="text" name="funding_ta" required="required" class="form-control" style="width: 907px;" placeholder="총 목표액을 입력해주세요." pattern="[0-9]+"/>
 			</div>
 			<div>
-				금액(숫자만)과 설명을 입력해주세요
-				<div id="textBox">
-				<p>
-					<input type="text" class="pay" required="required" placeholder="금액을 입력해주세요." onchange='payTotal();'/>
-					<input type="text" class="paydesc" required="required" placeholder="결제 항목 설명을 입력해주세요." onchange='paydescTotal();'/>
-				</p>
+				<div id="user_pay">
+					<div style="padding-bottom: 20px;">
+						<div id="collection">결제 항목</div>
+						<input type="text" class="form-control" id="paydesc" required="required" placeholder="결제 항목 설명을 입력해주세요." name="funding_paydesc"/>
+					</div>
+					<div>
+						<div id="collection">결제 금액</div>
+						<input type="text" class="form-control" id="pay" required="required" placeholder="결제 금액을 입력해주세요." name="funding_pay" pattern="[0-9]+"/>
+					</div>
 				</div>
-				<input type="button" value="항목 추가" onclick="addPayment();"/>
-	 			<input type="hidden" id="funding_pay" name="funding_pay"/>
-	 			<input type="hidden" id="funding_paydesc" name="funding_paydesc"/>
 			</div>
 		</div>
+		<br/><br/>
 		<div>
 				<textarea required="required" id="summernote" name="funding_content"></textarea>
 		</div>
@@ -108,8 +116,8 @@
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 		<br/>
 		<div style="text-align: right;">
-			<input type="submit" value="작성">
-			<input type="button" value="돌아가기" onclick="back();"/>
+			<input type="submit" value="작성" style="background-color: #71c55d; color: white; width: 80px; height: 35px; border: 2px solid #71c55d; border-radius: 10px; font-weight: 700;">
+			<input type="button" value="돌아가기" onclick="back();" style="background-color: white; color:#727272; width: 80px; height: 35px; border: 2px solid #71c55d; border-radius: 10px; font-weight: 700;"/>
 		</div>
 		<br/><br/>
 	</form>
@@ -176,39 +184,7 @@
 		$('#selected').prop("value", selected);
 		
 	}
-	
-	function addPayment() {
-		var box = document.getElementById("textBox");
-		var newP = document.createElement('p');
-		newP.innerHTML = "<input type='text' class='pay' required='required' placeholder='금액을 입력해주세요.' onchange='payTotal();'> <input type='text' class='paydesc' required='required' placeholder='설명을 입력해주세요.' onchange='paydescTotal();'> <input type='button' value='삭제' onclick='remove(this)'>";
-        box.appendChild(newP);
-    }
-      var remove = (obj) => {
-        document.getElementById('textBox').removeChild(obj.parentNode);
-    }
-      
-    function payTotal() {
 
-		var plength = $(".pay").length;
-		var total = new Array(plength);
-
-		for(var i=0; i< plength; i++){                          
-				total[i] = $(".pay").eq(i).val();
-		}
-		$('#funding_pay').prop("value", total);
-    }
-    
-    function paydescTotal() {
-		var desclength = $(".paydesc").length;
-		var total = new Array(desclength);
-
-		for(var i=0; i< desclength; i++){                          
-				total[i] = $(".paydesc").eq(i).val();
-		}
-		var desctotal = total.join("$%^");
-		$('#funding_paydesc').prop("value", desctotal);    	
-    }
-    
     function back() {
     	if(confirm("글 작성을 취소하시겠습니까?")) {
     		history.back();

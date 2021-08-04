@@ -17,6 +17,11 @@
 	});
 
 </script>
+<style type="text/css">
+
+.submitBtn {background-color: #71c55d; border: 1px solid #71c55d; color: white; width: 68px; height: 40px; border-radius: 13px; font-size: 15px; }
+
+</style>
 </head>
 <body>
 <jsp:include page="../main/header.jsp"></jsp:include>
@@ -48,7 +53,7 @@
 					<label class="col-sm-2 control-label">비밀글</label>
 				</div>
 				<div align="right">
-					<button type="submit" class="list_btn btn btn-primary">작성</button>	
+					<button type="submit" class="submitBtn">작성</button>	
 				</div>
 			</form>
 			</section>

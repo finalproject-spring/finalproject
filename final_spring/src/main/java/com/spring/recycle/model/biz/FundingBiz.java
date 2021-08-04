@@ -19,4 +19,8 @@ public interface FundingBiz {
 	
 	// funding 전체 리스트 추가
 	public List<FundingDto> fundingAll();
+	
+	// funding 결제 금액 업데이트
+	public int caUpdate(FundingDto dto);
+	public int cancelCaUpdate(FundingDto dto);
 }

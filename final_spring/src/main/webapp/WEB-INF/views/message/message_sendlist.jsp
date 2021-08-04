@@ -30,19 +30,22 @@ $(function(){
 	
 	#message_menu {padding-bottom: 30px;}
 	#message_menu span { display:inline-block; width: 50%; height: 50px; line-height: 50px; text-align: center; border: 1px solid rgba(0,0,0,.1); cursor: pointer; }
-	#paging { position : fixed; bottom : 5%;}
-	
+	#muldel {background-color: gray; text-align:center; color:#fff; border:none; position:relative; font-size:15px; width: 70px; height: 37px;
+	  cursor:pointer; transition:800ms ease all; outline:none; border-radius: 10px; }
+	#muldel:hover { background:#fff; color:gray;} 
+
 </style>
 </head>
 <body>
  <jsp:include page="../main/header.jsp"></jsp:include>
+ <br/>
  <div class="container">
 	<div id="message_menu">
 		<span onclick="location.href='message_recvList.do'" style="float: left;">받은 쪽지함</span>
 		<span onclick="location.href='message_sendList.do'" style="font-weight: 700;">보낸 쪽지함</span>
 	</div>
 
-	<div style="text-align: right;"><input type="button" id="muldel" value="삭제" class="btn btn-info btn-sm"/></div>
+	<div style="text-align: right;"><input type="button" id="muldel" value="삭제"/></div>
 	<br/>
 	<form action="message_multi_senddel.do" method="get" id="multiDelete">
 	<table class="table table-hover" style="table-layout:fixed">
@@ -56,7 +59,7 @@ $(function(){
 			</td>
 			<td>받는사람</td>
 			<td>내용</td>
-			<td>보낸 시간</td>
+			<td>보낸시간</td>
 		</tr>
 		<script type="text/javascript">
 	 	$("input:checkbox[id='allCheck']").click(function(){
@@ -107,6 +110,6 @@ $(function(){
 		  </ul>
 		</div>
 	</div>
-</div>	
+
 </body>
 </html>

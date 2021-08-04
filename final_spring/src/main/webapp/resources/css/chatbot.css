@@ -1,0 +1,39 @@
+	.chatbot {
+	  position: fixed;
+	  background: #71c55d;
+	  line-height: 1;
+	  color: #fff;
+	  padding: 15px 14px 16px 16px;
+	  font-size: 20px;
+	  border-radius: 2px;
+	  right: 60px;
+	  bottom: 60px;
+	  transition: background 0.5s;
+	}
+	
+	.chatbot:hover {background-color: #55b03f; }
+	#chatbot {margin:0; padding:0; width: 420px; height: 600px; position: fixed; right: 40px; bottom: 30px; z-index: 100; background-color: white; display: none; border-radius: 20px; box-shadow : 2px 2px 5px #999;}
+	.chat_wrap .header { position:fixed; width:420px; font-size: 22px; padding: 15px 0; background: #71c55d; color: white; text-align: center; border-bottom: 1px solid #DDDDDD; border-radius: 20px 20px 0px 0px;} 
+	.chat_wrap .header .fa-times:hover {color: #F8F4BC; }
+	.chat_wrap .chat { padding-top:60px; width: 420px; height:525px; overflow-y: scroll; overflow-x:hidden; }
+	.chat_wrap .chat::-webkit-scrollbar{ /* 스크롤바 막대 너비 설정 */ width: 6px; }
+	.chat_wrap .chat::-webkit-scrollbar-thumb{ /* 스크롤바 막대 높이 설정 */ height: 17%; background-color: rgba(255,255,255,1); /* 스크롤바 둥글게 설정 */ border-radius: 10px; }
+	.chat_wrap .chat::-webkit-scrollbar-track{ background-color: rgba(0,0,0,0); }
+	.chat_wrap .chat ul { width: 420px; list-style: none; padding: 10px; }
+	.chat_wrap .chat ul li.left { text-align: left; }
+	.chat_wrap .chat ul li.right { text-align: right; width: 100%; }
+	.chat_wrap .chat ul li > div { font-size: 13px; }
+	.chat_wrap .chat ul li > div.sender { margin: 10px 20px 0 20px; font-weight: bold; }
+	.chat_wrap .chat ul li.left > div.message { 
+												display: inline-block; word-break:break-all; margin: 5px 10px; max-width: 60%; border: 1px solid #e8e8ed; line-height: 20px;
+												border-radius: 20px 20px 20px 0px; padding: 11px;  background-color: #e8e8ed; color: black; font-size:14px; text-align: left; } 
+	.chat_wrap .chat ul li.right > div.message {
+												display: inline-block; word-break:break-all; margin: 5px 10px; max-width: 60%; border: 1px solid #00CD47; line-height: 20px;
+												border-radius: 20px 20px 0px 20px; padding: 11px; background-color: #00CD47; color: white; font-size:14px; text-align: left; }
+
+	
+	.chat_wrap .input { position: fixed; bottom: 20px; margin:20px; width:390px; text-align: center; border: 1px solid #DDDDDD; margin-top: 20px; }
+	.chat_wrap .input textarea { width: 83%; border: none; padding: 11px; font-size: 14px; }
+	.format { display: none; }
+	#sendMsg {cursor: pointer; height: 50px; line-height: 50px; padding: 5px 5px 5px 10px; font-size: 22px; color: gray;}
+	

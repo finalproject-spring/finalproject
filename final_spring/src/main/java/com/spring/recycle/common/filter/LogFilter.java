@@ -19,7 +19,6 @@ public class LogFilter implements Filter {
 
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
-		
 	}
 
 	@Override
@@ -39,14 +38,17 @@ public class LogFilter implements Filter {
 				String agent = req.getHeader("User-Agent"); // 사용자 정보
 				
 				StringBuffer sb = new StringBuffer();
-				sb.append("* remoteAddr : " + remoteAddr + "\n")
+				
+				sb.append("FILTER START\n")
+				  .append("* remoteAddr : " + remoteAddr + "\n")
 				  .append("* uri : " + uri + "\n")
 				  .append("* url : " + url + "\n")
 				  .append("* queryString : " + queryString + "\n")
 				  .append("* referer : " + referer + "\n")
-				  .append("* agent : "  + agent);
+				  .append("* agent : "  + agent + "\n")
+				  .append("FILTER END");
 					
-				logger.info("LOG FILTER\n" + sb);
+				logger.info("\n"+sb);
 					
 
 				chain.doFilter(request, response);
@@ -55,8 +57,6 @@ public class LogFilter implements Filter {
 	
 	@Override
 	public void destroy() {
-
-
 	}
 
 }

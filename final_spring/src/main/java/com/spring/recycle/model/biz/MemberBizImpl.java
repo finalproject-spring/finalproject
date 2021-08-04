@@ -1,7 +1,9 @@
 package com.spring.recycle.model.biz;
 
 
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,6 +11,9 @@ import org.springframework.stereotype.Service;
 import com.spring.recycle.model.dao.MemberDao;
 import com.spring.recycle.model.dto.BoardDto;
 import com.spring.recycle.model.dto.MemberDto;
+import com.spring.recycle.model.dto.PaymentDto;
+import com.spring.recycle.paging.Criteria;
+import com.spring.recycle.paging.SearchCriteria;
 
 
 
@@ -96,10 +101,36 @@ public class MemberBizImpl implements MemberBiz {
 		return dao.socialIdCheck(member_socialid);
 	}
 
+	@Override
+	public String find_id(String member_email) {
+		// TODO Auto-generated method stub
+		return dao.find_id(member_email);
+	}
 
+	@Override
+	public int update_pw(MemberDto dto) {
+		// TODO Auto-generated method stub
+		return dao.update_pw(dto);
+	}
 
+	@Override
+	public List<MemberDto> memberListPage(SearchCriteria scri) {
+		return dao.memberListPage(scri);
+	}
 
+	@Override
+	public int listCount(SearchCriteria scri) {
+		return dao.listCount(scri);
+	}
 
-	
+	@Override
+	public MemberDto checkMemberWithSessionKey(String sessionId) {
+		return dao.checkMemberWithSessionKey(sessionId);
+	}
+
+	@Override
+	public void keepLogin(String member_id, String sessionId, Date next) {
+		dao.keepLogin(member_id, sessionId, next);
+	}
 
 }

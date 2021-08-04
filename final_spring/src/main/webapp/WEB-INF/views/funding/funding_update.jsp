@@ -125,87 +125,140 @@
 
 </script>
 <style type="text/css">
+	
+	.bootstrap-select .bs-ok-default::after {
+	    border-width: 0 0.1em 0.1em 0;
+	    transform: rotate(45deg) translateY(0.5rem);
+	}
+	
+	.bootstrap-select>.dropdown-toggle {
+		width: 500px !important;
+	}
+	
+	.bootstrap-select .dropdown-menu li { width: 500px; }
+	
+	.btn.dropdown-toggle:focus {
+	    outline: none !important;
+	}
+	
+	#main_title { float: left; padding-right: 50px;}
+	
+	#preview { width: 450px; height: 300px; background-color:#D5D5D5;}
+	
+	#funding_title { width: 500px; font-size: 20px; border: 1px solid rgba(0, 0, 0, 0.1); }
+	
+	#clear { width:1050px; margin: auto; }
+	
+	#clear::after { display: block; clear: both; content: ''; }
+	
+	#dates {text-align: center; padding: 20px 0px 20px 0px }
+	
+	#collection, #user_pay {padding: 10px 0px 10px 0px}
+	
+	#paydesc, #pay {width: 907px;}
 
-#preview { width: 450px; height: 300px; background-color: gray; }
-
-.multi_select_box{ width: 100%; -ms-overflow-style: none; /* IE and Edge */ scrollbar-width: none; /* Firefox */ }
-
-.multi_select_box select { width: 400px; }
-
-.multi_select_box button { background-color: white; color: black; border:1px solid; border-color:black; padding: 15px 25px; }
-
-.bootstrap-select>.dropdown-toggle { width: 500px; }
-
-.bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn) { width: 493px; }
-
-.dropdown-menu > li > a { padding-top: 5px; }
+	#allButton { background:#1AAB8A; text-align:center; color:#fff; border:none; position:relative; font-size:15px; width: 90px; height: 37px;
+	  cursor:pointer; transition:800ms ease all; outline:none; border-radius: 10px; }
+	#allButton:hover { background:#fff; color:#1AAB8A;} 
+	#allButton:before,#allButton:after{
+	  content:'';
+	  position:absolute;
+	  top:0;
+	  right:0;
+	  height:2px;
+	  width:0;
+	  background: #1AAB8A;
+	  transition:400ms ease all;
+	}
+	#allButton:after{
+	  right:inherit;
+	  top:inherit;
+	  left:0;
+	  bottom:0;
+	}
+	#allButton:hover:before,#allButton:hover:after{
+	  width:100%;
+	  transition:800ms ease all;
+	}
 
 </style>
 </head>
 <body>
  <jsp:include page="../main/header.jsp"></jsp:include>
-	<div>
+	<div class="container">
 		<form method="post" enctype="multipart/form-data" action="funding_updateres.do">
+			<div id="clear">
 			<input type="hidden" name="funding_no" value="${dto.funding_no }"/>
 			<div>
-						펀딩 메인 사진
-				<div><img id="preview" src="${dto.funding_pic }"/>이미지 미리보기</div>
-				<input type="file" name="uploadfile" onchange="readURL(this);" accept="image/*" multiple="multiple"/>
-				<!-- name 이 controller의 파라미터와 동일해야 nullpoint가 안뜸 -->
+				<div id="main_title">
+					<div><img id="preview" src="${dto.funding_pic }"/></div>
+					<input type="file" name="uploadfile" onchange="readURL(this);" accept="image/*" multiple="multiple" />
+				</div>
 				<input type="hidden" value="${dto.funding_pic }" name="funding_pic"/>
 			</div>
-			<div>
-				<input type="text" required="required" name="funding_title" value="${dto.funding_title }" placeholder="펀딩 이름을 입력해 주세요."/>
+			<div class="form-group" style="padding: 50px 0px 20px 0px;">
+				<div id="collection">펀딩 제목</div> 
+				<input type="text" required="required" name="funding_title" id="funding_title" value="${dto.funding_title }" placeholder="펀딩 이름을 입력해 주세요." class="form-control"/>
 			</div>
-			<div>
-				펀딩 카테고리
-				<div class="multi_select_box">
-				<select id="multi_select" title="카테고리를 선택하세요." multiple="multiple" onchange="addFilter();">
-				    <option value="환경보호">환경보호</option>
-				    <option value="업싸이클링">업싸이클링</option>
-				    <option value="기후재난">기후재난</option>
-				    <option value="재활용">재활용</option>
-				    <option value="친환경">친환경</option>
-				    <option value="플라스틱 쓰레기">플라스틱 쓰레기</option>
-				    <option value="동물보호">동물보호</option>
-				</select>
-				<input type="hidden" id="selected" name="funding_filter" value="${dto.funding_filter }"/>
-			</div>
-			<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.bundle.js" integrity="sha512-iqhWkvLOXVDz+Lr//ZryEKNvZ5pmgdKEe58Wh/VwfTGwTku0MKbuLhjJ1zUAJu8iSbOqfLcXrrxJ61+27THi2Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-			<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.18/js/bootstrap-select.min.js" integrity="sha512-yDlE7vpGDP7o2eftkCiPZ+yuUyEcaBwoJoIhdXv71KZWugFqEphIS3PU60lEkFaz8RxaVsMpSvQxMBaKVwA5xg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-				
-			</div>
-			<div>
-				펀딩 시작
-				<input type="date" name="funding_start" value="${dto.funding_start }" required="required"/>
-				펀딩 종료
-				<input type="date" name="funding_end" value="${dto.funding_end }" required="required"/>
-			</div>
-			<div>
-				목표 모금액
-				<input type="text" name="funding_ta" value="${dto.funding_ta }" required="required"/>원
-			</div>
-			<div>
-				금액(숫자만)과 설명을 입력해주세요
-				<div id="textBox">
-				<p>
-					<input type="text" class="pay" required="required" placeholder="금액을 입력해주세요." onchange='payTotal();'/>
-					<input type="text" class="paydesc" required="required" placeholder="결제 항목 설명을 입력해주세요." onchange='paydescTotal();'/>
-				</p>
+			<div class="row">
+				<div style="padding: 20px 0px 20px 0px;">
+					펀딩 카테고리
+					<div class="multi_select_box">
+					<select id="multi_select" title="카테고리를 선택하세요." multiple="multiple" onchange="addFilter();">
+					    <option value="환경보호">환경보호</option>
+					    <option value="업싸이클링">업싸이클링</option>
+					    <option value="기후재난">기후재난</option>
+					    <option value="제로웨이스트">제로웨이스트</option>
+					    <option value="친환경">친환경</option>
+					    <option value="플라스틱 쓰레기">플라스틱 쓰레기</option>
+					    <option value="동물보호">동물보호</option>
+					</select>
+					<input type="hidden" id="selected" name="funding_filter" value="${dto.funding_filter }"/>
 				</div>
-				<input type="button" value="항목 추가" onclick="addPayment();"/>
-	 			<input type="hidden" id="funding_pay" name="funding_pay" value="${dto.funding_pay }"/>
-	 			<input type="hidden" id="funding_paydesc" name="funding_paydesc" value="${dto.funding_paydesc }"/>
+				</div>
 			</div>
-
+			</div>
+				<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.bundle.js" integrity="sha512-iqhWkvLOXVDz+Lr//ZryEKNvZ5pmgdKEe58Wh/VwfTGwTku0MKbuLhjJ1zUAJu8iSbOqfLcXrrxJ61+27THi2Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+				<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.18/js/bootstrap-select.min.js" integrity="sha512-yDlE7vpGDP7o2eftkCiPZ+yuUyEcaBwoJoIhdXv71KZWugFqEphIS3PU60lEkFaz8RxaVsMpSvQxMBaKVwA5xg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>	
+			<div id="dates">
+				<div class="form-group" style="display: inline-block;">
+					<label>펀딩 시작일</label>
+					<input type="date" name="funding_start" class="form-control" style="width:450px;" value="${dto.funding_start }" required="required"/>
+				</div>
+				<div class="form-group" style="display: inline-block;">
+					<label>펀딩 종료일</label>
+					<input type="date" name="funding_end" class="form-control" style="width:450px;" value="${dto.funding_end }" required="required"/>
+				</div>
+			</div>
+			<div style="margin: 0 auto; margin-left: 100px;">
+				<div>
+					<div id="collection">목표 모금액</div>
+					<input type="text" name="funding_ta" required="required" class="form-control" value="${dto.funding_ta }" style="width: 907px;" placeholder="총 목표액을 입력해주세요." pattern="[0-9]+"/>
+				</div>
+				<div>
+					<div id="user_pay">
+						<div style="padding-bottom: 20px;">
+							<div id="collection">결제 항목</div>
+							<input type="text" class="form-control" id="paydesc" required="required" placeholder="결제 항목 설명을 입력해주세요." name="funding_paydesc" value="${dto.funding_paydesc }"/>
+						</div>
+						<div>
+							<div id="collection">결제 금액</div>
+							<input type="text" class="form-control" id="pay" required="required" placeholder="결제 금액을 입력해주세요." name="funding_pay" value="${dto.funding_pay }" pattern="[0-9]+"/>
+						</div>
+					</div>
+				</div>
+			</div>
+		<br/><br/>
+	
 			<div>
 				<textarea required="required" id="summernote" name="funding_content">${dto.funding_content }</textarea>
 			</div>
 			<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 			<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+			<br/><br/>
 			<div>
-				<input type="submit" value="수정">
-				<input type="button" value="돌아가기" onclick="history.back();"/>
+				<input id="allButton" type="submit" value="수정">
+				<input id="allButton" type="button" value="돌아가기" onclick="history.back();"/>
 			</div>
 		</form>
 	</div>

@@ -8,7 +8,7 @@
 <meta charset="UTF-8">
 <title>Home</title>
 
-<jsp:include page="header.jsp"></jsp:include>	
+<jsp:include page="../main/header.jsp"></jsp:include>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <style type="text/css">
 	
@@ -21,7 +21,6 @@
 }
 body {
  overflow: scroll;
- height:1250px;
  font-family: 'HelveticaNeue-UltraLight', 'Helvetica Neue UltraLight', 'Helvetica Neue', Arial, Helvetica, sans-serif;
  font-weight: 100;
  color: rgba(255, 255, 255, 1);
@@ -41,12 +40,14 @@ body {
   transform: translate3d(0, 0, 0);
   width: 420px;
   margin: 0 auto;
+  margin-top : 250px;
   height: 664px;
   overflow: hidden;
   background: #4A4A4A;
+  border-radius: 15px;
 }
 
-.header {
+.calHeader {
   height: 50px;
   width: 420px;
   background: rgba(66, 66, 66, 1);
@@ -55,7 +56,7 @@ body {
   z-index: 100;
 }
 
-.header h1 {
+.calHeader h1 {
   margin: 0;
   padding: 0;
   font-size: 20px;
@@ -424,7 +425,7 @@ body {
 @keyframes fadeOutShink  {
   to { opacity: 0; padding: 0px; height: 0px; }
 }
-	
+
 </style>
 </head>
 
@@ -471,7 +472,7 @@ body {
 		    if(!this.header) {
 		      //Create the header elements
 		      this.header = createElement('div', 'header');
-		      this.header.className = 'header';
+		      this.header.className = 'calHeader';
 
 		      this.title = createElement('h1', 'calendar-header');
 
@@ -614,8 +615,7 @@ body {
 		    		}else if((day.date() == end.getDate()) && ((day.month()+1) == (end.getMonth()+1))){
 		    			var evSpan = createElement('span', ev.color, '', 'end');
 		 		        element.appendChild(evSpan);
-			    	} 
-		    		else{
+			    	}else{
 		    			var evSpan = createElement('span', ev.color, '', 'middle');
 				        element.appendChild(evSpan);
 		    		}
@@ -627,7 +627,10 @@ body {
 		    			var evSpan = createElement('span', ev.color, '', 'middle');
 				        element.appendChild(evSpan);
 		    		}
-		    	}
+		    	} else{
+	    			var evSpan = createElement('span', ev.color, '', 'middle');
+			        element.appendChild(evSpan);
+	    		}
 		    	
 
 		      });
@@ -699,7 +702,6 @@ body {
 		  }
 
 		  Calendar.prototype.renderEvents = function(events, ele) {
-			console.log(events)
 		    //Remove any events in the current details element
 		    var currentWrapper = ele.querySelector('.events');
 		    var wrapper = createElement('div', 'events in' + (currentWrapper ? ' new' : ''));
@@ -805,7 +807,7 @@ body {
 			  for(var i = 0; i <= dateDiff; i++){		  
 				  var inputEvent = new Date("${fund.funding_start}");
 				  inputEvent.setDate(inputEvent.getDate() + i);
-			      data.push({eventName:"${fund.funding_title} When ${fund.funding_start} ~ ${fund.funding_end}", calendar:"", color:color[random], event:inputEvent, start:"${fund.funding_start}", end:"${fund.funding_end}"});
+			      data.push({eventName:"${fund.funding_title} ${fund.funding_start}~${fund.funding_end}", calendar:"", color:color[random], event:inputEvent, start:"${fund.funding_start}", end:"${fund.funding_end}"});
 			  }
 		  </c:forEach>
 		  
@@ -819,7 +821,7 @@ body {
 			  for(var i = 0; i <= dateDiff; i++){		  
 				  var inputEvent = new Date("${event.event_start}");
 				  inputEvent.setDate(inputEvent.getDate() + i);
-				  data.push({eventName : "${event.event_title} When ${event.event_start} ~ ${event.event_end}", calendar: "", color: color[random], event:inputEvent, start:"${event.event_start}", end:"${event.event_end}"});
+				  data.push({eventName : "${event.event_title} ${event.event_start}~${event.event_end}", calendar: "", color: color[random], event:inputEvent, start:"${event.event_start}", end:"${event.event_end}"});
 			  }
 		  </c:forEach>
 		  
@@ -834,7 +836,6 @@ body {
 
 	</script>
 	
-	<jsp:include page="footer.jsp"></jsp:include>
 
 </body>
 </html>

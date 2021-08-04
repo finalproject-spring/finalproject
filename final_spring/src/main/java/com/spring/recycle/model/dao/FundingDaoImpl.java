@@ -109,4 +109,28 @@ public class FundingDaoImpl implements FundingDao {
 		return list;
 	}
 
+	@Override
+	public int caUpdate(FundingDto dto) {
+		int res = 0;
+		
+		try {
+			res = sqlSession.update(NAMESPACE + "caUpdate", dto);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return res;
+	}
+
+	@Override
+	public int cancelCaUpdate(FundingDto dto) {
+		int res = 0;
+		try {
+			res = sqlSession.update(NAMESPACE+"cancelCaUpdate", dto);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return res;
+	}
+
 }

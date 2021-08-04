@@ -30,21 +30,49 @@
 	        vertical-align: middle; 
 	}
 	
+	#createBtn { background:#1AAB8A; text-align:center; color:#fff; border:none; position:relative; font-size:15px; width: 90px; height: 37px;
+	  cursor:pointer; transition:800ms ease all; outline:none; border-radius: 10px; }
+	#createBtn:hover { background:#fff; color:#1AAB8A;} 
+	#createBtn:before,#createBtn:after{
+	  content:'';
+	  position:absolute;
+	  top:0;
+	  right:0;
+	  height:2px;
+	  width:0;
+	  background: #1AAB8A;
+	  transition:400ms ease all;
+	}
+	#createBtn:after{
+	  right:inherit;
+	  top:inherit;
+	  left:0;
+	  bottom:0;
+	}
+	#createBtn:hover:before,#createBtn:hover:after{
+	  width:100%;
+	  transition:800ms ease all;
+	}
+	
+	#muldel {background-color: gray; text-align:center; color:#fff; border:none; position:relative; font-size:15px; width: 70px; height: 37px;
+	  cursor:pointer; transition:800ms ease all; outline:none; border-radius: 10px; }
+	#muldel:hover { background:#fff; color:gray;} 
 	#message_menu {padding-bottom: 30px;}
 	#message_menu span { display:inline-block; width: 50%; height: 50px; line-height: 50px; text-align: center; border: 1px solid rgba(0,0,0,.1); cursor: pointer; }
-	#paging { position : fixed; bottom : 5%;}	
+		
 </style>
 </head>
 <body>
  <jsp:include page="../main/header.jsp"></jsp:include>
+ <br/>
  <div class="container">
 	<div id="message_menu">
 		<span onclick="location.href='message_recvList.do'" style="float: left; font-weight: 700;">받은 쪽지함</span>
 		<span onclick="location.href='message_sendList.do'">보낸 쪽지함</span>
 	</div>
 	<div style="text-align: right;">
-		<button id="createBtn" class="btn btn-info btn-sm" data-target="#myModal" data-toggle="modal">쪽지쓰기</button>
-		<input type="button" id="muldel" value="삭제" class="btn btn-info btn-sm" style="background-color: gray;"/>
+		<button id="createBtn" data-target="#myModal" data-toggle="modal">쪽지쓰기</button>
+		<input type="button" id="muldel" value="삭제"/>
 	</div>
 	<br/>	
  <!-- Modal -->
@@ -114,20 +142,20 @@
 					<td colspan="4" align="center">받은 쪽지가 없습니다.</td>
 				</tr>
 			</c:when>
-		<c:otherwise>
-		<c:forEach items="${list }" var="dto">
-		<tr>
-			<td>
-				<input type="checkbox" id="chk" name="message_noList" value="${dto.message_no }"/>
-			</td>
-			<td>${dto.message_sendid }</td>
-			<td class="recvMsg" style="overflow:hidden;white-space:nowrap;text-overflow:ellipsis; max-width:450px; text-decoration: none;"><a href="message_recvDetail.do?message_no=${dto.message_no }">${dto.message_content }</a></td>
-			<td>
-				<fmt:formatDate value="${dto.message_senddate}" pattern="yy-MM-dd kk:mm" var="date"/>
-			${date }</td>
-		</tr>
-		</c:forEach>
-		</c:otherwise>
+			<c:otherwise>
+				<c:forEach items="${list }" var="dto">
+				<tr>
+					<td>
+						<input type="checkbox" id="chk" name="message_noList" value="${dto.message_no }"/>
+					</td>
+					<td>${dto.message_sendid }</td>
+					<td class="recvMsg" style="overflow:hidden;white-space:nowrap;text-overflow:ellipsis; max-width:450px; text-decoration: none;"><a href="message_recvDetail.do?message_no=${dto.message_no }">${dto.message_content }</a></td>
+					<td>
+						<fmt:formatDate value="${dto.message_senddate}" pattern="yy-MM-dd kk:mm" var="date"/>
+					${date }</td>
+				</tr>
+				</c:forEach>
+			</c:otherwise>
 		</c:choose>
 	</table>
 	</form>
@@ -157,7 +185,7 @@
 			data : {"member_id" : $("#member_id").val()},
 			success : function(res){
 				for(var i = 0; i < parseInt(res); i++ ) {;
-					$('.recvMsg').eq(i).css({"font-weight":"700","color":"#40bfc1"});
+					$('.recvMsg > a').eq(i).css({"font-weight":"700","color":"#1AAB8A"});
 				}
 			},
 			error : function(res){
@@ -243,14 +271,11 @@
 	 						$("#idchk3").css("display","block");
 	 				 	
 	 			 		send();
-	 			 		$("#myModal").modal('toggle');
+	 			 		
 	 			 		$('#message_recvid').empty();
 	 			 		$('#message_content').empty();
-	 			 		$('.modal-body').empty();
-	 			 		$('.modal-footer').empty();
-	 					$('.modal-body').html("<div>쪽지를 보냈습니다.</div>");
-	 			 		window.setTimeout(function(){ window.location.reload()}, 950);
-
+	 			 		$("#myModal").modal('toggle');
+	 			 		alert("쪽지를 보냈습니다!");
 	 					}
 	 				}
 	 			});

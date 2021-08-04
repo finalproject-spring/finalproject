@@ -11,7 +11,7 @@ public class TeacherbleController {
 	@RequestMapping(value = "/teacherble.do", method = RequestMethod.GET)
 	public String teacherble(Model model) {
 		
-		return "teacherble/webcam";
+		return "teacherble/test";
 	}
 	
 	@RequestMapping(value = "/upload.do", method = RequestMethod.GET)

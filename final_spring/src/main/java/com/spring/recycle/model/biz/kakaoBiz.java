@@ -12,8 +12,9 @@ import com.google.gson.JsonParser;
 public class kakaoBiz {
 	
 	  private final static String CLIENT_ID = "cc288a0383552958e9ae7ba110fadc1c";
-	  private final static String REDIRECT_URI = "http://localhost:8787/recycle/login_kakaocallback.do";
-
+	  //private final static String REDIRECT_URI = "http://localhost:8787/recycle/login_kakaocallback.do";
+	  private final static String REDIRECT_URI = "http://qclass.iptime.org:8787/recycle/login_kakaocallback.do";
+	  
 	  // 토큰 얻기
 	  public String getAccessToken (String authorize_code) {
 		  String access_Token = "";
@@ -65,7 +66,7 @@ public class kakaoBiz {
 	  
 	  // 로그아웃
 	  public void kakaoLogout () {
-		  String reqURL ="https://kauth.kakao.com/oauth/logout&client_id="+CLIENT_ID+"&logout_redirect_uri=http://localhost:8787/recycle/member_logout.do";
+		  String reqURL ="https://kauth.kakao.com/oauth/logout&client_id="+CLIENT_ID+"&logout_redirect_uri=http://qclass.iptime.org:8787/recycle/member_logout.do";
 		  try {
 			  URL url = new URL(reqURL);
 			  

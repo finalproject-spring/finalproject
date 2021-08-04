@@ -1,14 +1,21 @@
 package com.spring.recycle.model.dao;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.spring.recycle.model.dto.BoardDto;
 import com.spring.recycle.model.dto.MemberDto;
+import com.spring.recycle.model.dto.PaymentDto;
+import com.spring.recycle.paging.Criteria;
+import com.spring.recycle.paging.SearchCriteria;
 
 
 @Repository
@@ -42,6 +49,8 @@ public class MemberDaoImpl implements MemberDao {
 	      } catch (Exception e) {
 	         e.printStackTrace();
 	      }
+	      
+	      System.out.println("dao res : " + res);
 	      
 	      return res;
 	   }
@@ -200,5 +209,63 @@ public class MemberDaoImpl implements MemberDao {
 
 	      return res;
 	}
-	
+
+	@Override
+	public String find_id(String member_email) {
+
+		return sqlSession.selectOne(NAMESPACE+"find_id" , member_email);
+	}
+
+	@Transactional
+	public int update_pw(MemberDto dto) {
+		return sqlSession.update(NAMESPACE+"update_pw",dto);
+	}
+
+	@Override
+	public List<MemberDto> memberListPage(SearchCriteria scri) {
+		List<MemberDto> list = new ArrayList<>();
+		try {
+			list = sqlSession.selectList(NAMESPACE+"memberListPage", scri);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	@Override
+	public int listCount(SearchCriteria scri) {
+		int res = 0;
+		try {
+			res = sqlSession.selectOne(NAMESPACE+"listCount", scri);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return res;
+	}
+
+	@Override
+	public void keepLogin(String member_id, String sessionId, Date next) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("member_id", member_id);
+		map.put("sessionId", sessionId);
+		map.put("next", next);
+		
+		try {
+			sqlSession.update(NAMESPACE+"keepLogin",map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public MemberDto checkMemberWithSessionKey(String sessionId) {
+		MemberDto dto = null;
+		try {
+			dto = sqlSession.selectOne(NAMESPACE+"checkMemberWithSessionKey",sessionId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return dto;
+	}
+
 }

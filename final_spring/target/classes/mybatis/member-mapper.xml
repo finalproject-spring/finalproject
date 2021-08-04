@@ -8,10 +8,20 @@
    WHERE MEMBER_ID = #{member_id} AND MEMBER_DELETE = 0
   </select>
   
+  <!-- 로그인 시 sessionId와 유효시간 세팅 -->
+  <update id="keepLogin">
+  	UPDATE MEMBER SET SESSIONKEY = #{sessionId}, sessionLimit = #{next} WHERE MEMBER_ID = #{member_id}
+  </update>
+  
+  <!-- 유효기간이 남아있으면서 해당 sessionid를 가지는 사용자 정보 꺼내오기 -->
+  <select id="checkMemberWithSessionKey" resultType="memberDto">
+  	SELECT * FROM MEMBER WHERE SESSIONKEY = #{sessionId} AND SESSIONLIMIT > SYSDATE
+  </select>
+  
   <!-- 회원가입 -->
   <insert id="join" parameterType="memberDto">
      INSERT INTO MEMBER 
-     VALUES(MEMBERSEQ.NEXTVAL ,#{member_name} ,#{member_id},#{member_pw},#{member_email},#{member_phone},#{member_addr},null,1,0,null)
+     VALUES(MEMBERSEQ.NEXTVAL ,#{member_name} ,#{member_id},#{member_pw},#{member_email},#{member_phone},#{member_addr},'resources/images/profile.png',1,0,null,'NONE',null)
   </insert>
   
   <!-- id중복체크 -->
@@ -27,7 +37,7 @@
 	</select>
 	<insert id="socialJoin" parameterType="memberDto">
 		INSERT INTO MEMBER
-		VALUES(MEMBERSEQ.NEXTVAL, #{member_name}, #{member_id}, #{member_pw}, #{member_email}, #{member_phone}, #{member_addr}, null, 1, 0, #{member_socialid})
+		VALUES(MEMBERSEQ.NEXTVAL, #{member_name}, #{member_id}, #{member_pw}, #{member_email}, #{member_phone}, #{member_addr}, 'resources/images/profile.png', 1, 0, #{member_socialid}, 'NONE', null)
 	</insert>
 	<!-- 소셜id중복체크 -->
 	<select id="socialIdCheck" resultType="int" parameterType="String">
@@ -39,6 +49,30 @@
 	<select id="memberList" resultType="memberDto">
 		SELECT * FROM MEMBER ORDER BY MEMBER_DELETE, MEMBER_NO
 	</select>
+	
+	<!-- 회원 전체 조회 + 페이징 -->
+	<select id="memberListPage" resultType="memberDto" parameterType="com.spring.recycle.paging.SearchCriteria">
+		SELECT MEMBER_NO, MEMBER_NAME, MEMBER_ID, MEMBER_PW, MEMBER_EMAIL, MEMBER_PHONE, MEMBER_ADDR, MEMBER_PIC, MEMBER_ROLE, MEMBER_DELETE, MEMBER_SOCIALID	
+		FROM (SELECT MEMBER_NO, MEMBER_NAME, MEMBER_ID, MEMBER_PW, MEMBER_EMAIL, MEMBER_PHONE, MEMBER_ADDR, MEMBER_PIC, MEMBER_ROLE, MEMBER_DELETE, MEMBER_SOCIALID, ROW_NUMBER() OVER(ORDER BY MEMBER_DELETE, MEMBER_NO) AS rn FROM MEMBER WHERE 1=1 <include refid="search"></include>) mb
+		WHERE rn BETWEEN #{rowStart} AND #{rowEnd}
+		ORDER BY MEMBER_DELETE, MEMBER_NO
+	</select>
+	
+	<!-- 회원수 + 검색 -->
+	<select id="listCount" resultType="int" parameterType="com.spring.recycle.paging.SearchCriteria">
+		SELECT COUNT(MEMBER_NO) FROM MEMBER WHERE 1=1
+		<include refid="search"></include>	
+	</select>
+	
+	<sql id="search">
+		<if test="searchType != null">
+			<if test="searchType == 'na'.toString()">AND MEMBER_NAME LIKE '%' || #{keyword} || '%'</if>
+			<if test="searchType == 'e'.toString()">AND MEMBER_EMAIL LIKE '%' || #{keyword} || '%'</if>
+			<if test="searchType == 'i'.toString()">AND MEMBER_ID LIKE '%' || #{keyword} || '%'</if>
+			<if test="searchType == 'p'.toString()">AND MEMBER_PHONE LIKE '%' || #{keyword} || '%'</if>
+			<if test="searchType == 'a'.toString()">AND MEMBER_ADDR LIKE '%' || #{keyword} || '%'</if>
+		</if>
+	</sql>
 	
 	<!-- 회원 정보 디테일 -->
 	<select id="memberDetail" resultType="memberDto">
@@ -73,4 +107,19 @@
 	<update id="memberDelete">
 		UPDATE MEMBER SET MEMBER_DELETE=1 WHERE MEMBER_NO=#{member_no}
 	</update>
+	
+	
+	<!-- 아이디 찾기 -->
+	<select id="find_id" parameterType="String" resultType="String" >
+	 SELECT MEMBER_ID
+	 FROM MEMBER
+	 WHERE MEMBER_EMAIL = #{member_email}
+	</select>
+	
+	<!-- 비밀번호 변경 -->
+	<update id="update_pw" parameterType="memberDto">
+		UPDATE MEMBER SET MEMBER_PW = #{member_pw} 
+		WHERE MEMBER_ID = #{member_id}
+	</update>
+	
 </mapper>

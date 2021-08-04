@@ -9,8 +9,8 @@ public class FundingDto {
 	private String funding_filter;
 	private String funding_start;
 	private String funding_end;
-	private String funding_ta;
-	private String funding_ca;
+	private int funding_ta;
+	private int funding_ca;
 	private String funding_pay;
 	private String funding_paydesc;
 
@@ -19,7 +19,7 @@ public class FundingDto {
 	}
 
 	public FundingDto(int funding_no, String funding_pic, String funding_title, String funding_content,
-			String funding_filter, String funding_start, String funding_end, String funding_ta, String funding_ca,
+			String funding_filter, String funding_start, String funding_end, int funding_ta, int funding_ca,
 			String funding_pay, String funding_paydesc) {
 		this.funding_no = funding_no;
 		this.funding_pic = funding_pic;
@@ -90,19 +90,19 @@ public class FundingDto {
 		this.funding_end = funding_end;
 	}
 
-	public String getFunding_ta() {
+	public int getFunding_ta() {
 		return funding_ta;
 	}
 
-	public void setFunding_ta(String funding_ta) {
+	public void setFunding_ta(int funding_ta) {
 		this.funding_ta = funding_ta;
 	}
 
-	public String getFunding_ca() {
+	public int getFunding_ca() {
 		return funding_ca;
 	}
 
-	public void setFunding_ca(String funding_ca) {
+	public void setFunding_ca(int funding_ca) {
 		this.funding_ca = funding_ca;
 	}
 

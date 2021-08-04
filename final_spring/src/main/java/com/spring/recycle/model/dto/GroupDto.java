@@ -86,12 +86,11 @@ public class GroupDto {
 	public void setBoard_filter(String board_filter) {
 		this.board_filter = board_filter;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
+	@Override
+	public String toString() {
+		return "GroupDto [board_no=" + board_no + ", board_id=" + board_id + ", board_title=" + board_title
+				+ ", board_content=" + board_content + ", board_date=" + board_date + ", board_views=" + board_views
+				+ ", board_filter=" + board_filter + "]";
+	}
+
 }

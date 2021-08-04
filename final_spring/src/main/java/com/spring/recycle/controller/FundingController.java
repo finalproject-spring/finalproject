@@ -4,6 +4,7 @@ import java.beans.PropertyEditorSupport;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,8 +25,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import com.google.gson.JsonObject;
 import com.spring.recycle.model.biz.FundingBiz;
+import com.spring.recycle.model.biz.PaymentBiz;
+import com.spring.recycle.model.biz.PaymentBizImpl;
 import com.spring.recycle.model.dto.FundingDto;
 import com.spring.recycle.model.dto.MemberDto;
+import com.spring.recycle.model.dto.PaymentDto;
 import com.spring.recycle.util.FundingPageMaker;
 import com.spring.recycle.util.FundingSearchCriteria;
 
@@ -37,10 +41,13 @@ public class FundingController {
 	
 	@Autowired
 	private FundingBiz biz;
+	@Autowired
+	private PaymentBiz pbiz;
+	
 	
 	@RequestMapping(value="/funding_list.do", method = RequestMethod.GET)
 	public String listPage(Model model, HttpServletRequest request,@ModelAttribute("scri") FundingSearchCriteria scri) {
-		if (scri.getFunding_filter().contains("전체보기")) {
+		if (scri.getFunding_filter().contains("전체보기") || scri.getFunding_filter().contains("카테고리를")) {
 			scri.setFunding_filter("");
 		}
 		
@@ -168,6 +175,50 @@ public class FundingController {
 		return "redirect:funding_detail.do?funding_no="+funding_no;
 	}
 	
+	
+	//태히 추가 
+	@RequestMapping("/funding_kakaopay.do")
+	public String fundingpay(HttpServletRequest request , Model model, PaymentDto dto) {
+		MemberDto memberdto = (MemberDto) request.getSession().getAttribute("dto");
+		FundingDto dtof = new FundingDto();
+		model.addAttribute("memberdto", memberdto);
+		dtof = biz.fundingDetail(dto.getFunding_no());
+		model.addAttribute("fundingdto", dtof);
+		model.addAttribute("paymentdto", dto);
+		
+		return "funding/funding_kakaopay";
+	}
+	
+	   @RequestMapping("/funding_paySuccess.do")
+	   public String funding_Success(HttpServletRequest request , Model model ,PaymentDto paymentdto, int funding_no, int pay_count, int pay_price, String merchant_uid  ) { 
+	      MemberDto memberdto = (MemberDto) request.getSession().getAttribute("dto");
+	      FundingDto fundingdto = biz.fundingDetail(funding_no);
+	      model.addAttribute("fundingdto", fundingdto);
+	      model.addAttribute("dto", memberdto);
+	      
+	      paymentdto.setPay_buyer(memberdto.getMember_id());
+	      paymentdto.setPay_product(fundingdto.getFunding_title());
+	      paymentdto.setPay_count(pay_count);
+	      paymentdto.setPay_price(pay_price);
+	      paymentdto.setMerchant_uid(merchant_uid);
+	      int res = 0;
+	      res = pbiz.paymentInsert(paymentdto);
+	      logger.info("paymentdto");
+	      int amount = pay_count * pay_price;
+	      fundingdto.setFunding_ca(amount);
+	      biz.caUpdate(fundingdto);
+	      model.addAttribute("paymentdto", paymentdto);
+	      model.addAttribute("amount",amount);
+	      return "funding/funding_paySuccess";
+	   }
+	   
+	
+	@RequestMapping("/funding_payFail.do")
+	public String funding_fail() {
+		
+		return "funding/funding_payFail";
+	}
+	
 	@InitBinder
 	public void initBinder(WebDataBinder binder) throws Exception {
 	    binder.registerCustomEditor(MultipartFile.class, new PropertyEditorSupport() {
@@ -179,6 +230,12 @@ public class FundingController {
 	        }
 
 	    });
+	}
+	
+	@RequestMapping("/funding_payRefund.do")
+	public String funding_payRefund(String merchant_uid) {
+		
+		return "funding/funding_payRefund";
 	}
 
 }
